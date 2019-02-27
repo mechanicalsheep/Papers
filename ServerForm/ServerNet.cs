@@ -14,9 +14,10 @@ namespace ServerForm
         public ServerNet(ServerForm serverForm)
         {
             form = serverForm;
-            form.writeline("-==SERVERNET ONLINE==-");
+           
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("SentFromClient",HandleStringFromClient);
             Connection.StartListening(ConnectionType.TCP, new IPEndPoint(IPAddress.Any, 0));
+            form.writeline("-==SERVERNET ONLINE==-");
             form.writeline("Listening on: ");
             foreach (IPEndPoint localEndpoint in Connection.ExistingLocalListenEndPoints(ConnectionType.TCP))
             {
@@ -26,7 +27,7 @@ namespace ServerForm
 
         private void HandleStringFromClient(PacketHeader packetHeader, Connection connection, string incomingObject)
         {
-            form.writeline($"Client: + {connection.ConnectionInfo.LocalEndPoint.ToString()} has send the following");
+            form.writeline($"Client: + {connection.ConnectionInfo.LocalEndPoint.ToString()} has sent the following");
             
             form.writeline($"Message: {incomingObject}");
         }
