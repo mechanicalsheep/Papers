@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias newt;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,7 @@ namespace ServerForm
         public ServerForm()
         {
             InitializeComponent();
+            ServerNet serverNet = new ServerNet(this);
         }
 
         public void writeline(string message)

@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "ServerForm\Server.csproj", "{FDE7447E-DF10-4070-9657-D2CDD381CABB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "WindowsFormsApp1\Client.csproj", "{E1E017D6-70DB-404F-AA0A-3270ABCC632F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "ClientForm\Client.csproj", "{E1E017D6-70DB-404F-AA0A-3270ABCC632F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

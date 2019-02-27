@@ -2,12 +2,12 @@
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 
-namespace PaperClient
+namespace ClientForm
 {
     public class ClientNet
     {
-        private PaperClient form;
-        public ClientNet(PaperClient clientForm)
+        private ClientForm form;
+        public ClientNet(ClientForm clientForm)
         {
             form = clientForm;
             form.writeline("-==Client=-");
@@ -15,7 +15,7 @@ namespace PaperClient
            NetworkComms.AppendGlobalIncomingPacketHandler<string>("snrClient",(packetHeader, connection, input) =>
            {
                form.writeline("received call from server, sending the server a message");
-               string message = "this is the message from the Client!";
+               string message = $"Client: {form.getUniqueKey()} sending data.";
                //When this is received by the client it will complete the synchronous request
                connection.SendObject("snrServer", message);
            });

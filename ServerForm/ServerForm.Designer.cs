@@ -39,14 +39,14 @@
             this.lb_output.Size = new System.Drawing.Size(319, 303);
             this.lb_output.TabIndex = 0;
             // 
-            // Form1
+            // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(668, 323);
             this.Controls.Add(this.lb_output);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "ServerForm";
+            this.Text = "Server";
             this.ResumeLayout(false);
 
         }
