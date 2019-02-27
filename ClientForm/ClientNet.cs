@@ -4,6 +4,7 @@ using NetworkCommsDotNet.Connections;
 
 namespace Client
 {
+
     public class ClientNet
     {
         int port = 123456;

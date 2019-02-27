@@ -26,11 +26,12 @@ namespace Client
         public string group { get; set; }
         [ProtoMember(8)]
         public List<string> software = new List<string>();
-       
+
+        
         //needed for protobuf
-       protected Computer()
+        protected Computer()
         {
-            fillComputerData();
+            //fillComputerData();
         }
         public Computer(string Name)
         {
@@ -38,19 +39,9 @@ namespace Client
           
         }
 
-        void fillComputerData()
-        {
-            name = getComputerName();
-        }
+      
 
-        public string getComputerName()
-        {
-            string compName = Environment.MachineName;
-            return compName;
-
-        }
-
-
+      
         public override bool Equals(object obj)
         {
             if (!(obj is Computer))

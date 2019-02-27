@@ -15,15 +15,14 @@ namespace Client
 {
     public partial class ClientForm : Form
     {
-        string currentPath; 
-        string initFile;
+        
 
         //testing
         string ip;
         int port;
         System.Timers.Timer aTimer;
 
-
+        Computer computer;
         ClientNet clientNet;
 
 
@@ -31,18 +30,31 @@ namespace Client
         {
             ip = "192.168.11.105";
             port = 11111;
-
+            //Initialize new computer, get the computer name from environment.machineName locally
+            computer = new Computer(getComputerName());
             InitializeComponent();
-            currentPath = Directory.GetCurrentDirectory();
-            initFile = currentPath + @"\initial.json";
+            /*currentPath = Directory.GetCurrentDirectory();
+            initFile = currentPath + @"\initial.json";*/
 
             clientNet = new ClientNet(this);
-            generateUniqueKey();
+           // generateUniqueKey();
             aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(sendMessage);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
 
+
+        }
+        void fillComputerData()
+        {
+            //computer.name = getComputerName();
+           // computer.uniqueKey = generateUniqueKey();
+        }
+
+        public string getComputerName()
+        {
+            string compName = Environment.MachineName;
+            return compName;
 
         }
 
@@ -70,9 +82,9 @@ namespace Client
         }
 
         //todo: save and read all in different class as a data handler
-        void generateUniqueKey()
+        string generateUniqueKey()
         {
-            
+
 
             if (!File.Exists(initFile))
             {
@@ -86,7 +98,7 @@ namespace Client
                 File.WriteAllText(initFile, output);
             }
 
-           
+
         }
         public string getUniqueKey()
         {

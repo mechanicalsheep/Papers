@@ -10,19 +10,17 @@ namespace Client
 {
     public class ClientDataHandler
     {
-        /*
-         * currently has a lot of garbage codes, variables, and methods for testing, will cleanup 
-         * and restructure for correct use later
-         * todo: work on correct error handling and default initializing.
-         */
-       // List<Computer> computers;
         
+
         public string path { get; set; }
         public Computer computer;
         string file;
         
 
+        public bool exists()
+        {
 
+        }
         public ClientDataHandler(Computer Computer)
         {
             path = Directory.GetCurrentDirectory();
@@ -30,7 +28,10 @@ namespace Client
             file = path + @"\" + computer.name + ".json";
         }
 
-       
+       public string GetKey(string str)
+        {
+            return computer.uniqueKey;
+        }
 
         public void SaveComputerData()
         {
@@ -41,14 +42,6 @@ namespace Client
         }
 
 
-
-      
-
-       /* public Computer GetComputerData()
-        {
-            computer = GetJsonData();
-            return computer;
-        }*/
 
         public Computer GetComputerData()
         {
