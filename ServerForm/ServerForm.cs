@@ -13,10 +13,11 @@ namespace ServerForm
 {
     public partial class ServerForm : Form
     {
+        ServerNet serverNet;
         public ServerForm()
         {
             InitializeComponent();
-            ServerNet serverNet = new ServerNet(this);
+            serverNet = new ServerNet(this);
         }
 
         public void writeline(string message)
@@ -29,6 +30,11 @@ namespace ServerForm
                 lb_output.Items.Add(message);
             }
 
+        }
+
+        private void btn_Scan_Click(object sender, EventArgs e)
+        {
+            serverNet.test();
         }
     }
 }
