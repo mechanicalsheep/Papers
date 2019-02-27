@@ -34,6 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tb_Port = new System.Windows.Forms.TextBox();
+            this.btn_shutdown = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lb_output
@@ -86,11 +87,22 @@
             this.tb_Port.Size = new System.Drawing.Size(100, 20);
             this.tb_Port.TabIndex = 2;
             // 
+            // btn_shutdown
+            // 
+            this.btn_shutdown.Location = new System.Drawing.Point(45, 332);
+            this.btn_shutdown.Name = "btn_shutdown";
+            this.btn_shutdown.Size = new System.Drawing.Size(75, 23);
+            this.btn_shutdown.TabIndex = 6;
+            this.btn_shutdown.Text = "Shutdown";
+            this.btn_shutdown.UseVisualStyleBackColor = true;
+            this.btn_shutdown.Click += new System.EventHandler(this.btn_shutdown_Click);
+            // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 383);
+            this.Controls.Add(this.btn_shutdown);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tb_Port);
             this.Controls.Add(this.label1);
@@ -112,6 +124,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tb_Port;
+        private System.Windows.Forms.Button btn_shutdown;
     }
 }
 
