@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 
-namespace ClientForm
+namespace Client
 {
     public partial class ClientForm : Form
     {

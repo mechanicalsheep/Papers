@@ -2,7 +2,7 @@
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 
-namespace ClientForm
+namespace Client
 {
     public class ClientNet
     {
@@ -33,7 +33,7 @@ namespace ClientForm
 
         public void sendMessage(string ip, int port, string message)
         {
-            form.writeline("Going to send the following");
+            //form.writeline("Going to send the following");
             form.writeline($"SentFromClient ip: {ip} port: {port} message: {message} ");
             NetworkComms.SendObject("SentFromClient", ip, port, message);
         }
