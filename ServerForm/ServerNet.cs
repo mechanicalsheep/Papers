@@ -53,7 +53,7 @@ namespace ServerForm
             form.writeline($"Message: {incomingObject}");
         }
 
-        public void sendMessage(string ip, int port, string message)
+        public string sendMessage(string ip, int port, string message)
         {
             form.writeline("Going to send the following");
             form.writeline($"ServerToClient ip: {ip} port: {port} message: {message} ");
@@ -63,11 +63,13 @@ namespace ServerForm
                 string clientMessage=NetworkComms.SendReceiveObject<string,string>("snrClient", ip, port, "snrServer", 800000,
                     message);
                 form.writeline(clientMessage);
+                return clientMessage;
 
             }
             catch (Exception err)
             {
                 form.writeline($"ERROR: {err.Message}");
+                return "NOT AVAILABLE";
             }
         }
 

@@ -38,30 +38,25 @@ namespace ServerForm
             //serverNet.test();
             lb_onlineComp.Items.Clear();
             List<string> onlineList = serverNet.GetConnection();
-            if (onlineList.Count > 0)
-            {
+            string[] ipPort;
                 foreach (var connection in onlineList)
                 {
-                    lb_onlineComp.Items.Add(connection);
+                ipPort = connection.Split(':');
+
+                string key= serverNet.sendMessage(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
+                lb_onlineComp.Items.Add(key);
                 }
-            }
+            
+        }
+        public void getComputerKey(string ip, int port)
+        {
+
         }
 
         private void btn_send_Click(object sender, EventArgs e)
         {
-            if (lb_onlineComp.Items.Count != 0)
-            {
-                if (lb_onlineComp.SelectedItem.ToString() == null)
-                {
-                    MessageBox.Show("Please select a computer");
-                }
-                else
-                {
-                    string address = lb_onlineComp.SelectedItem.ToString();
-                    string[] ipPort = address.Split(':');
-                    serverNet.sendMessage(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
-                }
-            }
+
+            
         }
     }
 }
