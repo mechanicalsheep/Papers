@@ -123,19 +123,12 @@ namespace Client
        
         void generateUniqueKey()
         {
-
-
-            //if (!File.Exists(initFile))
-            //{
-               // writeline("file: " + initFile + " does not exist!");
                 Guid g = Guid.NewGuid();
                 string GuidString = Convert.ToBase64String(g.ToByteArray());
                 GuidString = GuidString.Replace("=", "");
-                GuidString = GuidString.Replace("+", "");
-            //var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(GuidString);
+                GuidString = GuidString.Replace("+", "");          
             computer.uniqueKey = GuidString;
-                //File.WriteAllText(initFile, output);
-           // }
+           
 
 
         }
@@ -179,7 +172,7 @@ namespace Client
                     if (subKey.GetValue("UninstallString") != null)
                     {
                         string program = subKey.GetValue("DisplayName").ToString();
-                        //lb_installed.Items.Add(program);
+                        
                         software.Add(program);
 
                     }
@@ -196,7 +189,6 @@ namespace Client
         private void btn_send_Click(object sender, EventArgs e)
         {
             writeline("Sending Unique Key to server.");
-           // clientNet.sendMessage(tb_IP.Text, Convert.ToInt32(tb_Port.Text), getUniqueKey());
         }
 
         private void btn_shutdown_Click(object sender, EventArgs e)

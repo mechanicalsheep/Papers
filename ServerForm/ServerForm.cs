@@ -35,7 +35,6 @@ namespace ServerForm
 
         private void btn_Scan_Click(object sender, EventArgs e)
         {
-            //serverNet.test();
             lb_onlineComp.Items.Clear();
             List<string> onlineList = serverNet.GetConnection();
             string[] ipPort;

@@ -27,16 +27,7 @@ namespace ServerForm
             }
            
         }
-      /* public void test()
-        {
-            
-            foreach(var connection in NetworkComms.AllConnectionInfo())
-            {
-                form.writeline(connection.RemoteEndPoint.ToString());
-                
-            }
-           
-        }*/
+     
         public List<string> GetConnection()
         {
             List<string> connectionList = new List<string>();
@@ -59,8 +50,7 @@ namespace ServerForm
             form.writeline($"ServerToClient ip: {ip} port: {port} message: {message} ");
             try
             {
-                //NetworkComms.SendObject("ServerToClient", ip, port, message);
-                string clientMessage=NetworkComms.SendReceiveObject<string,string>("snrClient", ip, port, "snrServer", 800000,
+               string clientMessage=NetworkComms.SendReceiveObject<string,string>("snrClient", ip, port, "snrServer", 800000,
                     message);
                 form.writeline(clientMessage);
                 return clientMessage;
