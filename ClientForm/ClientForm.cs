@@ -121,24 +121,24 @@ namespace Client
         }
 
        
-        void generateUniqueKey()
+        string generateUniqueKey()
         {
                 Guid g = Guid.NewGuid();
                 string GuidString = Convert.ToBase64String(g.ToByteArray());
                 GuidString = GuidString.Replace("=", "");
                 GuidString = GuidString.Replace("+", "");          
-            computer.uniqueKey = GuidString;
-           
+           //computer.uniqueKey = GuidString;
 
+            return GuidString;
 
         }
         public string getUniqueKey()
         {
-            string initFile = Directory.GetCurrentDirectory() + "//initial.json";
+            string initFile = Directory.GetCurrentDirectory() + "//"+computer.name+".json";
             if (!File.Exists(initFile))
             {
                 writeline("no initial.json, generating Key...");
-                generateUniqueKey();
+                return generateUniqueKey();
             }
             try
             {
