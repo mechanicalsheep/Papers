@@ -17,10 +17,7 @@ namespace Client
         string file;
         
 
-        public bool exists()
-        {
-
-        }
+     
         public ClientDataHandler(Computer Computer)
         {
             path = Directory.GetCurrentDirectory();

@@ -50,7 +50,7 @@ namespace Client
             var other = obj as Computer;
 
             // if (name != other.name || OS != other.OS || ram != other.ram || ip != other.ip || online != other.online || uniqueString != other.uniqueString || software != other.software || group != other.group)
-            if (name == other.name && OS == other.OS && ram == other.ram && uniqueString == other.uniqueString && group == other.group)
+            if (name == other.name && OS == other.OS && ram == other.ram && uniqueKey == other.uniqueKey && group == other.group)
             {
                 //if all the others are true, they are the same computer, let's check if the softwares have changed.
                 if (software.Count == other.software.Count)
