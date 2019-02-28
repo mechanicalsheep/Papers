@@ -2,8 +2,9 @@
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 
-namespace ClientForm
+namespace Client
 {
+
     public class ClientNet
     {
         int port = 123456;
@@ -16,7 +17,8 @@ namespace ClientForm
            NetworkComms.AppendGlobalIncomingPacketHandler<string>("snrClient",(packetHeader, connection, input) =>
            {
                form.writeline("received call from server, sending the server a message");
-               string message = $"Client: {form.getUniqueKey()} sending data.";
+              string message = $"Client: {form.getUniqueKey()} sending data.";
+               
                //When this is received by the client it will complete the synchronous request
                connection.SendObject("snrServer", message);
            });
@@ -33,7 +35,7 @@ namespace ClientForm
 
         public void sendMessage(string ip, int port, string message)
         {
-            form.writeline("Going to send the following");
+            //form.writeline("Going to send the following");
             form.writeline($"SentFromClient ip: {ip} port: {port} message: {message} ");
             NetworkComms.SendObject("SentFromClient", ip, port, message);
         }

@@ -1,8 +1,11 @@
 ﻿extern alias newt;
+
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -11,40 +14,88 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 
-namespace ClientForm
+namespace Client
 {
     public partial class ClientForm : Form
     {
-        string currentPath; 
-        string initFile;
+        
 
         //testing
         string ip;
         int port;
         System.Timers.Timer aTimer;
 
-
+        Computer computer;
         ClientNet clientNet;
-
+        ClientDataHandler data;
 
         public ClientForm()
         {
+           
+            InitializeComponent();
+           
             ip = "192.168.11.105";
             port = 11111;
+            //Initialize new computer, get the computer name from environment.machineName locally
+            computer = GetComputerData();
+            data = new ClientDataHandler(computer);
 
-            InitializeComponent();
-            currentPath = Directory.GetCurrentDirectory();
-            initFile = currentPath + @"\initial.json";
+            data.SaveComputerData();
 
             clientNet = new ClientNet(this);
-            generateUniqueKey();
+
+
+            // generateUniqueKey();
             aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(sendMessage);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
 
+        }
+
+        Computer GetComputerData()
+        {
+            Computer newcomputer = new Computer(getComputerName());
+            //computer.name = getComputerName();
+            newcomputer.uniqueKey = getUniqueKey();
+            newcomputer.OS = getOS();
+            newcomputer.software = getInstallations();
+            return newcomputer;
+            
 
         }
+
+        public string getComputerName()
+        {
+            string compName = Environment.MachineName;
+            return compName;
+
+        }
+        #region OS
+
+        public string HKLM_GetString(string path, string key)
+        {
+            try
+            {
+                RegistryKey rk = Registry.LocalMachine.OpenSubKey(path);
+                if (rk == null) return "";
+                return (string)rk.GetValue(key);
+            }
+            catch { return ""; }
+        }
+
+        public string getOS()
+        {
+            string ProductName = HKLM_GetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName");
+            string CSDVersion = HKLM_GetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CSDVersion");
+            if (ProductName != "")
+            {
+                return (ProductName.StartsWith("Microsoft") ? "" : "Microsoft ") + ProductName +
+                            (CSDVersion != "" ? " " + CSDVersion : "");
+            }
+            return "";
+        }
+        #endregion
 
         private void sendMessage(object sender, ElapsedEventArgs e)
         {
@@ -69,30 +120,36 @@ namespace ClientForm
             lb_output.Items.Add(message);
         }
 
-        //todo: save and read all in different class as a data handler
+       
         void generateUniqueKey()
         {
-            
 
-            if (!File.Exists(initFile))
-            {
-                writeline("file: " + initFile + " does not exist!");
+
+            //if (!File.Exists(initFile))
+            //{
+               // writeline("file: " + initFile + " does not exist!");
                 Guid g = Guid.NewGuid();
                 string GuidString = Convert.ToBase64String(g.ToByteArray());
                 GuidString = GuidString.Replace("=", "");
                 GuidString = GuidString.Replace("+", "");
-                var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(GuidString);
+            //var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(GuidString);
+            computer.uniqueKey = GuidString;
+                //File.WriteAllText(initFile, output);
+           // }
 
-                File.WriteAllText(initFile, output);
-            }
 
-           
         }
         public string getUniqueKey()
         {
-
+            string initFile = Directory.GetCurrentDirectory() + "//initial.json";
+            if (!File.Exists(initFile))
+            {
+                writeline("no initial.json, generating Key...");
+                generateUniqueKey();
+            }
             try
             {
+
                 var inputs = File.ReadAllText(initFile);
                 string uniqueKey = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<string>(inputs);
                 return uniqueKey;
@@ -100,15 +157,46 @@ namespace ClientForm
             }
             catch (Exception err)
             {
-                writeline("Error sending key: " + err.Message);
+                writeline("Error getting key: " + err.Message);
                 return null;
             }
         }
 
+        public List<string> getInstallations()
+        {
+            List<string> software = new List<string>();
+
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo();
+            string uKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+            RegistryKey rk = Registry.LocalMachine.OpenSubKey(uKey);
+
+            foreach (string key in rk.GetSubKeyNames())
+            {
+                RegistryKey subKey = rk.OpenSubKey(key);
+                try
+                {
+                    if (subKey.GetValue("UninstallString") != null)
+                    {
+                        string program = subKey.GetValue("DisplayName").ToString();
+                        //lb_installed.Items.Add(program);
+                        software.Add(program);
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception Error: " + ex);
+                }
+
+            }
+
+            return software;
+        }
         private void btn_send_Click(object sender, EventArgs e)
         {
             writeline("Sending Unique Key to server.");
-            clientNet.sendMessage(tb_IP.Text, Convert.ToInt32(tb_Port.Text), getUniqueKey());
+           // clientNet.sendMessage(tb_IP.Text, Convert.ToInt32(tb_Port.Text), getUniqueKey());
         }
 
         private void btn_shutdown_Click(object sender, EventArgs e)
