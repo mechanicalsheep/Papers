@@ -25,20 +25,30 @@ namespace ServerForm
             {
                 form.writeline(" - "+localEndpoint.Address+" "+localEndpoint.Port);
             }
-           // test();
+           
         }
-       public void test()
+      /* public void test()
         {
-            form.writeline("entered test().");
+            
             foreach(var connection in NetworkComms.AllConnectionInfo())
             {
                 form.writeline(connection.RemoteEndPoint.ToString());
+                
             }
            
+        }*/
+        public List<string> GetConnection()
+        {
+            List<string> connectionList = new List<string>();
+            foreach(var connection in NetworkComms.AllConnectionInfo())
+            {
+                connectionList.Add(connection.RemoteEndPoint.ToString());
+            }
+            return connectionList;
         }
         private void HandleStringFromClient(PacketHeader packetHeader, Connection connection, string incomingObject)
         {
-            form.writeline($"Client: + {connection.ConnectionInfo.LocalEndPoint.ToString()} has sent the following");
+            form.writeline($"Client: + {connection.ConnectionInfo.RemoteEndPoint.ToString()} has sent the following");
             
             form.writeline($"Message: {incomingObject}");
         }
@@ -60,12 +70,6 @@ namespace ServerForm
                 form.writeline($"ERROR: {err.Message}");
             }
         }
-
-        /*internal List<Computer> getRespondingClients()
-        {
-            //todo: get the list of responding clients.
-            throw new NotImplementedException();
-        }*/
 
         internal void CloseNetwork()
         {
