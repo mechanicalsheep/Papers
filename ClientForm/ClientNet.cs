@@ -7,7 +7,7 @@ namespace Client
 
     public class ClientNet
     {
-        int port = 123456;
+        
         private ClientForm form;
         public ClientNet(ClientForm clientForm)
         {
