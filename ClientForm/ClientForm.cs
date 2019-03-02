@@ -36,7 +36,7 @@ namespace Client
 
             computer = new Computer(getComputerName());
             data = new ClientDataHandler(computer);
-            ip = "192.168.11.105";
+            ip = "192.168.8.100";
             port = 11111;
           
             GetComputerData();
@@ -51,8 +51,7 @@ namespace Client
             aTimer.Elapsed += new ElapsedEventHandler(sendMessage);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
-            lb_output.SelectedIndex = lb_output.Items.Count - 1;
-            lb_output.SelectedIndex = -1;
+           
 
         }
 
@@ -116,10 +115,21 @@ namespace Client
         {
             if (lb_output.InvokeRequired)
             {
-                lb_output.Invoke(new Action(() =>  lb_output.Items.Add(message)));
+                lb_output.Invoke(new Action(() =>
+                {
+                    lb_output.Items.Add(message);
+                    lb_output.SelectedIndex = lb_output.Items.Count - 1;
+                    lb_output.SelectedIndex = -1;
+                }));
+
             }
             else
-            lb_output.Items.Add(message);
+            {
+                lb_output.Items.Add(message);
+                lb_output.SelectedIndex = lb_output.Items.Count - 1;
+                lb_output.SelectedIndex = -1;
+            }
+            
         }
 
        

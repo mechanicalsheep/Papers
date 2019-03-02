@@ -24,11 +24,18 @@ namespace ServerForm
         {
             //added an invoke in case the writeline is used by a different thread.
             if(lb_output.InvokeRequired)
-           lb_output.Invoke(new Action(() => lb_output.Items.Add(message)));
+           lb_output.Invoke(new Action(() =>
+           {
+               lb_output.Items.Add(message);
+               lb_output.SelectedIndex = lb_output.Items.Count - 1;
+               lb_output.SelectedIndex = -1;
+           }));
             else
             {
                 lb_output.Items.Add(message);
-                
+                lb_output.SelectedIndex = lb_output.Items.Count - 1;
+                lb_output.SelectedIndex = -1;
+
             }
 
         }
