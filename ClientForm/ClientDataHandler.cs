@@ -25,7 +25,7 @@ namespace Client
             file = path + @"\" + computer.name + ".json";
         }
 
-       public string GetKey(string str)
+       public string GetKey()
         {
             return computer.uniqueKey;
         }
@@ -39,7 +39,19 @@ namespace Client
         }
 
 
-
+        public void saveInitFile(string UniqueKey)
+        {
+            try
+            {
+                var initPath = Directory.GetCurrentDirectory()+ "\\init.json";
+                var input = newt.Newtonsoft.Json.JsonConvert.SerializeObject(UniqueKey);
+                File.WriteAllText(initPath, input);
+            }
+            catch(Exception err)
+            {
+                Console.WriteLine("PaperExcceptions from SaveInitFile() Method: " + err.Message);
+            }
+        }
         public Computer GetComputerData()
         {
 

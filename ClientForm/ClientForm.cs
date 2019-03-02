@@ -33,34 +33,39 @@ namespace Client
         {
            
             InitializeComponent();
-           
+
+            computer = new Computer(getComputerName());
+            data = new ClientDataHandler(computer);
             ip = "192.168.11.105";
             port = 11111;
             //Initialize new computer, get the computer name from environment.machineName locally
-            computer = GetComputerData();
-            data = new ClientDataHandler(computer);
+            //computer = GetComputerData();
+            
+            GetComputerData();
+            
 
             data.SaveComputerData();
 
             clientNet = new ClientNet(this);
 
 
-            // generateUniqueKey();
+            
             aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(sendMessage);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
+            lb_output.SelectedIndex = lb_output.Items.Count - 1;
+            lb_output.SelectedIndex = -1;
 
         }
 
-        Computer GetComputerData()
+        void GetComputerData()
         {
-            Computer newcomputer = new Computer(getComputerName());
-            //computer.name = getComputerName();
-            newcomputer.uniqueKey = getUniqueKey();
-            newcomputer.OS = getOS();
-            newcomputer.software = getInstallations();
-            return newcomputer;
+           
+            computer.uniqueKey = getUniqueKey();
+            computer.OS = getOS();
+            computer.software = getInstallations();
+          
             
 
         }
@@ -126,15 +131,15 @@ namespace Client
                 Guid g = Guid.NewGuid();
                 string GuidString = Convert.ToBase64String(g.ToByteArray());
                 GuidString = GuidString.Replace("=", "");
-                GuidString = GuidString.Replace("+", "");          
-           //computer.uniqueKey = GuidString;
-
+                GuidString = GuidString.Replace("+", "");
+                data.saveInitFile(GuidString);
+            
             return GuidString;
 
         }
         public string getUniqueKey()
         {
-            string initFile = Directory.GetCurrentDirectory() + "//"+computer.name+".json";
+            string initFile = Directory.GetCurrentDirectory() + "\\init.json";
             if (!File.Exists(initFile))
             {
                 writeline("no initial.json, generating Key...");
