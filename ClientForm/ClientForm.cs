@@ -38,12 +38,9 @@ namespace Client
             data = new ClientDataHandler(computer);
             ip = "192.168.11.105";
             port = 11111;
-            //Initialize new computer, get the computer name from environment.machineName locally
-            //computer = GetComputerData();
-            
+          
             GetComputerData();
             
-
             data.SaveComputerData();
 
             clientNet = new ClientNet(this);
