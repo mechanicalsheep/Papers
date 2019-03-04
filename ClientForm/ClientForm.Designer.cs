@@ -36,8 +36,16 @@
             this.tb_Port = new System.Windows.Forms.TextBox();
             this.btn_shutdown = new System.Windows.Forms.Button();
             this.tb_installer_path = new System.Windows.Forms.TextBox();
-            this.btn_Install = new System.Windows.Forms.Button();
+            this.btn_Run = new System.Windows.Forms.Button();
             this.btn_browse = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tb_password = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tb_username = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tb_domain = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.tb_command = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // lb_output
@@ -102,24 +110,24 @@
             // 
             // tb_installer_path
             // 
-            this.tb_installer_path.Location = new System.Drawing.Point(329, 186);
+            this.tb_installer_path.Location = new System.Drawing.Point(326, 139);
             this.tb_installer_path.Name = "tb_installer_path";
             this.tb_installer_path.Size = new System.Drawing.Size(262, 20);
             this.tb_installer_path.TabIndex = 7;
             // 
-            // btn_Install
+            // btn_Run
             // 
-            this.btn_Install.Location = new System.Drawing.Point(448, 238);
-            this.btn_Install.Name = "btn_Install";
-            this.btn_Install.Size = new System.Drawing.Size(62, 23);
-            this.btn_Install.TabIndex = 8;
-            this.btn_Install.Text = "Install";
-            this.btn_Install.UseVisualStyleBackColor = true;
-            this.btn_Install.Click += new System.EventHandler(this.btn_Install_Click);
+            this.btn_Run.Location = new System.Drawing.Point(472, 290);
+            this.btn_Run.Name = "btn_Run";
+            this.btn_Run.Size = new System.Drawing.Size(62, 23);
+            this.btn_Run.TabIndex = 8;
+            this.btn_Run.Text = "Run";
+            this.btn_Run.UseVisualStyleBackColor = true;
+            this.btn_Run.Click += new System.EventHandler(this.btn_Install_Click);
             // 
             // btn_browse
             // 
-            this.btn_browse.Location = new System.Drawing.Point(597, 183);
+            this.btn_browse.Location = new System.Drawing.Point(594, 136);
             this.btn_browse.Name = "btn_browse";
             this.btn_browse.Size = new System.Drawing.Size(62, 23);
             this.btn_browse.TabIndex = 9;
@@ -127,13 +135,85 @@
             this.btn_browse.UseVisualStyleBackColor = true;
             this.btn_browse.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(369, 218);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Password";
+            // 
+            // tb_password
+            // 
+            this.tb_password.Location = new System.Drawing.Point(434, 215);
+            this.tb_password.Name = "tb_password";
+            this.tb_password.Size = new System.Drawing.Size(100, 20);
+            this.tb_password.TabIndex = 11;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(367, 192);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(55, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Username";
+            // 
+            // tb_username
+            // 
+            this.tb_username.Location = new System.Drawing.Point(434, 189);
+            this.tb_username.Name = "tb_username";
+            this.tb_username.Size = new System.Drawing.Size(100, 20);
+            this.tb_username.TabIndex = 10;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(369, 244);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(43, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Domain";
+            // 
+            // tb_domain
+            // 
+            this.tb_domain.Location = new System.Drawing.Point(434, 241);
+            this.tb_domain.Name = "tb_domain";
+            this.tb_domain.Size = new System.Drawing.Size(100, 20);
+            this.tb_domain.TabIndex = 12;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(323, 269);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(54, 13);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "Command";
+            // 
+            // tb_command
+            // 
+            this.tb_command.Location = new System.Drawing.Point(388, 266);
+            this.tb_command.Name = "tb_command";
+            this.tb_command.Size = new System.Drawing.Size(297, 20);
+            this.tb_command.TabIndex = 13;
+            // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 383);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.tb_command);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.tb_domain);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.tb_password);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.tb_username);
             this.Controls.Add(this.btn_browse);
-            this.Controls.Add(this.btn_Install);
+            this.Controls.Add(this.btn_Run);
             this.Controls.Add(this.tb_installer_path);
             this.Controls.Add(this.btn_shutdown);
             this.Controls.Add(this.label2);
@@ -159,8 +239,16 @@
         private System.Windows.Forms.TextBox tb_Port;
         private System.Windows.Forms.Button btn_shutdown;
         private System.Windows.Forms.TextBox tb_installer_path;
-        private System.Windows.Forms.Button btn_Install;
+        private System.Windows.Forms.Button btn_Run;
         private System.Windows.Forms.Button btn_browse;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tb_password;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox tb_username;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox tb_domain;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox tb_command;
     }
 }
 

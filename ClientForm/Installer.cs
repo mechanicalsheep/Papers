@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 
 
@@ -53,14 +54,21 @@ namespace Client
             });
             p.ErrorDataReceived += new DataReceivedEventHandler((s, e) =>
             {
-                Console.WriteLine("ErrorHandler" + e.Data);
+                Console.WriteLine("ErrorHandler " + e.Data);
                 //outList.Add(e.Data);
                 if(e.Data!=null)
                 if (e.Data.Contains($"'choco' is not recognized"))
                 {
                     outList.Add("CHOCO IS NOT INSTALLED ON THIS DEVICE");
+                        installChocolatey(credential);
                 }
+                    else
+                    {
+                        outList.Add(e.Data);
+                    }
             });
+
+            
             Console.WriteLine($"Username: {p.StartInfo.UserName}  Password: {p.StartInfo.Password}");
             p.Start();
             p.BeginOutputReadLine();
@@ -71,7 +79,40 @@ namespace Client
             return outList;
             
         }
+        void installChocolatey(NetworkCredential Credential)
+        {
+            Console.WriteLine("Starting to install chocolatey");
+            
+            Process p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
 
-        
+            if (Credential.Password != "" && Credential.UserName != "")
+            {
+                p.StartInfo.UserName = Credential.UserName;
+                p.StartInfo.Password = Credential.SecurePassword;
+                p.StartInfo.Domain = Credential.Domain;
+            }
+            // p.StartInfo.CreateNoWindow = true;
+            string command = @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" + " - NoProfile - InputFormat None - ExecutionPolicy Bypass - Command " + "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" + " && SET " + "PATH=%PATH%;%ALLUSERSPROFILE%\\chocolatey\\bin"
+            +"pause";
+              //  string command2 = @"@powershell -NoProfile -ExecutionPolicy Bypass -Command ""iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))"" && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin";
+              Process.Start(Directory.GetCurrentDirectory() + "\\Prereq\\chocolatey.bat",Credential.UserName,Credential.SecurePassword,"");
+           /* p.StartInfo.Verb = "runas";
+          // p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory() + "\\Prereq\\";
+            p.StartInfo.FileName = @"cmd.exe";
+            p.StartInfo.Arguments = "/C "+ Directory.GetCurrentDirectory() + "\\Prereq\\chocolatey.bat";
+            Console.WriteLine($"Running {p.StartInfo.FileName} in {p.StartInfo.WorkingDirectory} using User: {p.StartInfo.UserName} Domain: {p.StartInfo.Domain}");
+          p.Start();
+            p.WaitForExit();
+
+    */
+
+
+
+        }
+
+
     }
 }

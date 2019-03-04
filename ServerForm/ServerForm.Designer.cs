@@ -38,6 +38,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tb_command = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.tb_username = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lb_output
@@ -124,11 +126,29 @@
             this.label3.TabIndex = 8;
             this.label3.Text = "Command";
             // 
+            // tb_username
+            // 
+            this.tb_username.Location = new System.Drawing.Point(531, 58);
+            this.tb_username.Name = "tb_username";
+            this.tb_username.Size = new System.Drawing.Size(100, 20);
+            this.tb_username.TabIndex = 11;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(465, 61);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(55, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Username";
+            // 
             // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(762, 517);
+            this.Controls.Add(this.tb_username);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.tb_command);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tb_domain);
@@ -158,6 +178,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tb_command;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tb_username;
+        private System.Windows.Forms.Label label4;
     }
 }
 

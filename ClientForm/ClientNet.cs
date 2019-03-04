@@ -19,7 +19,7 @@ namespace Client
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("choco", (packetHeader, connection, input) =>
             {
                 form.writeline("Choco command: "+ input.command);
-                form.choco(input.command,input.password, input.domain);
+                form.choco(input.command,input.username,input.password, input.domain);
                
                 //form.choco()
 

@@ -68,7 +68,7 @@ namespace ServerForm
         {
             NetworkCredential networkCredential = new NetworkCredential()
             {
-                UserName = "administrator",
+                UserName = tb_username.Text,
                 Password = tb_password.Text,
                 Domain = tb_domain.Text,
 

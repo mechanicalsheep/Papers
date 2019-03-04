@@ -61,7 +61,7 @@ namespace Client
         {
             if(e.KeyCode==Keys.Enter)
             {
-                choco(tb_installer_path.Text,tb_IP.Text,tb_Port.Text);
+                choco(tb_command.Text, tb_username.Text, tb_password.Text, tb_domain.Text);
             }
         }
 
@@ -176,11 +176,12 @@ namespace Client
                 return null;
             }
         }
-        public void choco(string Command, string password, string domain)
+        public void choco(string Command, string username, string password, string domain)
         {
             Installer installer = new Installer();
-            
-            NetworkCredential credential = new NetworkCredential("administrator", password, domain);
+            if (username == "")
+                username = "administrator";
+            NetworkCredential credential = new NetworkCredential(username, password, domain);
             List<string> output = installer.Install(Command, credential);
             foreach (var outs in output)
                 if (outs != null)
@@ -229,7 +230,7 @@ namespace Client
         
         private void btn_Install_Click(object sender, EventArgs e)
         {
-            choco(tb_installer_path.Text, tb_IP.Text,tb_Port.Text);
+            choco(tb_command.Text, tb_username.Text, tb_password.Text, tb_domain.Text);
             
         }
 
