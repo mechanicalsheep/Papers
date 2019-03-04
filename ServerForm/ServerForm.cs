@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -61,7 +62,17 @@ namespace ServerForm
 
         private void btn_send_Click(object sender, EventArgs e)
         {
+            NetworkCredential networkCredential = new NetworkCredential()
+            {
+                UserName = "administrator",
+                Password = tb_password.Text,
+                Domain = tb_domain.Text,
 
+            };
+
+            CommandInfo commandInfo = new CommandInfo(networkCredential, tb_command.Text);
+
+            //serverNet.sendCommand()
             
         }
     }

@@ -4,6 +4,7 @@ using NetworkCommsDotNet.Connections;
 using System.Net;
 using System;
 using System.Collections.Generic;
+using ProtoBuf;
 
 namespace ServerForm
 {
@@ -27,7 +28,19 @@ namespace ServerForm
             }
            
         }
-     
+     public void sendCommand(string ip, int port, CommandInfo commandInfo)
+        {
+            form.writeline("Send Command: " + commandInfo.command);
+            try
+            {
+
+                NetworkComms.SendObject<CommandInfo>("choco", ip, port, commandInfo);
+            }
+            catch (Exception err)
+            {
+                form.writeline($"EXCEPTION IN SENDING COMMAND: {err.Message}");
+            }
+        }
         public List<string> GetConnection()
         {
             List<string> connectionList = new List<string>();
@@ -66,6 +79,28 @@ namespace ServerForm
         internal void CloseNetwork()
         {
             NetworkComms.Shutdown();
+        }
+    }
+
+
+    [ProtoContract]
+    public class CommandInfo
+    {
+        [ProtoMember(1)]
+        public NetworkCredential credential;
+
+        [ProtoMember(2)]
+        public string command { get; set; }
+
+        public CommandInfo()
+        {
+
+        }
+
+        public CommandInfo(NetworkCredential Credential, string Command)
+        {
+            credential = Credential;
+            command = Command;
         }
     }
 }

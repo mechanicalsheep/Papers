@@ -14,7 +14,18 @@ namespace Client
             form = clientForm;
             form.writeline("-==Client=-");
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("ServerToClient", HandleServerMessage);
-           NetworkComms.AppendGlobalIncomingPacketHandler<string>("snrClient",(packetHeader, connection, input) =>
+            //choco command receiver!
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("choco", (packetHeader, connection, input) =>
+            {
+                form.writeline("Choco command: "+input);
+               
+                //form.choco()
+
+                //When this is received by the client it will complete the synchronous request
+                //connection.SendObject("chocoAnswer", true);
+            });
+
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("snrClient",(packetHeader, connection, input) =>
            {
                form.writeline("received call from server, sending the server a message");
               string message = form.getUniqueKey();
