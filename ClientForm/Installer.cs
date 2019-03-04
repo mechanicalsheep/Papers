@@ -17,73 +17,68 @@ namespace Client
             Install();
         }*/
         
-        public void Install(string Path)
+        public List<string> Install(string Path)
         {
-           string commandString;
-            commandString = "/C choco --version";
-            
-            using(Process process = new Process())
+            //string commandString;
+            // commandString = "/C choco --version";
+
+            // using(Process process = new Process())
+            // {
+            //     ProcessStartInfo startInfo = new ProcessStartInfo("cmd.exe")
+            //     {
+            //         RedirectStandardInput = true,
+            //         UseShellExecute = false,
+            //         WorkingDirectory = @"d:\",
+            //         FileName="cmd.exe",
+            //         Arguments = commandString
+            //     };
+            //     // event handlers for output & error
+            //     process.OutputDataReceived += p_OutputDataReceived;
+            //     process.ErrorDataReceived += p_ErrorDataReceived;
+
+            //     // start process
+            //     process.Start();
+            //     // send command to its input
+            //     process.StandardInput.Write("dir" + process.StandardInput.NewLine);
+            //     //wait
+            //     process.WaitForExit();
+            // }
+            string ipAddress="127.0.0.1";
+           Process p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            string strCmdText;
+            //strCmdText = "/C tracert -d " + "127.0.0.1";
+            strCmdText = "/C ipconfig";
+            // Correct way to launch a process with arguments
+            p.StartInfo.FileName = "CMD.exe";
+           
+            p.StartInfo.Arguments = strCmdText;
+
+            List<string> outList = new List<string>();
+
+            p.OutputDataReceived += new DataReceivedEventHandler((s, e) =>
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo("cmd.exe")
-                {
-                    RedirectStandardInput = true,
-                    UseShellExecute = false,
-                    WorkingDirectory = @"d:\"
-                    Arguments=
-                };
-                // event handlers for output & error
-                process.OutputDataReceived += p_OutputDataReceived;
-                process.ErrorDataReceived += p_ErrorDataReceived;
+                Console.WriteLine(e.Data);
+                outList.Add(e.Data);
+            });
+            p.Start();
+            p.BeginOutputReadLine();
 
-                // start process
-                process.Start(commandString);
-                // send command to its input
-                process.StandardInput.Write("dir" + process.StandardInput.NewLine);
-                //wait
-                process.WaitForExit();
-            }
+            //string output = p.StandardOutput.ReadToEnd();
+
+            //string output2;
             
-            //string path=Path;
-            //PowerShell powerShell = null;
-
-            //try
+            //while ((output2 = p.StandardOutput.ReadLine()) != null)
             //{
-            //    using (powerShell = PowerShell.Create())
-            //    {
-            //        powerShell.AddScript($"setup=Start-Process '{path}' -ArgumentList ' /S ' -Wait -PassThru");
-
-
-            //         foreach (PSObject outputItem in powerShell.Invoke())
-            //         {
-            //             string test = $"Full name: {outputItem.BaseObject.GetType().FullName}";
-            //             Debug.WriteLine(test);
-            //        Console.WriteLine((test));
-            //         }
-
-            //    }
+            //    outList.Add(output2);
+            //    Console.WriteLine(output2);
             //}
-            //catch (Exception err)
-            //{
-            //    string message = $"Error: {err.Message}";
-            //    Console.WriteLine(message);
-
-
-            //}
-        }
-        static void p_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            Process p = sender as Process;
-            if (p == null)
-                return;
-            Console.WriteLine(e.Data);
+            p.WaitForExit();
+            return outList ;
+            
         }
 
-        static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            Process p = sender as Process;
-            if (p == null)
-                return;
-            Console.WriteLine(e.Data);
-        }
+        
     }
 }

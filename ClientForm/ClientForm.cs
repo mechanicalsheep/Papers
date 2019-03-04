@@ -211,7 +211,9 @@ namespace Client
         private void btn_Install_Click(object sender, EventArgs e)
         {
             Installer installer = new Installer();
-            installer.Install(tb_installer_path.Text);
+            List<string> output = installer.Install(tb_installer_path.Text);
+            foreach(var outs in output)
+            writeline("Output is "+outs);
         }
 
         private void button1_Click(object sender, EventArgs e)
