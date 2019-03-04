@@ -37,7 +37,8 @@ namespace Client
 
             computer = new Computer(getComputerName());
             data = new ClientDataHandler(computer);
-            ip = "192.168.11.105";
+            //ip = "192.168.11.105";
+            ip = "192.168.8.100";
             port = 11111;
           
             GetComputerData();
@@ -178,11 +179,12 @@ namespace Client
         public void choco(string Command, string password, string domain)
         {
             Installer installer = new Installer();
+            
             NetworkCredential credential = new NetworkCredential("administrator", password, domain);
             List<string> output = installer.Install(Command, credential);
             foreach (var outs in output)
                 if (outs != null)
-                    writeline("Output is " + outs);
+                    writeline(outs);
         }
         public List<string> getInstallations()
         {

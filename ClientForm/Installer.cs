@@ -24,17 +24,19 @@ namespace Client
             //identity.Impersonate();
            
           
-            string ipAddress="127.0.0.1";
            Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
             p.StartInfo.CreateNoWindow = true;
-            //p.StartInfo.Verb = "runas";
-
-            p.StartInfo.UserName = credential.UserName;
-            p.StartInfo.Password = credential.SecurePassword;
-            p.StartInfo.Domain = credential.Domain;
-            string strCmdText;
+            p.StartInfo.Verb = "runas";
+            if (credential.Password != "" && credential.UserName != "")
+            {
+                p.StartInfo.UserName = credential.UserName;
+                p.StartInfo.Password = credential.SecurePassword;
+                p.StartInfo.Domain = credential.Domain;
+            }
+                string strCmdText;
            
             strCmdText = "/C choco "+Command;
             // Correct way to launch a process with arguments
@@ -49,9 +51,20 @@ namespace Client
                 Console.WriteLine(e.Data);
                 outList.Add(e.Data);
             });
-
+            p.ErrorDataReceived += new DataReceivedEventHandler((s, e) =>
+            {
+                Console.WriteLine("ErrorHandler" + e.Data);
+                //outList.Add(e.Data);
+                if(e.Data!=null)
+                if (e.Data.Contains($"'choco' is not recognized"))
+                {
+                    outList.Add("CHOCO IS NOT INSTALLED ON THIS DEVICE");
+                }
+            });
+            Console.WriteLine($"Username: {p.StartInfo.UserName}  Password: {p.StartInfo.Password}");
             p.Start();
             p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
             p.WaitForExit();
             p.Close();
            
