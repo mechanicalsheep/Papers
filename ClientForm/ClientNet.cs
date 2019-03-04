@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
+using ProtoBuf;
 
 namespace Client
 {
@@ -15,9 +16,10 @@ namespace Client
             form.writeline("-==Client=-");
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("ServerToClient", HandleServerMessage);
             //choco command receiver!
-            NetworkComms.AppendGlobalIncomingPacketHandler<string>("choco", (packetHeader, connection, input) =>
+            NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("choco", (packetHeader, connection, input) =>
             {
-                form.writeline("Choco command: "+input);
+                form.writeline("Choco command: "+ input.command);
+                form.choco(input.command, input.credential.Password, input.credential.Domain);
                
                 //form.choco()
 
@@ -66,6 +68,26 @@ namespace Client
         public void CloseNetwork()
         {
             NetworkComms.Shutdown();
+        }
+    }
+    [ProtoContract]
+    public class CommandInfo
+    {
+        [ProtoMember(1)]
+        public NetworkCredential credential { get; set; }
+
+        [ProtoMember(2)]
+        public string command { get; set; }
+
+        public CommandInfo()
+        {
+
+        }
+
+        public CommandInfo(NetworkCredential Credential, string Command)
+        {
+            credential = Credential;
+            command = Command;
         }
     }
 }

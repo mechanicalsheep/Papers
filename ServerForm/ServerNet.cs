@@ -30,7 +30,7 @@ namespace ServerForm
         }
      public void sendCommand(string ip, int port, CommandInfo commandInfo)
         {
-            form.writeline("Send Command: " + commandInfo.command);
+            form.writeline("Sending Command: " + commandInfo.command);
             try
             {
 
@@ -52,7 +52,7 @@ namespace ServerForm
         }
         private void HandleStringFromClient(PacketHeader packetHeader, Connection connection, string incomingObject)
         {
-            form.writeline($"Client: + {connection.ConnectionInfo.RemoteEndPoint.ToString()} has sent the following");
+            form.writeline($"Client:  {connection.ConnectionInfo.RemoteEndPoint.ToString()} has sent the following");
             
             form.writeline($"Message: {incomingObject}");
         }
@@ -87,7 +87,7 @@ namespace ServerForm
     public class CommandInfo
     {
         [ProtoMember(1)]
-        public NetworkCredential credential;
+        public NetworkCredential credential { get; set; }
 
         [ProtoMember(2)]
         public string command { get; set; }
