@@ -19,7 +19,7 @@ namespace Client
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("choco", (packetHeader, connection, input) =>
             {
                 form.writeline("Choco command: "+ input.command);
-                form.choco(input.command, input.credential.Password, input.credential.Domain);
+                form.choco(input.command,input.password, input.domain);
                
                 //form.choco()
 
@@ -73,10 +73,15 @@ namespace Client
     [ProtoContract]
     public class CommandInfo
     {
-        [ProtoMember(1)]
-        public NetworkCredential credential { get; set; }
 
+        [ProtoMember(1)]
+        public string username { get; set; }
         [ProtoMember(2)]
+        public string password { get; set; }
+        [ProtoMember(3)]
+        public string domain { get; set; }
+
+        [ProtoMember(4)]
         public string command { get; set; }
 
         public CommandInfo()
@@ -86,7 +91,9 @@ namespace Client
 
         public CommandInfo(NetworkCredential Credential, string Command)
         {
-            credential = Credential;
+            username = Credential.UserName;
+            password = Credential.Password;
+            domain = Credential.Domain;
             command = Command;
         }
     }

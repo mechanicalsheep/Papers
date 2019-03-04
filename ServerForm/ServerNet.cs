@@ -86,10 +86,15 @@ namespace ServerForm
     [ProtoContract]
     public class CommandInfo
     {
-        [ProtoMember(1)]
-        public NetworkCredential credential { get; set; }
 
+        [ProtoMember(1)]
+        public string username { get; set; }
         [ProtoMember(2)]
+        public string password { get; set; }
+        [ProtoMember(3)]
+        public string domain { get; set; }
+
+        [ProtoMember(4)]
         public string command { get; set; }
 
         public CommandInfo()
@@ -99,7 +104,9 @@ namespace ServerForm
 
         public CommandInfo(NetworkCredential Credential, string Command)
         {
-            credential = Credential;
+            username = Credential.UserName;
+            password = Credential.Password;
+            domain = Credential.Domain;
             command = Command;
         }
     }
