@@ -213,6 +213,7 @@ namespace Client
             Installer installer = new Installer();
             List<string> output = installer.Install(tb_installer_path.Text);
             foreach(var outs in output)
+                if(outs!=null)
             writeline("Output is "+outs);
         }
 
