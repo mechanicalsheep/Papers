@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 //using System.Management.Automation.Runspaces;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net;
+using System.Security;
+using System.Security.Principal;
+
 
 namespace Client
 {
@@ -17,40 +21,29 @@ namespace Client
             Install();
         }*/
         
-        public List<string> Install(string Path)
+        public List<string> Install(string Command, NetworkCredential credential)
         {
-            //string commandString;
-            // commandString = "/C choco --version";
+            // Retrieve the Windows account token for the current user.
+           // IntPtr logonToken = WindowsIdentity.GetCurrent().Token;
 
-            // using(Process process = new Process())
-            // {
-            //     ProcessStartInfo startInfo = new ProcessStartInfo("cmd.exe")
-            //     {
-            //         RedirectStandardInput = true,
-            //         UseShellExecute = false,
-            //         WorkingDirectory = @"d:\",
-            //         FileName="cmd.exe",
-            //         Arguments = commandString
-            //     };
-            //     // event handlers for output & error
-            //     process.OutputDataReceived += p_OutputDataReceived;
-            //     process.ErrorDataReceived += p_ErrorDataReceived;
 
-            //     // start process
-            //     process.Start();
-            //     // send command to its input
-            //     process.StandardInput.Write("dir" + process.StandardInput.NewLine);
-            //     //wait
-            //     process.WaitForExit();
-            // }
+           // WindowsIdentity identity = new WindowsIdentity(logonToken);
+            //identity.Impersonate();
+           
+          
             string ipAddress="127.0.0.1";
            Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.CreateNoWindow = true;
+            //p.StartInfo.Verb = "runas";
+
+            p.StartInfo.UserName = credential.UserName;
+            p.StartInfo.Password = credential.SecurePassword;
+            p.StartInfo.Domain = credential.Domain;
             string strCmdText;
-            //strCmdText = "/C tracert -d " + "127.0.0.1";
-            strCmdText = "/C choco --version";
+           
+            strCmdText = "/C choco "+Command;
             // Correct way to launch a process with arguments
             p.StartInfo.FileName = "CMD.exe";
            
@@ -63,19 +56,12 @@ namespace Client
                 Console.WriteLine(e.Data);
                 outList.Add(e.Data);
             });
+
             p.Start();
             p.BeginOutputReadLine();
-
-            //string output = p.StandardOutput.ReadToEnd();
-
-            //string output2;
-            
-            //while ((output2 = p.StandardOutput.ReadLine()) != null)
-            //{
-            //    outList.Add(output2);
-            //    Console.WriteLine(output2);
-            //}
             p.WaitForExit();
+            p.Close();
+           // identity.
             return outList ;
             
         }

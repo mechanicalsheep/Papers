@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
+using System.Net;
 
 namespace Client
 {
@@ -45,7 +46,7 @@ namespace Client
 
             clientNet = new ClientNet(this);
 
-
+            tb_installer_path.KeyDown += Tb_installer_path_KeyDown;
             
             aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(sendMessage);
@@ -53,6 +54,14 @@ namespace Client
             aTimer.Enabled = true;
            
 
+        }
+
+        private void Tb_installer_path_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Enter)
+            {
+                choco(tb_installer_path.Text,tb_IP.Text,tb_Port.Text);
+            }
         }
 
         void GetComputerData()
@@ -166,7 +175,15 @@ namespace Client
                 return null;
             }
         }
-
+        public void choco(string Command, string password, string domain)
+        {
+            Installer installer = new Installer();
+            NetworkCredential credential = new NetworkCredential("administrator", password, domain);
+            List<string> output = installer.Install(Command, credential);
+            foreach (var outs in output)
+                if (outs != null)
+                    writeline("Output is " + outs);
+        }
         public List<string> getInstallations()
         {
             List<string> software = new List<string>();
@@ -207,14 +224,11 @@ namespace Client
         {
             clientNet.CloseNetwork();
         }
-
+        
         private void btn_Install_Click(object sender, EventArgs e)
         {
-            Installer installer = new Installer();
-            List<string> output = installer.Install(tb_installer_path.Text);
-            foreach(var outs in output)
-                if(outs!=null)
-            writeline("Output is "+outs);
+            choco(tb_installer_path.Text, tb_IP.Text,tb_Port.Text);
+            
         }
 
         private void button1_Click(object sender, EventArgs e)

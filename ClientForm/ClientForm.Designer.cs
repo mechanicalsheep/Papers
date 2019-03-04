@@ -50,7 +50,7 @@
             // 
             // btn_send
             // 
-            this.btn_send.Location = new System.Drawing.Point(189, 207);
+            this.btn_send.Location = new System.Drawing.Point(105, 225);
             this.btn_send.Name = "btn_send";
             this.btn_send.Size = new System.Drawing.Size(75, 23);
             this.btn_send.TabIndex = 3;
@@ -60,7 +60,7 @@
             // 
             // tb_IP
             // 
-            this.tb_IP.Location = new System.Drawing.Point(177, 82);
+            this.tb_IP.Location = new System.Drawing.Point(92, 139);
             this.tb_IP.Name = "tb_IP";
             this.tb_IP.Size = new System.Drawing.Size(100, 20);
             this.tb_IP.TabIndex = 1;
@@ -68,7 +68,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(139, 85);
+            this.label1.Location = new System.Drawing.Point(54, 142);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(17, 13);
             this.label1.TabIndex = 3;
@@ -77,7 +77,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(139, 138);
+            this.label2.Location = new System.Drawing.Point(54, 182);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 13);
             this.label2.TabIndex = 5;
@@ -85,7 +85,7 @@
             // 
             // tb_Port
             // 
-            this.tb_Port.Location = new System.Drawing.Point(177, 135);
+            this.tb_Port.Location = new System.Drawing.Point(92, 179);
             this.tb_Port.Name = "tb_Port";
             this.tb_Port.Size = new System.Drawing.Size(100, 20);
             this.tb_Port.TabIndex = 2;
