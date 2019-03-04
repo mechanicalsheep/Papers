@@ -35,6 +35,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tb_Port = new System.Windows.Forms.TextBox();
             this.btn_shutdown = new System.Windows.Forms.Button();
+            this.tb_installer_path = new System.Windows.Forms.TextBox();
+            this.btn_Install = new System.Windows.Forms.Button();
+            this.btn_browse = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lb_output
@@ -97,11 +100,41 @@
             this.btn_shutdown.UseVisualStyleBackColor = true;
             this.btn_shutdown.Click += new System.EventHandler(this.btn_shutdown_Click);
             // 
+            // tb_installer_path
+            // 
+            this.tb_installer_path.Location = new System.Drawing.Point(329, 186);
+            this.tb_installer_path.Name = "tb_installer_path";
+            this.tb_installer_path.Size = new System.Drawing.Size(262, 20);
+            this.tb_installer_path.TabIndex = 7;
+            // 
+            // btn_Install
+            // 
+            this.btn_Install.Location = new System.Drawing.Point(448, 238);
+            this.btn_Install.Name = "btn_Install";
+            this.btn_Install.Size = new System.Drawing.Size(62, 23);
+            this.btn_Install.TabIndex = 8;
+            this.btn_Install.Text = "Install";
+            this.btn_Install.UseVisualStyleBackColor = true;
+            this.btn_Install.Click += new System.EventHandler(this.btn_Install_Click);
+            // 
+            // btn_browse
+            // 
+            this.btn_browse.Location = new System.Drawing.Point(597, 183);
+            this.btn_browse.Name = "btn_browse";
+            this.btn_browse.Size = new System.Drawing.Size(62, 23);
+            this.btn_browse.TabIndex = 9;
+            this.btn_browse.Text = "Browse";
+            this.btn_browse.UseVisualStyleBackColor = true;
+            this.btn_browse.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 383);
+            this.Controls.Add(this.btn_browse);
+            this.Controls.Add(this.btn_Install);
+            this.Controls.Add(this.tb_installer_path);
             this.Controls.Add(this.btn_shutdown);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tb_Port);
@@ -125,6 +158,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tb_Port;
         private System.Windows.Forms.Button btn_shutdown;
+        private System.Windows.Forms.TextBox tb_installer_path;
+        private System.Windows.Forms.Button btn_Install;
+        private System.Windows.Forms.Button btn_browse;
     }
 }
 

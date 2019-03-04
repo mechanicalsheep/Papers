@@ -207,6 +207,24 @@ namespace Client
         {
             clientNet.CloseNetwork();
         }
+
+        private void btn_Install_Click(object sender, EventArgs e)
+        {
+            Installer installer = new Installer();
+            installer.Install(tb_installer_path.Text);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.InitialDirectory = "C:\\Users";
+            
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                // MessageBox.Show("You selected: " + dialog.FileName);
+                tb_installer_path.Text = dialog.FileName;
+            }
+        }
     }
 
 }
