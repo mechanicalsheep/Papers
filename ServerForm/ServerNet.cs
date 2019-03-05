@@ -17,7 +17,20 @@ namespace ServerForm
         public ServerNet(ServerForm serverForm)
         {
             form = serverForm;
-           
+            NetworkComms.ConnectionEstablishShutdownDelegate clientEstablishDelegate = (connection) =>
+
+            {
+                form.ScanForConnections();
+                Console.WriteLine("Client " + connection.ConnectionInfo + " connected.");
+
+            };
+            NetworkComms.ConnectionEstablishShutdownDelegate connectionShutdownDelegate = (connection) =>
+              {
+                  form.ScanForConnections();
+                  Console.WriteLine("Client" + connection.ConnectionInfo + "disconnected");
+              };
+            NetworkComms.AppendGlobalConnectionEstablishHandler(clientEstablishDelegate);
+            NetworkComms.AppendGlobalConnectionCloseHandler(connectionShutdownDelegate);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("SentFromClient",HandleStringFromClient);
             Connection.StartListening(ConnectionType.TCP, new IPEndPoint(IPAddress.Any, port));
             form.writeline("-==SERVERNET ONLINE==-");
@@ -41,8 +54,9 @@ namespace ServerForm
                 form.writeline($"EXCEPTION IN SENDING COMMAND: {err.Message}");
             }
         }
-        public List<string> GetConnection()
+        public List<string> GetConnections()
         {
+            
             List<string> connectionList = new List<string>();
             foreach(var connection in NetworkComms.AllConnectionInfo())
             {
@@ -56,7 +70,10 @@ namespace ServerForm
             form.writeline($"Client:  {connection.ConnectionInfo.RemoteEndPoint.ToString()} has sent the following");
             
             form.writeline($"Message: {incomingObject}");
+
+           
         }
+
         
         public string GetKeyCommad(string ip, int port, string message)
         {

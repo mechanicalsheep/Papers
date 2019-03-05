@@ -45,24 +45,59 @@ namespace ServerForm
        
 
         }
-
-        private void btn_Scan_Click(object sender, EventArgs e)
+        public void ScanForConnections()
         {
-            lb_onlineComp.Items.Clear();
-            List<string> onlineList = serverNet.GetConnection();
-            Dictionary<string, string> onlineAddresses = new Dictionary<string, string>();
-            string[] ipPort;
+            if (lb_onlineComp.InvokeRequired)
+            {
+                lb_onlineComp.Invoke(new Action(()=>{
+
+
+                    lb_onlineComp.Items.Clear();
+                    List<string> onlineList = serverNet.GetConnections();
+                    Dictionary<string, string> onlineAddresses = new Dictionary<string, string>();
+                    string[] ipPort;
+                    foreach (var connection in onlineList)
+                    {
+                        ipPort = connection.Split(':');
+
+                        string key = serverNet.GetKeyCommad(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
+                        onlineAddresses.Add(key, connection);
+                        lb_onlineComp.Items.Add(key + " " + connection);
+
+                    }
+                    if (lb_onlineComp.Items.Count > 0)
+                    {
+                        lb_onlineComp.SelectedIndex = 0;
+                    }
+
+                }));
+            }
+            else
+            {
+                lb_onlineComp.Items.Clear();
+                List<string> onlineList = serverNet.GetConnections();
+                Dictionary<string, string> onlineAddresses = new Dictionary<string, string>();
+                string[] ipPort;
                 foreach (var connection in onlineList)
                 {
-                ipPort = connection.Split(':');
+                    ipPort = connection.Split(':');
 
-                string key= serverNet.GetKeyCommad(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
-                onlineAddresses.Add(key, connection);
-                lb_onlineComp.Items.Add(key+" " +connection);
-                
+                    string key = serverNet.GetKeyCommad(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
+                    onlineAddresses.Add(key, connection);
+                    lb_onlineComp.Items.Add(key + " " + connection);
+
                 }
-            
-            
+                if (lb_onlineComp.Items.Count > 0)
+                {
+                    lb_onlineComp.SelectedIndex = 0;
+                }
+            }
+
+
+        }
+        private void btn_Scan_Click(object sender, EventArgs e)
+        {
+            ScanForConnections();
         }
         public void getComputerKey(string ip, int port)
         {

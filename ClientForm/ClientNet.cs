@@ -28,7 +28,7 @@ namespace Client
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("snrClient",(packetHeader, connection, input) =>
            {
                form.writeline("received call from server, sending the server a message");
-              string message = form.getUniqueKey();
+              string message = form.getComputerName();
                
                //When this is received by the client it will complete the synchronous request
                connection.SendObject("snrServer", message);
