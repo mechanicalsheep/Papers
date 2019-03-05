@@ -71,9 +71,15 @@ namespace Client
             computer.uniqueKey = getUniqueKey();
             computer.OS = getOS();
             computer.software = getInstallations();
+            computer.dateTime = getDateTime();
           
             
 
+        }
+        public string getDateTime()
+        {
+            DateTime dateTime = DateTime.Now;
+            return dateTime.ToString();
         }
 
         public string getComputerName()

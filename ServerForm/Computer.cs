@@ -26,6 +26,8 @@ namespace ServerForm
         public string group { get; set; }
         [ProtoMember(8)]
         public List<string> software = new List<string>();
+        [ProtoMember(9)]
+        public string dateTime { get; set; }
 
         
         //needed for protobuf

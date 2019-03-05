@@ -26,6 +26,8 @@ namespace Client
         public string group { get; set; }
         [ProtoMember(8)]
         public List<string> software = new List<string>();
+        [ProtoMember(9)]
+        public string dateTime { get; set; }
 
         
         //needed for protobuf
@@ -77,33 +79,6 @@ namespace Client
             return false;
         }
 
-        private bool isOnline()
-        {
-            //todo add powershell that will ping and return if online
-            return online;
-        }
-
-        public void getComputerInfo()
-        {
-            /*todo
-             Invoke-Command -ComputerName sheep1 -ScriptBlock { Get-ComputerInfo } -credential mechanicalsheep
-             */
-        }
-
-        public void getInstalledSoftware()
-        {
-            //todo powershell command to get all installed.
-            
-            //delete this later.
-            
-        }
-        
-        public void installSoftware(string software)
-        {
-         /*todo
-           powershell command= Invoke-Command -ComputerName sheep1 -ScriptBlock { choco install googlechrome -y } -credential mechanicalsheep
-         */
-        }
        
     }
  
