@@ -32,6 +32,7 @@ namespace ServerForm
             NetworkComms.AppendGlobalConnectionEstablishHandler(clientEstablishDelegate);
             NetworkComms.AppendGlobalConnectionCloseHandler(connectionShutdownDelegate);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("SentFromClient",HandleStringFromClient);
+
             Connection.StartListening(ConnectionType.TCP, new IPEndPoint(IPAddress.Any, port));
             form.writeline("-==SERVERNET ONLINE==-");
             form.writeline("Listening on: ");
@@ -41,6 +42,7 @@ namespace ServerForm
             }
            
         }
+      
      public void sendCommand(string ip, int port, CommandInfo commandInfo)
         {
             form.writeline("Sending Command: " + commandInfo.command);
