@@ -14,6 +14,11 @@ namespace Client
         {
             Install();
         }*/
+        ClientForm form;
+        public Installer(ClientForm Form)
+        {
+            form = Form;
+        }
         
         public List<string> Install(string Command, NetworkCredential credential)
         {
@@ -51,6 +56,7 @@ namespace Client
             {
                 Console.WriteLine(e.Data);
                 outList.Add(e.Data);
+                form.sendMessage(e.Data);
             });
             p.ErrorDataReceived += new DataReceivedEventHandler((s, e) =>
             {
@@ -84,30 +90,42 @@ namespace Client
             Console.WriteLine("Starting to install chocolatey");
             
             Process p = new Process();
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.RedirectStandardError = true;
+             p.StartInfo.UseShellExecute = false;
+             p.StartInfo.RedirectStandardOutput = true;
+             p.StartInfo.RedirectStandardError = true;
 
-            if (Credential.Password != "" && Credential.UserName != "")
-            {
-                p.StartInfo.UserName = Credential.UserName;
-                p.StartInfo.Password = Credential.SecurePassword;
-                p.StartInfo.Domain = Credential.Domain;
-            }
+             if (Credential.Password != "" && Credential.UserName != "")
+             {
+                 p.StartInfo.UserName = Credential.UserName;
+                 p.StartInfo.Password = Credential.SecurePassword;
+                 p.StartInfo.Domain = Credential.Domain;
+             }
+             
             // p.StartInfo.CreateNoWindow = true;
-            string command = @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" + " - NoProfile - InputFormat None - ExecutionPolicy Bypass - Command " + "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" + " && SET " + "PATH=%PATH%;%ALLUSERSPROFILE%\\chocolatey\\bin"
-            +"pause";
-              //  string command2 = @"@powershell -NoProfile -ExecutionPolicy Bypass -Command ""iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))"" && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin";
-              Process.Start(Directory.GetCurrentDirectory() + "\\Prereq\\chocolatey.bat",Credential.UserName,Credential.SecurePassword,"");
-           /* p.StartInfo.Verb = "runas";
+            string command = "@\"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command \"iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))\" && SET \"PATH=%PATH%;%ALLUSERSPROFILE%\\chocolatey\\bin\"";
+            //+"pause";
+            //string command = "\"" + "Hello" "\"";
+            Console.WriteLine(command);
+            //  string command2 = @"@powershell -NoProfile -ExecutionPolicy Bypass -Command ""iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))"" && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin";
+
+            //-Process.Start(Directory.GetCurrentDirectory() + "\\Prereq\\chocolatey.bat",Credential.UserName,Credential.SecurePassword,"");
+          
+             p.StartInfo.Verb = "runas";
           // p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory() + "\\Prereq\\";
             p.StartInfo.FileName = @"cmd.exe";
-            p.StartInfo.Arguments = "/C "+ Directory.GetCurrentDirectory() + "\\Prereq\\chocolatey.bat";
+            p.StartInfo.Arguments = "/C "+ command;
+            p.EnableRaisingEvents = true;
+            p.Exited += (sender, e) => 
+            {
+                Console.WriteLine("PROCESS COMPLETE");
+                form.sendMessage("Choco is now installed");
+                
+            };
             Console.WriteLine($"Running {p.StartInfo.FileName} in {p.StartInfo.WorkingDirectory} using User: {p.StartInfo.UserName} Domain: {p.StartInfo.Domain}");
           p.Start();
             p.WaitForExit();
 
-    */
+    
 
 
 

@@ -52,15 +52,16 @@ namespace ServerForm
         }
         private void HandleStringFromClient(PacketHeader packetHeader, Connection connection, string incomingObject)
         {
+            
             form.writeline($"Client:  {connection.ConnectionInfo.RemoteEndPoint.ToString()} has sent the following");
             
             form.writeline($"Message: {incomingObject}");
         }
-
-        public string sendMessage(string ip, int port, string message)
+        
+        public string GetKeyCommad(string ip, int port, string message)
         {
-            form.writeline("Going to send the following");
-            form.writeline($"ServerToClient ip: {ip} port: {port} message: {message} ");
+            //form.writeline("Going to send the following");
+            //form.writeline($"ServerToClient ip: {ip} port: {port} message: {message} ");
             try
             {
                string clientMessage=NetworkComms.SendReceiveObject<string,string>("snrClient", ip, port, "snrServer", 800000,

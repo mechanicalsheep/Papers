@@ -19,6 +19,8 @@ namespace ServerForm
         {
             InitializeComponent();
             serverNet = new ServerNet(this);
+
+            ColorMessage("HELLO");
         }
 
         public void writeline(string message)
@@ -27,17 +29,20 @@ namespace ServerForm
             if(lb_output.InvokeRequired)
            lb_output.Invoke(new Action(() =>
            {
+              // lb_output.ForeColor = Color.Green;
                lb_output.Items.Add(message);
                lb_output.SelectedIndex = lb_output.Items.Count - 1;
                lb_output.SelectedIndex = -1;
            }));
             else
             {
+               // lb_output.ForeColor = Color.Green;
                 lb_output.Items.Add(message);
                 lb_output.SelectedIndex = lb_output.Items.Count - 1;
                 lb_output.SelectedIndex = -1;
 
             }
+       
 
         }
 
@@ -51,7 +56,7 @@ namespace ServerForm
                 {
                 ipPort = connection.Split(':');
 
-                string key= serverNet.sendMessage(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
+                string key= serverNet.GetKeyCommad(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
                 onlineAddresses.Add(key, connection);
                 lb_onlineComp.Items.Add(key+" " +connection);
                 
@@ -63,7 +68,18 @@ namespace ServerForm
         {
 
         }
-
+        public void ColorMessage(string message)
+        {
+            // lb_output.Invalidate();
+            //  lb_output.ForeColor = Color.Red;
+            // lb_output.Invalidate();
+            Label label = new Label();
+            label.ForeColor = Color.Red;
+            label.Text = message;
+            lb_output.Items.Add(label.Text);
+           // lb_output.Invalidate();
+           // lb_output.ForeColor = Color.Black;
+        }
         private void btn_send_Click(object sender, EventArgs e)
         {
             NetworkCredential networkCredential = new NetworkCredential()

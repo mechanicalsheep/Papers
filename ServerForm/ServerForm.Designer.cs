@@ -131,7 +131,7 @@
             this.tb_username.Location = new System.Drawing.Point(531, 58);
             this.tb_username.Name = "tb_username";
             this.tb_username.Size = new System.Drawing.Size(100, 20);
-            this.tb_username.TabIndex = 11;
+            this.tb_username.TabIndex = 4;
             // 
             // label4
             // 

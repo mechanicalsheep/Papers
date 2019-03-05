@@ -37,8 +37,8 @@ namespace Client
 
             computer = new Computer(getComputerName());
             data = new ClientDataHandler(computer);
-            //ip = "192.168.11.105";
-            ip = "192.168.8.100";
+            ip = "192.168.11.105";
+            //ip = "192.168.8.100";
             port = 11111;
           
             GetComputerData();
@@ -50,7 +50,7 @@ namespace Client
             tb_installer_path.KeyDown += Tb_installer_path_KeyDown;
             
             aTimer = new System.Timers.Timer();
-            aTimer.Elapsed += new ElapsedEventHandler(sendMessage);
+            aTimer.Elapsed += new ElapsedEventHandler(stillAlive);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
            
@@ -107,8 +107,11 @@ namespace Client
             return "";
         }
         #endregion
-
-        private void sendMessage(object sender, ElapsedEventArgs e)
+        public void sendMessage(string message)
+        {
+            clientNet.sendMessage(ip,port,message);
+        }
+        private void stillAlive(object sender, ElapsedEventArgs e)
         {
             try
             {
@@ -178,7 +181,7 @@ namespace Client
         }
         public void choco(string Command, string username, string password, string domain)
         {
-            Installer installer = new Installer();
+            Installer installer = new Installer(this);
             if (username == "")
                 username = "administrator";
             NetworkCredential credential = new NetworkCredential(username, password, domain);
