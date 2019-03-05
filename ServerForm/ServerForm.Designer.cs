@@ -40,6 +40,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tb_username = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.btn_getComputer = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lb_output
@@ -143,11 +144,22 @@
             this.label4.TabIndex = 10;
             this.label4.Text = "Username";
             // 
+            // btn_getComputer
+            // 
+            this.btn_getComputer.Location = new System.Drawing.Point(120, 290);
+            this.btn_getComputer.Name = "btn_getComputer";
+            this.btn_getComputer.Size = new System.Drawing.Size(146, 23);
+            this.btn_getComputer.TabIndex = 11;
+            this.btn_getComputer.Text = "Get Computer Snapshot";
+            this.btn_getComputer.UseVisualStyleBackColor = true;
+            this.btn_getComputer.Click += new System.EventHandler(this.btn_getComputer_Click);
+            // 
             // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(762, 517);
+            this.Controls.Add(this.btn_getComputer);
             this.Controls.Add(this.tb_username);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tb_command);
@@ -181,6 +193,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tb_username;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btn_getComputer;
     }
 }
 

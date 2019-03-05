@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace Client
+namespace ServerForm
 {
     [ProtoContract]
 #pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()

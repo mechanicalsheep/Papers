@@ -42,7 +42,19 @@ namespace ServerForm
             }
            
         }
-      
+        public Computer GetComputer(string ip, int port)
+        {
+            try
+            {
+                Computer computer = NetworkComms.SendReceiveObject<string, Computer>("GetComputer", ip, port, "SentComputer", 800000, "gimme computer");
+                Console.WriteLine("Computer name received is: "+computer.name);
+                return computer;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
      public void sendCommand(string ip, int port, CommandInfo commandInfo)
         {
             form.writeline("Sending Command: " + commandInfo.command);

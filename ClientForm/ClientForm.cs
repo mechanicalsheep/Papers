@@ -26,7 +26,7 @@ namespace Client
         int port;
         System.Timers.Timer aTimer;
 
-        Computer computer;
+        public Computer computer;
         ClientNet clientNet;
         ClientDataHandler data;
 

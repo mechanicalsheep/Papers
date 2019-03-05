@@ -15,12 +15,15 @@ namespace ServerForm
     public partial class ServerForm : Form
     {
         ServerNet serverNet;
+        ServerDataHandler data;
         public ServerForm()
         {
             InitializeComponent();
             serverNet = new ServerNet(this);
 
-            ColorMessage("HELLO");
+            
+
+            //ColorMessage("HELLO");
         }
 
         public void writeline(string message)
@@ -135,6 +138,20 @@ namespace ServerForm
             serverNet.sendCommand(ip, port, commandInfo);
 
             //serverNet.sendCommand()
+            
+        }
+
+        private void btn_getComputer_Click(object sender, EventArgs e)
+        {
+            string ipWithPort = lb_onlineComp.SelectedItem.ToString().Split(' ').Last();
+            string ip = ipWithPort.Split(':').First();
+            int port = Convert.ToInt32(ipWithPort.Split(':').Last());
+
+            Computer computer=serverNet.GetComputer(ip, port);
+            writeline("Computer: " + computer.name);
+            writeline("OS: " + computer.OS);
+            data = new ServerDataHandler(computer, "Computers");
+            data.SaveComputerData();
             
         }
     }
