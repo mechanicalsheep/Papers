@@ -21,10 +21,6 @@ namespace ServerForm
             InitializeComponent();
             serverNet = new ServerNet(this);
             data = new ServerDataHandler();
-
-            
-
-            //ColorMessage("HELLO");
         }
 
         public void writeline(string message)
@@ -103,24 +99,14 @@ namespace ServerForm
         {
             ScanForConnections();
         }
-        public void getComputerKey(string ip, int port)
-        {
-
-        }
-        public void ColorMessage(string message)
-        {
-            // lb_output.Invalidate();
-            //  lb_output.ForeColor = Color.Red;
-            // lb_output.Invalidate();
-            Label label = new Label();
-            label.ForeColor = Color.Red;
-            label.Text = message;
-            lb_output.Items.Add(label.Text);
-           // lb_output.Invalidate();
-           // lb_output.ForeColor = Color.Black;
-        }
+       
         private void btn_send_Click(object sender, EventArgs e)
         {
+            if (lb_onlineComp.SelectedItems.Count > 0)
+            {
+                foreach(var item in lb_onlineComp.SelectedItems)
+                {
+
             NetworkCredential networkCredential = new NetworkCredential()
             {
                 UserName = tb_username.Text,
@@ -139,6 +125,9 @@ namespace ServerForm
             serverNet.sendCommand(ip, port, commandInfo);
 
             //serverNet.sendCommand()
+
+            }
+                }
             
         }
         public void getComputerData(string ipWithPort)
