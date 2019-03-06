@@ -13,14 +13,27 @@ namespace ServerForm
         public string path { get; set; }
         public Computer computer;
         string file;
+        object obj;
         
+        public ServerDataHandler()
+        {
 
+        }
      
-        public ServerDataHandler(Computer Computer)
+      /*  public ServerDataHandler(Computer Computer)
         {
             path = Directory.GetCurrentDirectory();
             computer = Computer;
             file = path + @"\" + computer.name + ".json";
+        }
+        public ServerDataHandler(object obj, string FileName, string FolderName)
+        {
+            path = Directory.GetCurrentDirectory() + "\\" + FolderName;
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            //computer = Computer;
+            this.obj = obj;
+            file = path + @"\" + FileName + ".json";
         }
         public ServerDataHandler(Computer Computer, string FolderName)
         {
@@ -29,13 +42,24 @@ namespace ServerForm
             Directory.CreateDirectory(path);
             computer = Computer;
             file = path + @"\" + computer.name + ".json";
-        }
+        }*/
 
        public string GetKey()
         {
             return computer.uniqueKey;
         }
+        public void SaveObjectData(object obj, string FileName, string FolderName)
+        {
+            path = Directory.GetCurrentDirectory() + "\\" + FolderName;
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            //computer = Computer;
+            this.obj = obj;
+            file = path + @"\" + FileName + ".json";
+            var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(obj);
 
+            File.WriteAllText(file, output);
+        }
         public void SaveComputerData()
         {
             //save as JSon                      
@@ -43,7 +67,7 @@ namespace ServerForm
 
             File.WriteAllText(file, output);
         }
-
+        
 
         public void saveInitFile(string UniqueKey)
         {

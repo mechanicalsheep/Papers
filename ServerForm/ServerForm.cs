@@ -20,6 +20,7 @@ namespace ServerForm
         {
             InitializeComponent();
             serverNet = new ServerNet(this);
+            data = new ServerDataHandler();
 
             
 
@@ -150,9 +151,12 @@ namespace ServerForm
             Computer computer=serverNet.GetComputer(ip, port);
             writeline("Computer: " + computer.name);
             writeline("OS: " + computer.OS);
-            data = new ServerDataHandler(computer, "Computers");
-            data.SaveComputerData();
             
+            data.SaveObjectData(computer, computer.name, "Computers");
+            //data.SaveObjectData();
+            // data = new ServerDataHandler(computer, "Computers");
+            // data.SaveComputerData();
+
         }
     }
 }

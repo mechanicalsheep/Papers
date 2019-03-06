@@ -36,14 +36,14 @@ namespace Client
             InitializeComponent();
 
             computer = new Computer(getComputerName());
-            data = new ClientDataHandler(computer);
+            data = new ClientDataHandler();
             ip = "192.168.11.105";
             //ip = "192.168.8.100";
             port = 11111;
           
             GetComputerData();
             
-            data.SaveComputerData();
+            data.SaveObjectData(computer, computer.name, "ref");
 
             clientNet = new ClientNet(this);
 
@@ -158,14 +158,15 @@ namespace Client
                 string GuidString = Convert.ToBase64String(g.ToByteArray());
                 GuidString = GuidString.Replace("=", "");
                 GuidString = GuidString.Replace("+", "");
-                data.saveInitFile(GuidString);
+            //data.saveInitFile(GuidString);
+            data.SaveObjectData(GuidString, "init", "ref");
             
             return GuidString;
 
         }
         public string getUniqueKey()
         {
-            string initFile = Directory.GetCurrentDirectory() + "\\init.json";
+            string initFile = Directory.GetCurrentDirectory() + "\\ref\\init.json";
             if (!File.Exists(initFile))
             {
                 writeline("no initial.json, generating Key...");
