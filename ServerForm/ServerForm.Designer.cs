@@ -66,6 +66,7 @@
             this.lb_onlineComp.FormattingEnabled = true;
             this.lb_onlineComp.Location = new System.Drawing.Point(12, 24);
             this.lb_onlineComp.Name = "lb_onlineComp";
+            this.lb_onlineComp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lb_onlineComp.Size = new System.Drawing.Size(394, 251);
             this.lb_onlineComp.TabIndex = 2;
             // 

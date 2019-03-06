@@ -141,18 +141,33 @@ namespace ServerForm
             //serverNet.sendCommand()
             
         }
-
-        private void btn_getComputer_Click(object sender, EventArgs e)
+        public void getComputerData(string ipWithPort)
         {
-            string ipWithPort = lb_onlineComp.SelectedItem.ToString().Split(' ').Last();
+            //Console.WriteLine("ip selected: " + ipWithPort);
+            //string ipWithPort = lb_onlineComp.SelectedItem.ToString().Split(' ').Last();
             string ip = ipWithPort.Split(':').First();
             int port = Convert.ToInt32(ipWithPort.Split(':').Last());
 
-            Computer computer=serverNet.GetComputer(ip, port);
+            Computer computer = serverNet.GetComputer(ip, port);
             writeline("Computer: " + computer.name);
             writeline("OS: " + computer.OS);
-            
+
             data.SaveObjectData(computer, computer.name, "Computers");
+        }
+        private void btn_getComputer_Click(object sender, EventArgs e)
+        {
+            if (lb_onlineComp.SelectedItems.Count > 0)
+            {
+                foreach(var item in lb_onlineComp.SelectedItems)
+                {
+                    getComputerData(item.ToString().Split(' ').Last());
+                }
+            }
+          /*  else
+            {
+
+                getComputerData(lb_onlineComp.SelectedItem.ToString().Split(' ').Last());
+            }*/
             //data.SaveObjectData();
             // data = new ServerDataHandler(computer, "Computers");
             // data.SaveComputerData();
