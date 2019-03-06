@@ -130,10 +130,26 @@ namespace ServerForm
                 }
             
         }
+        public void Manifest(Computer Computer)
+        {
+            Console.WriteLine("already have this computer info.");
+            Computer computer = Computer;
+            Computer savedComputer = data.GetComputer(computer.name);
+            if (computer.Equals(savedComputer))
+            {
+                Console.WriteLine("the computers are equal");
+            }
+            else
+            {
+                Console.WriteLine("things have been changed");
+            }
+
+            Console.WriteLine("got data from " + savedComputer.name);
+
+        }
         public void getComputerData(string ipWithPort)
         {
-            //Console.WriteLine("ip selected: " + ipWithPort);
-            //string ipWithPort = lb_onlineComp.SelectedItem.ToString().Split(' ').Last();
+          
             string ip = ipWithPort.Split(':').First();
             int port = Convert.ToInt32(ipWithPort.Split(':').Last());
 
@@ -141,7 +157,15 @@ namespace ServerForm
             writeline("Computer: " + computer.name);
             writeline("OS: " + computer.OS);
 
+            if(data.ComputerExists(computer.name))
+            {
+                //add to the manifest
+                Manifest(computer);
+            }
+            else
+            {
             data.SaveObjectData(computer, computer.name, "Computers");
+            }
         }
         private void btn_getComputer_Click(object sender, EventArgs e)
         {

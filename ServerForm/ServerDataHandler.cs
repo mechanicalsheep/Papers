@@ -11,46 +11,26 @@ namespace ServerForm
         
 
         public string path { get; set; }
-        public Computer computer;
+       // public Computer computer;
         string file;
         object obj;
+        string folder;
+        string currentDirectory;
+        string computerPath;
         
         public ServerDataHandler()
         {
-
+            currentDirectory = Directory.GetCurrentDirectory();
+            computerPath = currentDirectory + "\\Computers";
         }
      
-      /*  public ServerDataHandler(Computer Computer)
-        {
-            path = Directory.GetCurrentDirectory();
-            computer = Computer;
-            file = path + @"\" + computer.name + ".json";
-        }
-        public ServerDataHandler(object obj, string FileName, string FolderName)
-        {
-            path = Directory.GetCurrentDirectory() + "\\" + FolderName;
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-            //computer = Computer;
-            this.obj = obj;
-            file = path + @"\" + FileName + ".json";
-        }
-        public ServerDataHandler(Computer Computer, string FolderName)
-        {
-            path = Directory.GetCurrentDirectory()+"\\"+FolderName;
-            if(!Directory.Exists(path))
-            Directory.CreateDirectory(path);
-            computer = Computer;
-            file = path + @"\" + computer.name + ".json";
-        }*/
-
-       public string GetKey()
+      /* public string GetKey()
         {
             return computer.uniqueKey;
-        }
+        }*/
         public void SaveObjectData(object obj, string FileName, string FolderName)
         {
-            path = Directory.GetCurrentDirectory() + "\\" + FolderName;
+            path = currentDirectory + "\\" + FolderName;
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             //computer = Computer;
@@ -60,20 +40,40 @@ namespace ServerForm
 
             File.WriteAllText(file, output);
         }
-        public void SaveComputerData()
+       /* public void SaveComputerData()
         {
             //save as JSon                      
             var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(computer);
 
             File.WriteAllText(file, output);
+        }*/
+        public bool ComputerExists(string computer)
+        {
+            
+            return File.Exists(computerPath+"\\"+computer+".json");
         }
-        
-
-        public void saveInitFile(string UniqueKey)
+        public Computer GetComputer(string computerName)
         {
             try
             {
-                var initPath = Directory.GetCurrentDirectory()+ "\\init.json";
+            string compFile = computerPath + "\\" + computerName + ".json";
+            var inputs = File.ReadAllText(compFile);
+                object computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
+
+                return (Computer)computer;
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("ServerDataHandler.GetComputer just threw an error: " + err.Message);
+                return null;
+            }
+        }
+        /*public void saveInitFile(string UniqueKey)
+        {
+            try
+            {
+                var initPath = currentDirectory+ "\\init.json";
                 var input = newt.Newtonsoft.Json.JsonConvert.SerializeObject(UniqueKey);
                 File.WriteAllText(initPath, input);
             }
@@ -89,16 +89,16 @@ namespace ServerForm
             {
                 var inputs = File.ReadAllText(file);
 
-                computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
+                object computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
 
-                return computer;
+                return (Computer)computer;
             }
             catch(Exception er)
             {
                 Console.WriteLine("Errors: "+er);
             }
             return computer;
-        }
+        }*/
             
         
        }
