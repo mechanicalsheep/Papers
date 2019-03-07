@@ -130,7 +130,7 @@ namespace ServerForm
             }
 
         }
-        public void Manifest(Computer Computer)
+        public void StartManifest(Computer Computer)
         {
             Console.WriteLine("already have this computer info.");
             Computer computer = Computer;
@@ -138,16 +138,20 @@ namespace ServerForm
             if (savedComputer.uniqueKey!=computer.uniqueKey)
             {
                 //they are different computer with possibly same name?
-                
-                data.SaveObjectData(computer, computer.name, "Computers");
+                computer.machineNote = "There is possibly another computer with the same name as " + computer.name;
+                data.SaveObjectData(computer, computer.name, "WarningComps");
             }
             else if (computer.Equals(savedComputer))
             {
                 Console.WriteLine("the computers are equal");
+                //don't do anything, we already have the computer snapshot and nothing changed.
             }
             else
             {
                 Console.WriteLine("things have been changed");
+                Manifest manifest = new Manifest(savedComputer, computer);
+                data.SaveObjectData(manifest, computer.name + "-" + computer.dateTime.Split(' ').First(),"Manifest\\"+computer.name);
+                data.SaveObjectData(computer, computer.name, "Computers");
             }
 
             Console.WriteLine("got data from " + savedComputer.name);
@@ -166,7 +170,7 @@ namespace ServerForm
             if (data.ComputerExists(computer.name))
             {
                 //add to the manifest
-                Manifest(computer);
+                StartManifest(computer);
             }
             else
             {
@@ -186,15 +190,6 @@ namespace ServerForm
         }
     
     }
-    public class Manifest
-    {
-        Computer computer;
-        string computerName;
-        string date;
-        Dictionary<string,string> change;
-        public Manifest(Computer computer)
-        {
-            this.computer = computer;
-        }
-    }
+    
+    
 }

@@ -79,7 +79,7 @@ namespace Client
         public string getDateTime()
         {
             DateTime dateTime = DateTime.Now;
-            return dateTime.ToString();
+            return dateTime.ToString("yyyy'-'MM'-'dd h:mm tt");
         }
 
         public string getComputerName()

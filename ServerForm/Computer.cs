@@ -35,7 +35,7 @@ namespace ServerForm
 
 
         //needed for protobuf
-        protected Computer()
+        public Computer()
         {
 
         }
