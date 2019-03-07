@@ -150,7 +150,9 @@ namespace ServerForm
             {
                 Console.WriteLine("things have been changed");
                 Manifest manifest = new Manifest(savedComputer, computer);
-                data.SaveObjectData(manifest, computer.name + "-" + computer.dateTime.Split(' ').First(),"Manifest\\"+computer.name);
+                Console.WriteLine("Manifest computer date is: "+manifest.dateTime);
+                string[] datestring = computer.dateTime.Split(':');
+                data.SaveObjectData(manifest, computer.name + "-" + datestring[0]+datestring[1],"Manifest\\"+computer.name);
                 data.SaveObjectData(computer, computer.name, "Computers");
             }
 

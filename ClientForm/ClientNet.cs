@@ -27,7 +27,7 @@ namespace Client
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("GetComputer", (packet, connection, input) =>
              {
                  
-                 connection.SendObject<Computer>("SentComputer", form.computer);
+                 connection.SendObject<Computer>("SentComputer", form.getSavedComputerData());
              });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("snrClient",(packetHeader, connection, input) =>
            {

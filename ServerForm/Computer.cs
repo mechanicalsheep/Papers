@@ -59,7 +59,7 @@ namespace ServerForm
             if (uniqueKey == other.uniqueKey)
             {
 
-                if (name == other.name && OS == other.OS && ram == other.ram && group == other.group)
+                if (name == other.name && OS == other.OS && ram == other.ram && group == other.group && machineNote==other.machineNote && note==other.note)
                 {
                     //if all the others are true, they are the same computer, let's check if the softwares have changed.
                     if (software.Count == other.software.Count)

@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace ServerForm
 {
+    
     class Manifest
     {
-        Computer manifestComputer, savedComputer, newComputer;
-        string computerName;
-        string date;
-        Dictionary<string, string> change;
+        Computer savedComputer, newComputer;
+     
+        public string name, group, note, machineNote, OS, ram, dateTime;
+        
+
         List<string> softwareAdded, softwareRemoved;
 
         public Manifest(Computer Savedcomputer, Computer NewComputer)
@@ -21,27 +23,32 @@ namespace ServerForm
             softwareAdded = new List<string>();
             softwareRemoved = new List<string>();
 
-            manifestComputer = WhatChanged();
+           WhatChanged();
+           // Console.WriteLine("Manifest computer dateTime= " + manifestComputer.dateTime);
         }
-        public Computer WhatChanged()
+        public void WhatChanged()
         {
-            Computer computer = new Computer();
-            computer.dateTime = newComputer.dateTime;
+            //Console.WriteLine("entered whatChanged()");
+           // Computer computer = new Computer();
+            dateTime = newComputer.dateTime;
 
             if (savedComputer.name != newComputer.name)
-                computer.name = newComputer.name;
+                name = newComputer.name;
 
             if (savedComputer.group != newComputer.group)
-                computer.group = newComputer.group;
+                group = newComputer.group;
 
             if (savedComputer.note != newComputer.note)
-                computer.note = newComputer.note;
+                note = newComputer.note;
+
+            if (savedComputer.machineNote != newComputer.machineNote)
+                machineNote = newComputer.machineNote;
 
             if (savedComputer.OS != newComputer.OS)
-                computer.OS = newComputer.OS;
+                OS = newComputer.OS;
 
             if (savedComputer.ram != newComputer.ram)
-                computer.ram = newComputer.ram;
+                ram = newComputer.ram;
 
             if (savedComputer.software.Count > newComputer.software.Count)
             {
@@ -66,11 +73,6 @@ namespace ServerForm
                 }
             }
             
-
-
-
-
-            return computer;
         }
     }
 }

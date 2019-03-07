@@ -79,7 +79,7 @@ namespace Client
         public string getDateTime()
         {
             DateTime dateTime = DateTime.Now;
-            return dateTime.ToString("yyyy'-'MM'-'dd h:mm tt");
+            return dateTime.ToString("yyyy'-'MM'-'dd h:mmtt");
         }
 
         public string getComputerName()
@@ -150,7 +150,10 @@ namespace Client
             }
             
         }
-
+        public Computer getSavedComputerData()
+        {
+            return data.GetComputerData();
+        }
        
         string generateUniqueKey()
         {
@@ -254,6 +257,14 @@ namespace Client
                 // MessageBox.Show("You selected: " + dialog.FileName);
                 tb_installer_path.Text = dialog.FileName;
             }
+        }
+
+        private void btn_Note_Click(object sender, EventArgs e)
+        {
+            computer.note = tb_note.Text;
+            computer.dateTime = getDateTime();
+            data.SaveObjectData(computer, computer.name, "ref");
+            writeline("note saved!");
         }
     }
 

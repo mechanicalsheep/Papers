@@ -46,6 +46,8 @@
             this.tb_domain = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.tb_command = new System.Windows.Forms.TextBox();
+            this.tb_note = new System.Windows.Forms.TextBox();
+            this.btn_Note = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lb_output
@@ -199,11 +201,30 @@
             this.tb_command.Size = new System.Drawing.Size(297, 20);
             this.tb_command.TabIndex = 13;
             // 
+            // tb_note
+            // 
+            this.tb_note.Location = new System.Drawing.Point(220, 335);
+            this.tb_note.Name = "tb_note";
+            this.tb_note.Size = new System.Drawing.Size(100, 20);
+            this.tb_note.TabIndex = 18;
+            // 
+            // btn_Note
+            // 
+            this.btn_Note.Location = new System.Drawing.Point(326, 332);
+            this.btn_Note.Name = "btn_Note";
+            this.btn_Note.Size = new System.Drawing.Size(75, 23);
+            this.btn_Note.TabIndex = 19;
+            this.btn_Note.Text = "note";
+            this.btn_Note.UseVisualStyleBackColor = true;
+            this.btn_Note.Click += new System.EventHandler(this.btn_Note_Click);
+            // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 383);
+            this.Controls.Add(this.btn_Note);
+            this.Controls.Add(this.tb_note);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.tb_command);
             this.Controls.Add(this.label5);
@@ -249,6 +270,8 @@
         private System.Windows.Forms.TextBox tb_domain;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox tb_command;
+        private System.Windows.Forms.TextBox tb_note;
+        private System.Windows.Forms.Button btn_Note;
     }
 }
 
