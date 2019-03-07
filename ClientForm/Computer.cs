@@ -25,13 +25,15 @@ namespace Client
         [ProtoMember(7)]
         public string group { get; set; }
         [ProtoMember(8)]
-        public List<string> software = new List<string>();
+        public List<string> softwares = new List<string>();
         [ProtoMember(9)]
         public string dateTime { get; set; }
         [ProtoMember(10)]
         public string machineNote { get; set; }
         [ProtoMember(11)]
         public string note { get; set; }
+        [ProtoMember(12)]
+        public List<string> chocoSoftwares { get; set; }
 
         //needed for protobuf
         protected Computer()
@@ -61,17 +63,29 @@ namespace Client
             if (name == other.name && OS == other.OS && ram == other.ram && group == other.group)
             {
                 //if all the others are true, they are the same computer, let's check if the softwares have changed.
-                if (software.Count == other.software.Count)
-                {
-                    foreach(var soft in software)
+                    if (softwares.Count == other.softwares.Count)
                     {
-                        if (!other.software.Contains(soft))
+                        foreach (var soft in softwares)
+                        {
+                            if (!other.softwares.Contains(soft))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                if (chocoSoftwares.Count == other.chocoSoftwares.Count)
+                {
+                    foreach(var soft in chocoSoftwares)
+                    {
+                        if (!other.chocoSoftwares.Contains(soft))
                         {
                             return false;
                         }
                     }
                 }
+
             }
+
                 else
                 {
                     return false;

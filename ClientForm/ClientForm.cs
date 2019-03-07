@@ -29,7 +29,7 @@ namespace Client
         public Computer computer;
         ClientNet clientNet;
         ClientDataHandler data;
-
+        //Installer installer;
         public ClientForm()
         {
            
@@ -40,13 +40,13 @@ namespace Client
             ip = "192.168.11.105";
             //ip = "192.168.8.100";
             port = 11111;
-          
+            
+            clientNet = new ClientNet(this);
             GetComputerData();
             
             data.SaveObjectData(computer, computer.name, "ref");
 
-            clientNet = new ClientNet(this);
-
+            
             tb_installer_path.KeyDown += Tb_installer_path_KeyDown;
             
             aTimer = new System.Timers.Timer();
@@ -70,7 +70,8 @@ namespace Client
            
             computer.uniqueKey = getUniqueKey();
             computer.OS = getOS();
-            computer.software = getInstallations();
+            computer.softwares = getInstallations();
+            computer.chocoSoftwares = getChocoInstalls();
             computer.dateTime = getDateTime();
           
             
@@ -115,6 +116,7 @@ namespace Client
         #endregion
         public void sendMessage(string message)
         {
+            if (message != null)
             clientNet.sendMessage(ip,port,message);
         }
         private void stillAlive(object sender, ElapsedEventArgs e)
@@ -191,7 +193,7 @@ namespace Client
         }
         public void choco(string Command, string username, string password, string domain)
         {
-            Installer installer = new Installer(this);
+           Installer installer = new Installer(this);
             if (username == "")
                 username = "administrator";
             NetworkCredential credential = new NetworkCredential(username, password, domain);
@@ -203,6 +205,7 @@ namespace Client
         public List<string> getInstallations()
         {
             List<string> software = new List<string>();
+            
 
             Process process = new Process();
             process.StartInfo = new ProcessStartInfo();
@@ -228,8 +231,18 @@ namespace Client
                 }
 
             }
-
+            
             return software;
+        }
+        public List<string> getChocoInstalls()
+        {
+           Installer installer = new Installer(this);
+            List<string> chocolateySoftwares = new List<string>();
+            chocolateySoftwares = installer.getChocolateyInstallations();
+            Console.WriteLine("chocolatey installer");
+            foreach (var chocolate in chocolateySoftwares)
+                Console.WriteLine(chocolate);
+            return chocolateySoftwares;
         }
         private void btn_send_Click(object sender, EventArgs e)
         {

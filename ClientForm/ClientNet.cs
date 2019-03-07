@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 using ProtoBuf;
@@ -50,7 +51,14 @@ namespace Client
         public void sendMessage(string ip, int port, string message)
         {
             form.writeline($"SentFromClient ip: {ip} port: {port} message: {message} ");
+            try
+            {
             NetworkComms.SendObject("SentFromClient", ip, port, message);
+            }
+            catch(Exception err)
+            {
+                Console.WriteLine("exception thrown: " + err.Message);
+            }
         }
 
         private void HandleServerMessage(PacketHeader packetheader, Connection connection, string incomingobject)

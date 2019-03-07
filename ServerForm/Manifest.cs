@@ -50,23 +50,23 @@ namespace ServerForm
             if (savedComputer.ram != newComputer.ram)
                 ram = newComputer.ram;
 
-            if (savedComputer.software.Count > newComputer.software.Count)
+            if (savedComputer.softwares.Count > newComputer.softwares.Count)
             {
-                foreach (var soft in savedComputer.software)
+                foreach (var soft in savedComputer.softwares)
 
                 {
-                    if (!newComputer.software.Contains(soft))
+                    if (!newComputer.softwares.Contains(soft))
                     {
                         softwareRemoved.Add(soft);
                     }
                 }
             }
-            if (savedComputer.software.Count < newComputer.software.Count)
+            if (savedComputer.softwares.Count < newComputer.softwares.Count)
             {
-                foreach (var soft in newComputer.software)
+                foreach (var soft in newComputer.softwares)
 
                 {
-                    if (!savedComputer.software.Contains(soft))
+                    if (!savedComputer.softwares.Contains(soft))
                     {
                         softwareAdded.Add(soft);
                     }
