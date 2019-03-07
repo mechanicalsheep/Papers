@@ -31,6 +31,8 @@ namespace ServerForm
               };
             NetworkComms.AppendGlobalConnectionEstablishHandler(clientEstablishDelegate);
             NetworkComms.AppendGlobalConnectionCloseHandler(connectionShutdownDelegate);
+
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("sendAlive",HandleAliveSend);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("SentFromClient",HandleStringFromClient);
 
             Connection.StartListening(ConnectionType.TCP, new IPEndPoint(IPAddress.Any, port));
@@ -42,6 +44,12 @@ namespace ServerForm
             }
            
         }
+
+        private void HandleAliveSend(PacketHeader packetHeader, Connection connection, string incomingObject)
+        {
+            
+        }
+
         public Computer GetComputer(string ip, int port)
         {
             try

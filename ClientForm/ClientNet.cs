@@ -47,7 +47,17 @@ namespace Client
             }
         }
     
-
+        public void sendAlive(string ip, int port)
+        {
+            try
+            {
+                NetworkComms.SendObject("sendAlive", ip, port,"i'm alive");
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("sendAlive exception thrown: " + err.Message);
+            }
+        }
         public void sendMessage(string ip, int port, string message)
         {
             form.writeline($"SentFromClient ip: {ip} port: {port} message: {message} ");

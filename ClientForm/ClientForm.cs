@@ -123,7 +123,7 @@ namespace Client
         {
             try
             {
-                clientNet.sendMessage(ip, port, "still alive!");
+                clientNet.sendAlive(ip, port);
             }
             catch (Exception)
             {
