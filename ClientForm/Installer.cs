@@ -25,7 +25,7 @@ namespace Client
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
-           // p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.CreateNoWindow = true;
             string strCmdText = "/C choco list -l";
             // Correct way to launch a process with arguments
             p.StartInfo.FileName = "CMD.exe";
