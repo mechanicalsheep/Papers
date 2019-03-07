@@ -28,40 +28,48 @@ namespace ServerForm
         public List<string> software = new List<string>();
         [ProtoMember(9)]
         public string dateTime { get; set; }
+        [ProtoMember(10)]
+        public string machineNote { get; set; }
+        [ProtoMember(11)]
+        public string note { get; set; }
 
-        
+
         //needed for protobuf
         protected Computer()
         {
-            //fillComputerData();
+
         }
         public Computer(string Name)
         {
             name = Name;
-          
+
         }
 
-      
 
-      
+
+        /*todo: work on the equal override definition as for now it will return false
+         * whether they are two different computers or if they are the same computer but some component changed.
+         */
         public override bool Equals(object obj)
         {
             if (!(obj is Computer))
                 return false;
 
             var other = obj as Computer;
-
-            // if (name != other.name || OS != other.OS || ram != other.ram || ip != other.ip || online != other.online || uniqueString != other.uniqueString || software != other.software || group != other.group)
-            if (name == other.name && OS == other.OS && ram == other.ram && uniqueKey == other.uniqueKey && group == other.group)
+            if (uniqueKey == other.uniqueKey)
             {
-                //if all the others are true, they are the same computer, let's check if the softwares have changed.
-                if (software.Count == other.software.Count)
+
+                if (name == other.name && OS == other.OS && ram == other.ram && group == other.group)
                 {
-                    foreach(var soft in software)
+                    //if all the others are true, they are the same computer, let's check if the softwares have changed.
+                    if (software.Count == other.software.Count)
                     {
-                        if (!other.software.Contains(soft))
+                        foreach (var soft in software)
                         {
-                            return false;
+                            if (!other.software.Contains(soft))
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -70,43 +78,14 @@ namespace ServerForm
                     return false;
                 }
                 Console.WriteLine("something is the same!");
-                return true; }
-            /*if (name != other.name) {
-                Console.WriteLine(name+" != "+ other.name);
-                    return false;
-                    }*/
+                return true;
+            }
+
             Console.WriteLine("returning false");
             return false;
         }
 
-        private bool isOnline()
-        {
-            //todo add powershell that will ping and return if online
-            return online;
-        }
 
-        public void getComputerInfo()
-        {
-            /*todo
-             Invoke-Command -ComputerName sheep1 -ScriptBlock { Get-ComputerInfo } -credential mechanicalsheep
-             */
-        }
+    }
 
-        public void getInstalledSoftware()
-        {
-            //todo powershell command to get all installed.
-            
-            //delete this later.
-            
-        }
-        
-        public void installSoftware(string software)
-        {
-         /*todo
-           powershell command= Invoke-Command -ComputerName sheep1 -ScriptBlock { choco install googlechrome -y } -credential mechanicalsheep
-         */
-        }
-       
-    }
- 
-    }
+}

@@ -26,30 +26,30 @@ namespace ServerForm
         public void writeline(string message)
         {
             //added an invoke in case the writeline is used by a different thread.
-            if(lb_output.InvokeRequired)
-           lb_output.Invoke(new Action(() =>
-           {
-              // lb_output.ForeColor = Color.Green;
+            if (lb_output.InvokeRequired)
+                lb_output.Invoke(new Action(() =>
+                {
+               // lb_output.ForeColor = Color.Green;
                lb_output.Items.Add(message);
-               lb_output.SelectedIndex = lb_output.Items.Count - 1;
-               lb_output.SelectedIndex = -1;
-           }));
+                    lb_output.SelectedIndex = lb_output.Items.Count - 1;
+                    lb_output.SelectedIndex = -1;
+                }));
             else
             {
-               // lb_output.ForeColor = Color.Green;
+                // lb_output.ForeColor = Color.Green;
                 lb_output.Items.Add(message);
                 lb_output.SelectedIndex = lb_output.Items.Count - 1;
                 lb_output.SelectedIndex = -1;
 
             }
-       
+
 
         }
         public void ScanForConnections()
         {
             if (lb_onlineComp.InvokeRequired)
             {
-                lb_onlineComp.Invoke(new Action(()=>{
+                lb_onlineComp.Invoke(new Action(() => {
 
 
                     lb_onlineComp.Items.Clear();
@@ -99,43 +99,49 @@ namespace ServerForm
         {
             ScanForConnections();
         }
-       
+
         private void btn_send_Click(object sender, EventArgs e)
         {
             if (lb_onlineComp.SelectedItems.Count > 0)
             {
-                foreach(var item in lb_onlineComp.SelectedItems)
+                foreach (var item in lb_onlineComp.SelectedItems)
                 {
 
-            NetworkCredential networkCredential = new NetworkCredential()
-            {
-                UserName = tb_username.Text,
-                Password = tb_password.Text,
-                Domain = tb_domain.Text,
+                    NetworkCredential networkCredential = new NetworkCredential()
+                    {
+                        UserName = tb_username.Text,
+                        Password = tb_password.Text,
+                        Domain = tb_domain.Text,
 
-            };
-            //int index=lb_onlineComp.SelectedIndex;
-            
-            Console.WriteLine("Key is: " + lb_onlineComp.SelectedItem.ToString().Split(' ').First());
-            string ipWithPort = lb_onlineComp.SelectedItem.ToString().Split(' ').Last();
-            string ip = ipWithPort.Split(':').First();
-            int port = Convert.ToInt32(ipWithPort.Split(':').Last());
-            CommandInfo commandInfo = new CommandInfo(networkCredential, tb_command.Text);
+                    };
+                    //int index=lb_onlineComp.SelectedIndex;
 
-            serverNet.sendCommand(ip, port, commandInfo);
+                    Console.WriteLine("Key is: " + lb_onlineComp.SelectedItem.ToString().Split(' ').First());
+                    string ipWithPort = lb_onlineComp.SelectedItem.ToString().Split(' ').Last();
+                    string ip = ipWithPort.Split(':').First();
+                    int port = Convert.ToInt32(ipWithPort.Split(':').Last());
+                    CommandInfo commandInfo = new CommandInfo(networkCredential, tb_command.Text);
 
-            //serverNet.sendCommand()
+                    serverNet.sendCommand(ip, port, commandInfo);
 
-            }
+                    //serverNet.sendCommand()
+
                 }
-            
+            }
+
         }
         public void Manifest(Computer Computer)
         {
             Console.WriteLine("already have this computer info.");
             Computer computer = Computer;
             Computer savedComputer = data.GetComputer(computer.name);
-            if (computer.Equals(savedComputer))
+            if (savedComputer.uniqueKey!=computer.uniqueKey)
+            {
+                //they are different computer with possibly same name?
+                
+                data.SaveObjectData(computer, computer.name, "Computers");
+            }
+            else if (computer.Equals(savedComputer))
             {
                 Console.WriteLine("the computers are equal");
             }
@@ -149,7 +155,7 @@ namespace ServerForm
         }
         public void getComputerData(string ipWithPort)
         {
-          
+
             string ip = ipWithPort.Split(':').First();
             int port = Convert.ToInt32(ipWithPort.Split(':').Last());
 
@@ -157,34 +163,38 @@ namespace ServerForm
             writeline("Computer: " + computer.name);
             writeline("OS: " + computer.OS);
 
-            if(data.ComputerExists(computer.name))
+            if (data.ComputerExists(computer.name))
             {
                 //add to the manifest
                 Manifest(computer);
             }
             else
             {
-            data.SaveObjectData(computer, computer.name, "Computers");
+                data.SaveObjectData(computer, computer.name, "Computers");
             }
         }
         private void btn_getComputer_Click(object sender, EventArgs e)
         {
             if (lb_onlineComp.SelectedItems.Count > 0)
             {
-                foreach(var item in lb_onlineComp.SelectedItems)
+                foreach (var item in lb_onlineComp.SelectedItems)
                 {
                     getComputerData(item.ToString().Split(' ').Last());
                 }
             }
-          /*  else
-            {
 
-                getComputerData(lb_onlineComp.SelectedItem.ToString().Split(' ').Last());
-            }*/
-            //data.SaveObjectData();
-            // data = new ServerDataHandler(computer, "Computers");
-            // data.SaveComputerData();
-
+        }
+    
+    }
+    public class Manifest
+    {
+        Computer computer;
+        string computerName;
+        string date;
+        Dictionary<string,string> change;
+        public Manifest(Computer computer)
+        {
+            this.computer = computer;
         }
     }
 }

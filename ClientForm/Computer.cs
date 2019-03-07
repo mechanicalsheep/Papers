@@ -28,12 +28,15 @@ namespace Client
         public List<string> software = new List<string>();
         [ProtoMember(9)]
         public string dateTime { get; set; }
+        [ProtoMember(10)]
+        public string machineNote { get; set; }
+        [ProtoMember(11)]
+        public string note { get; set; }
 
-        
         //needed for protobuf
         protected Computer()
         {
-            //fillComputerData();
+            
         }
         public Computer(string Name)
         {
@@ -41,18 +44,21 @@ namespace Client
           
         }
 
-      
 
-      
+
+        /*todo: work on the equal override definition as for now it will return false
+         * whether they are two different computers or if they are the same computer but some component changed.
+         */
         public override bool Equals(object obj)
         {
             if (!(obj is Computer))
                 return false;
 
             var other = obj as Computer;
+            if (uniqueKey == other.uniqueKey)
+            {
 
-            // if (name != other.name || OS != other.OS || ram != other.ram || ip != other.ip || online != other.online || uniqueString != other.uniqueString || software != other.software || group != other.group)
-            if (name == other.name && OS == other.OS && ram == other.ram && uniqueKey == other.uniqueKey && group == other.group)
+            if (name == other.name && OS == other.OS && ram == other.ram && group == other.group)
             {
                 //if all the others are true, they are the same computer, let's check if the softwares have changed.
                 if (software.Count == other.software.Count)
@@ -65,16 +71,15 @@ namespace Client
                         }
                     }
                 }
+            }
                 else
                 {
                     return false;
                 }
                 Console.WriteLine("something is the same!");
-                return true; }
-            /*if (name != other.name) {
-                Console.WriteLine(name+" != "+ other.name);
-                    return false;
-                    }*/
+                return true;
+            }
+            
             Console.WriteLine("returning false");
             return false;
         }
