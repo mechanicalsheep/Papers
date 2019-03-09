@@ -37,8 +37,8 @@ namespace Client
 
             computer = new Computer(getComputerName());
             data = new ClientDataHandler();
-            ip = "192.168.11.105";
-            //ip = "192.168.8.100";
+            //ip = "192.168.11.105";
+            ip = "192.168.8.100";
             port = 11111;
             
             clientNet = new ClientNet(this);

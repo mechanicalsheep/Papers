@@ -18,9 +18,25 @@ namespace ServerForm
         ServerDataHandler data;
         public ServerForm()
         {
+            //Console.WriteLine("hellow?");
             InitializeComponent();
             serverNet = new ServerNet(this);
             data = new ServerDataHandler();
+            //lv_computers.View = View.Details;
+            lv_computers.Columns.Add("Computer Name",120,HorizontalAlignment.Left);
+            lv_computers.Columns.Add("IP");
+
+            ListViewItem item = new ListViewItem(new[] { "hi", "0.0.0.0" });
+            ListViewItem item1 = new ListViewItem(new[] { "hi1", "1.0.0.0" });
+            ListViewItem qwer = new ListViewItem(new[] { "computex", "1.0.0.0" });
+            lv_computers.Items.Add(item);
+            lv_computers.Items.Add(item1);
+            lv_computers.Items.Add(qwer);
+            Console.WriteLine("IndexOfKey = ");
+            //Console.WriteLine("LV_COMPUTERS COUNT "+lv_computers.Items.Count);
+            lv_computers.Items.Remove(lv_computers.FindItemWithText("computex"));
+
+
         }
 
         public void writeline(string message)
@@ -45,6 +61,40 @@ namespace ServerForm
 
 
         }
+        public void AddOnlineComputer(string computerName,string IP)
+        {
+          
+
+            if (lv_computers.InvokeRequired)
+            {
+                lv_computers.Invoke(new Action(() => {
+                    lv_computers.Items.Add(new ListViewItem(new[]{computerName, IP }));
+                }));
+                
+            }
+            else
+            {
+                lv_computers.Items.Add(new ListViewItem(new[] { computerName, IP }));
+            }
+        }
+        public void RemoveOfflineComputer(string item)
+        {
+
+            if (lv_computers.InvokeRequired)
+            {
+                lv_computers.Invoke(new Action(() => {
+
+                    lv_computers.Items.Remove(lv_computers.FindItemWithText(item));
+
+                }));
+
+            }
+            else
+            {
+                lv_computers.Items.Remove(lv_computers.FindItemWithText(item));
+
+            }
+        }
         public void ScanForConnections()
         {
             if (lb_onlineComp.InvokeRequired)
@@ -60,7 +110,7 @@ namespace ServerForm
                     {
                         ipPort = connection.Split(':');
 
-                        string key = serverNet.GetKeyCommad(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
+                        string key = serverNet.GetComputerName(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
                         onlineAddresses.Add(key, connection);
                         lb_onlineComp.Items.Add(key + " " + connection);
 
@@ -82,7 +132,7 @@ namespace ServerForm
                 {
                     ipPort = connection.Split(':');
 
-                    string key = serverNet.GetKeyCommad(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
+                    string key = serverNet.GetComputerName(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
                     onlineAddresses.Add(key, connection);
                     lb_onlineComp.Items.Add(key + " " + connection);
 

@@ -5,6 +5,7 @@ using System.Net;
 using System;
 using System.Collections.Generic;
 using ProtoBuf;
+using System.Linq;
 
 namespace ServerForm
 {
@@ -21,12 +22,18 @@ namespace ServerForm
 
             {
                 form.ScanForConnections();
+                string[] ipPort = connection.ConnectionInfo.RemoteEndPoint.ToString().Split(':');
+                Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.ToString());
+                form.AddOnlineComputer(GetComputerName(ipPort[0],Convert.ToInt32(ipPort[1]),"Whatevs"),ipPort[0]);
+              
                 Console.WriteLine("Client " + connection.ConnectionInfo + " connected.");
 
             };
             NetworkComms.ConnectionEstablishShutdownDelegate connectionShutdownDelegate = (connection) =>
               {
+                  string ipPort= connection.ConnectionInfo.RemoteEndPoint.ToString();
                   form.ScanForConnections();
+                  form.RemoveOfflineComputer(ipPort.Split(':').First());
                   Console.WriteLine("Client" + connection.ConnectionInfo + "disconnected");
               };
             NetworkComms.AppendGlobalConnectionEstablishHandler(clientEstablishDelegate);
@@ -97,7 +104,7 @@ namespace ServerForm
         }
 
         
-        public string GetKeyCommad(string ip, int port, string message)
+        public string GetComputerName(string ip, int port, string message)
         {
             //form.writeline("Going to send the following");
             //form.writeline($"ServerToClient ip: {ip} port: {port} message: {message} ");
