@@ -21,10 +21,10 @@ namespace ServerForm
             NetworkComms.ConnectionEstablishShutdownDelegate clientEstablishDelegate = (connection) =>
 
             {
-                form.ScanForConnections();
+               // form.ScanForConnections();
                 string[] ipPort = connection.ConnectionInfo.RemoteEndPoint.ToString().Split(':');
                 Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.ToString());
-                form.AddOnlineComputer(GetComputerName(ipPort[0],Convert.ToInt32(ipPort[1]),"Whatevs"),ipPort[0]);
+                form.AddOnlineComputer(GetComputerName(ipPort[0],Convert.ToInt32(ipPort[1]),"Whatevs"),ipPort[0], ipPort[1]);
               
                 Console.WriteLine("Client " + connection.ConnectionInfo + " connected.");
 
@@ -32,7 +32,7 @@ namespace ServerForm
             NetworkComms.ConnectionEstablishShutdownDelegate connectionShutdownDelegate = (connection) =>
               {
                   string ipPort= connection.ConnectionInfo.RemoteEndPoint.ToString();
-                  form.ScanForConnections();
+                 // form.ScanForConnections();
                   form.RemoveOfflineComputer(ipPort.Split(':').First());
                   Console.WriteLine("Client" + connection.ConnectionInfo + "disconnected");
               };

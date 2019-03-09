@@ -40,7 +40,6 @@
             this.tb_username = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btn_getComputer = new System.Windows.Forms.Button();
-            this.lb_onlineComp = new System.Windows.Forms.ListBox();
             this.lv_computers = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
@@ -60,7 +59,6 @@
             this.btn_Scan.TabIndex = 1;
             this.btn_Scan.Text = "Scan";
             this.btn_Scan.UseVisualStyleBackColor = true;
-            this.btn_Scan.Click += new System.EventHandler(this.btn_Scan_Click);
             // 
             // btn_send
             // 
@@ -147,18 +145,9 @@
             this.btn_getComputer.UseVisualStyleBackColor = true;
             this.btn_getComputer.Click += new System.EventHandler(this.btn_getComputer_Click);
             // 
-            // lb_onlineComp
-            // 
-            this.lb_onlineComp.FormattingEnabled = true;
-            this.lb_onlineComp.Location = new System.Drawing.Point(12, 24);
-            this.lb_onlineComp.Name = "lb_onlineComp";
-            this.lb_onlineComp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lb_onlineComp.Size = new System.Drawing.Size(394, 251);
-            this.lb_onlineComp.TabIndex = 2;
-            // 
             // lv_computers
             // 
-            this.lv_computers.Location = new System.Drawing.Point(331, 281);
+            this.lv_computers.Location = new System.Drawing.Point(33, 30);
             this.lv_computers.Name = "lv_computers";
             this.lv_computers.Size = new System.Drawing.Size(400, 224);
             this.lv_computers.TabIndex = 12;
@@ -181,7 +170,6 @@
             this.Controls.Add(this.tb_password);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_send);
-            this.Controls.Add(this.lb_onlineComp);
             this.Controls.Add(this.btn_Scan);
             this.Controls.Add(this.lb_output);
             this.Name = "ServerForm";
@@ -205,7 +193,6 @@
         private System.Windows.Forms.TextBox tb_username;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btn_getComputer;
-        private System.Windows.Forms.ListBox lb_onlineComp;
         private System.Windows.Forms.ListView lv_computers;
     }
 }

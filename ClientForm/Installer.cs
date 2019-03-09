@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-
-
+using System.Security.Principal;
 
 namespace Client
 {
@@ -88,14 +87,20 @@ namespace Client
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
             p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.Verb = "runas";
+           
             if (credential.Password != "" && credential.UserName != "")
             {
                 p.StartInfo.UserName = credential.UserName;
                 p.StartInfo.Password = credential.SecurePassword;
                 p.StartInfo.Domain = credential.Domain;
             }
-                string strCmdText;
+            else
+            {
+                //TODO: WHAT IF ADMIN NOT WORKING 
+                do SOMETHING HERE!
+            }
+            p.StartInfo.Verb = "runas";
+            string strCmdText;
            
             strCmdText = "/C choco "+Command;
             // Correct way to launch a process with arguments
@@ -143,28 +148,24 @@ namespace Client
             Console.WriteLine("Starting to install chocolatey");
             
             Process p = new Process();
-             p.StartInfo.UseShellExecute = false;
-             p.StartInfo.RedirectStandardOutput = true;
-             p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.UseShellExecute = false;
+            //p.StartInfo.RedirectStandardOutput = true;
+            //p.StartInfo.RedirectStandardError = true;
 
-             if (Credential.Password != "" && Credential.UserName != "")
+            if (Credential.Password != "" && Credential.UserName != "")
              {
                  p.StartInfo.UserName = Credential.UserName;
                  p.StartInfo.Password = Credential.SecurePassword;
                  p.StartInfo.Domain = Credential.Domain;
              }
              
-            // p.StartInfo.CreateNoWindow = true;
+            
             string command = "@\"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command \"iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))\" && SET \"PATH=%PATH%;%ALLUSERSPROFILE%\\chocolatey\\bin\"";
-            //+"pause";
-            //string command = "\"" + "Hello" "\"";
+       
             Console.WriteLine(command);
-            //  string command2 = @"@powershell -NoProfile -ExecutionPolicy Bypass -Command ""iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))"" && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin";
 
-            //-Process.Start(Directory.GetCurrentDirectory() + "\\Prereq\\chocolatey.bat",Credential.UserName,Credential.SecurePassword,"");
           
-             p.StartInfo.Verb = "runas";
-          // p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory() + "\\Prereq\\";
+            // p.StartInfo.Verb = "runas";
             p.StartInfo.FileName = @"cmd.exe";
             p.StartInfo.Arguments = "/C "+ command;
             p.EnableRaisingEvents = true;
@@ -174,7 +175,7 @@ namespace Client
                 form.sendMessage("Choco is now installed");
                 
             };
-            Console.WriteLine($"Running {p.StartInfo.FileName} in {p.StartInfo.WorkingDirectory} using User: {p.StartInfo.UserName} Domain: {p.StartInfo.Domain}");
+            Console.WriteLine($"Running {p.StartInfo.FileName} in {p.StartInfo.WorkingDirectory} using User: {p.StartInfo.UserName} Password:{p.StartInfo.PasswordInClearText} Domain: {p.StartInfo.Domain}");
           p.Start();
             p.WaitForExit();
 
