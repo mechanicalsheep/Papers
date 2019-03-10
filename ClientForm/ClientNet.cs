@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
@@ -11,6 +12,7 @@ namespace Client
     {
         
         private ClientForm form;
+        string ip, port;
         public ClientNet(ClientForm clientForm)
         {
             form = clientForm;
@@ -43,14 +45,31 @@ namespace Client
             clientForm.writeline("Client Listening On: ");
             foreach (IPEndPoint localEndpoint in Connection.ExistingLocalListenEndPoints(ConnectionType.TCP))
             {
-                clientForm.writeline(" - "+localEndpoint.Address+" "+localEndpoint.Port);
+               
+                string endPointIP = localEndpoint.Address.ToString().Split(':').First();
+                Console.WriteLine("string count " + endPointIP.Length);
+                if (!endPointIP.Contains( "127.0.0.1" ) && endPointIP.Length>0)
+                {
+
+                    clientForm.writeline(" - " + localEndpoint.Address + " " + localEndpoint.Port);
+                    ip = localEndpoint.Address.ToString();
+                    port = localEndpoint.Port.ToString();
+                }
             }
         }
-    
+    public string getIP()
+        {
+            return ip;
+        }
+        public string getPort()
+        {
+            return port;
+        }
         public void sendAlive(string ip, int port)
         {
             try
             {
+                Console.WriteLine("sending object to "+ip+ " from ");
                 NetworkComms.SendObject("sendAlive", ip, port,"i'm alive");
             }
             catch (Exception err)
@@ -79,10 +98,7 @@ namespace Client
         }
 
         
-        string getIP()
-        {
-            return null;
-        }
+       
 
         public void CloseNetwork()
         {

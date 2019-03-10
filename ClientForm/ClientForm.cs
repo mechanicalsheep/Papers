@@ -69,8 +69,12 @@ namespace Client
             computer.softwares = getInstallations();
             computer.chocoSoftwares = getChocoInstalls();
             computer.dateTime = getDateTime();
-          
-            
+            computer.ip = clientNet.getIP();
+            Console.WriteLine("ip got from client: "+computer.ip);
+            //computer.port
+
+
+
 
         }
         public string getDateTime()
