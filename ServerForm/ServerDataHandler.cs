@@ -3,6 +3,7 @@ extern alias newt;
 using System.IO;
 
 using System;
+using System.Collections.Generic;
 
 namespace ServerForm
 {
@@ -11,7 +12,7 @@ namespace ServerForm
         
 
         public string path { get; set; }
-       // public Computer computer;
+     
         string file;
         object obj;
         string folder;
@@ -24,29 +25,20 @@ namespace ServerForm
             computerPath = currentDirectory + "\\Computers";
         }
      
-      /* public string GetKey()
-        {
-            return computer.uniqueKey;
-        }*/
+    
         public void SaveObjectData(object obj, string FileName, string FolderName)
         {
             path = currentDirectory + "\\" + FolderName;
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-            //computer = Computer;
+          
             this.obj = obj;
             file = path + @"\" + FileName + ".json";
             var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(obj);
 
             File.WriteAllText(file, output);
         }
-       /* public void SaveComputerData()
-        {
-            //save as JSon                      
-            var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(computer);
-
-            File.WriteAllText(file, output);
-        }*/
+     
         public bool ComputerExists(string computer)
         {
             
@@ -69,36 +61,22 @@ namespace ServerForm
                 return null;
             }
         }
-        /*public void saveInitFile(string UniqueKey)
-        {
-            try
-            {
-                var initPath = currentDirectory+ "\\init.json";
-                var input = newt.Newtonsoft.Json.JsonConvert.SerializeObject(UniqueKey);
-                File.WriteAllText(initPath, input);
-            }
-            catch(Exception err)
-            {
-                Console.WriteLine("PaperExcceptions from SaveInitFile() Method: " + err.Message);
-            }
-        }
-        public Computer GetComputerData()
-        {
 
-            try
+        public List<Computer> GenerateComputerList()
+        {
+            List<Computer> computerList = new List<Computer>();
+            DirectoryInfo dir = new DirectoryInfo(computerPath);
+            foreach(var file in dir.GetFiles())
             {
-                var inputs = File.ReadAllText(file);
+                var inputs = File.ReadAllText(file.FullName);
 
                 object computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
 
-                return (Computer)computer;
+                computerList.Add(computer as Computer);
             }
-            catch(Exception er)
-            {
-                Console.WriteLine("Errors: "+er);
-            }
-            return computer;
-        }*/
+            return computerList;
+        }
+      
             
         
        }

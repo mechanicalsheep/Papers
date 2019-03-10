@@ -16,31 +16,34 @@ namespace ServerForm
     {
         ServerNet serverNet;
         ServerDataHandler data;
+        List<Computer> computers;
         public ServerForm()
         {
             //Console.WriteLine("hellow?");
             InitializeComponent();
             serverNet = new ServerNet(this);
             data = new ServerDataHandler();
-            //lv_computers.View = View.Details;
+            computers = new List<Computer>();
+            initializeComputers();
+
             lv_computers.Columns.Add("Computer Name",120,HorizontalAlignment.Left);
             lv_computers.Columns.Add("IP",120);
             lv_computers.Columns.Add("Port");
-
-            ListViewItem item = new ListViewItem(new[] { "hi", "0.0.0.0" });
-           // Console.WriteLine("ip is: "+item.SubItems[1]);
-           /* ListViewItem item1 = new ListViewItem(new[] { "hi1", "1.0.0.0" });
-            ListViewItem qwer = new ListViewItem(new[] { "computex", "1.0.0.0" });
-            lv_computers.Items.Add(item);
-            lv_computers.Items.Add(item1);
-            lv_computers.Items.Add(qwer);
-            Console.WriteLine("IndexOfKey = ");
-            //Console.WriteLine("LV_COMPUTERS COUNT "+lv_computers.Items.Count);
-            lv_computers.Items.Remove(lv_computers.FindItemWithText("computex"));*/
-
+            lv_computers.Columns.Add("Unique Key");
+           
 
         }
-
+        public void initializeComputers()
+        {
+            computers = data.GenerateComputerList();
+            writeline("Computer list Count: " + computers.Count);
+            foreach(var computer in computers)
+            {
+                ListViewItem lvi = new ListViewItem(new[] { computer.name, computer.ip,"1234", computer.uniqueKey});
+                lvi.ForeColor = Color.Gray;
+                lv_computers.Items.Add(lvi);
+            }
+        }
         public void writeline(string message)
         {
             //added an invoke in case the writeline is used by a different thread.
@@ -97,90 +100,10 @@ namespace ServerForm
 
             }
         }
-       /* public void ScanForConnections()
-        {
-            if (lb_onlineComp.InvokeRequired)
-            {
-                lb_onlineComp.Invoke(new Action(() => {
-
-
-                    lb_onlineComp.Items.Clear();
-                    List<string> onlineList = serverNet.GetConnections();
-                    Dictionary<string, string> onlineAddresses = new Dictionary<string, string>();
-                    string[] ipPort;
-                    foreach (var connection in onlineList)
-                    {
-                        ipPort = connection.Split(':');
-
-                        string key = serverNet.GetComputerName(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
-                        onlineAddresses.Add(key, connection);
-                        lb_onlineComp.Items.Add(key + " " + connection);
-
-                    }
-                    if (lb_onlineComp.Items.Count > 0)
-                    {
-                        lb_onlineComp.SelectedIndex = 0;
-                    }
-
-                }));
-            }
-            else
-            {
-                lb_onlineComp.Items.Clear();
-                List<string> onlineList = serverNet.GetConnections();
-                Dictionary<string, string> onlineAddresses = new Dictionary<string, string>();
-                string[] ipPort;
-                foreach (var connection in onlineList)
-                {
-                    ipPort = connection.Split(':');
-
-                    string key = serverNet.GetComputerName(ipPort[0], Convert.ToInt32(ipPort[1]), "GIMME WHAT YOU GOT");
-                    onlineAddresses.Add(key, connection);
-                    lb_onlineComp.Items.Add(key + " " + connection);
-
-                }
-                if (lb_onlineComp.Items.Count > 0)
-                {
-                    lb_onlineComp.SelectedIndex = 0;
-                }
-            }
-
-
-        }*/
-       /* private void btn_Scan_Click(object sender, EventArgs e)
-        {
-            ScanForConnections();
-        }*/
-
+       
         private void btn_send_Click(object sender, EventArgs e)
         {
-            /* if (lb_onlineComp.SelectedItems.Count > 0)
-             {
-                 foreach (var item in lb_onlineComp.SelectedItems)
-                 {
-
-                     NetworkCredential networkCredential = new NetworkCredential()
-                     {
-                         UserName = tb_username.Text,
-                         Password = tb_password.Text,
-                         Domain = tb_domain.Text,
-
-                     };
-                     //int index=lb_onlineComp.SelectedIndex;
-
-                     Console.WriteLine("Key is: " + lb_onlineComp.SelectedItem.ToString().Split(' ').First());
-                     string ipWithPort = lb_onlineComp.SelectedItem.ToString().Split(' ').Last();
-                     string ip = ipWithPort.Split(':').First();
-                     int port = Convert.ToInt32(ipWithPort.Split(':').Last());
-                     CommandInfo commandInfo = new CommandInfo(networkCredential, tb_command.Text);
-
-                     serverNet.sendCommand(ip, port, commandInfo);
-
-                     //serverNet.sendCommand()
-
-                 }
-
-             }*/
+            
             if (lv_computers.SelectedItems.Count > 0)
             {
                 foreach (var item in lv_computers.SelectedItems)
@@ -193,17 +116,12 @@ namespace ServerForm
                         Domain = tb_domain.Text,
 
                     };
-                    //int index=lb_onlineComp.SelectedIndex;
-
-                    //Console.WriteLine("Key is: " + lb_onlineComp.SelectedItem.ToString().Split(' ').First());
-                    //string ipWithPort = lb_onlineComp.SelectedItem.ToString().Split(' ').Last();
+                   
                     string ip = lvi.SubItems[1].Text;
                     int port = Convert.ToInt32(lvi.SubItems[2].Text);
                     CommandInfo commandInfo = new CommandInfo(networkCredential, tb_command.Text);
 
                     serverNet.sendCommand(ip, port, commandInfo);
-
-                    //serverNet.sendCommand()
 
                 }
 
@@ -269,15 +187,21 @@ namespace ServerForm
                     Console.WriteLine("lvi is: IP:"+lvi.SubItems[1].Text);
                     getComputerData(lvi.SubItems[1].Text, Convert.ToInt32(lvi.SubItems[2].Text));
                 }
-               /* foreach (var item in lb_onlineComp.SelectedItems)
-                {
-                    
-                    getComputerData(item.ToString().Split(' ').Last());
-                }*/
+             
             }
 
         }
-    
+
+        private void lv_computers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach(ListViewItem item in lv_computers.SelectedItems)
+            {
+                if (item.ForeColor == Color.Gray)
+                {
+                    item.Selected = false;
+                }
+            }
+        }
     }
     
     

@@ -153,6 +153,7 @@
             this.lv_computers.TabIndex = 12;
             this.lv_computers.UseCompatibleStateImageBehavior = false;
             this.lv_computers.View = System.Windows.Forms.View.Details;
+            this.lv_computers.SelectedIndexChanged += new System.EventHandler(this.lv_computers_SelectedIndexChanged);
             // 
             // ServerForm
             // 
