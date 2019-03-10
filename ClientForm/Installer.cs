@@ -152,8 +152,9 @@ namespace Client
             
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
-            //p.StartInfo.RedirectStandardOutput = true;
-            //p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.CreateNoWindow = true;
 
             if (Credential.Password != "" && Credential.UserName != "")
              {
