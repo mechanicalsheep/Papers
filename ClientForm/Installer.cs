@@ -92,12 +92,15 @@ namespace Client
             {
                 p.StartInfo.UserName = credential.UserName;
                 p.StartInfo.Password = credential.SecurePassword;
-                p.StartInfo.Domain = credential.Domain;
+                if (credential.Domain != "")
+                    p.StartInfo.Domain = credential.Domain;
+                else
+                    p.StartInfo.Domain=Environment.UserDomainName;
             }
             else
             {
                 //TODO: WHAT IF ADMIN NOT WORKING 
-                do SOMETHING HERE!
+                //do SOMETHING HERE!
             }
             p.StartInfo.Verb = "runas";
             string strCmdText;
@@ -133,7 +136,7 @@ namespace Client
             });
 
             
-            Console.WriteLine($"Username: {p.StartInfo.UserName}  Password: {p.StartInfo.Password}");
+            Console.WriteLine($"Username: {p.StartInfo.UserName}  Password: {p.StartInfo.Password} Domain: {p.StartInfo.Domain}");
             p.Start();
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
@@ -156,7 +159,10 @@ namespace Client
              {
                  p.StartInfo.UserName = Credential.UserName;
                  p.StartInfo.Password = Credential.SecurePassword;
-                 p.StartInfo.Domain = Credential.Domain;
+                if (Credential.Domain != "")
+                    p.StartInfo.Domain = Credential.Domain;
+                else
+                    p.StartInfo.Domain = Environment.UserDomainName;
              }
              
             
@@ -176,7 +182,8 @@ namespace Client
                 
             };
             Console.WriteLine($"Running {p.StartInfo.FileName} in {p.StartInfo.WorkingDirectory} using User: {p.StartInfo.UserName} Password:{p.StartInfo.PasswordInClearText} Domain: {p.StartInfo.Domain}");
-          p.Start();
+            form.writeline($"Running {p.StartInfo.FileName} in {p.StartInfo.WorkingDirectory} using User: {p.StartInfo.UserName} Password:{p.StartInfo.PasswordInClearText} Domain: {p.StartInfo.Domain}");
+            p.Start();
             p.WaitForExit();
 
     

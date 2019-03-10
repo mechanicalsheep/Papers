@@ -3,14 +3,10 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using System.Timers;
 using System.Windows.Forms;
 using System.Net;
@@ -37,8 +33,8 @@ namespace Client
 
             computer = new Computer(getComputerName());
             data = new ClientDataHandler();
-            //ip = "192.168.11.105";
-            ip = "192.168.8.100";
+            ip = "192.168.11.105";
+            //ip = "192.168.8.100";
             port = 11111;
             
             clientNet = new ClientNet(this);
