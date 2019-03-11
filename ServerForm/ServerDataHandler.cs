@@ -15,7 +15,7 @@ namespace ServerForm
      
         string file;
         object obj;
-        string folder;
+        //string folder;
         string currentDirectory;
         string computerPath;
         
@@ -62,17 +62,17 @@ namespace ServerForm
             }
         }
 
-        public List<Computer> GenerateComputerList()
+        public Dictionary<string,Computer> GenerateComputerList()
         {
-            List<Computer> computerList = new List<Computer>();
+            Dictionary<string,Computer> computerList = new Dictionary<string, Computer>();
             DirectoryInfo dir = new DirectoryInfo(computerPath);
             foreach(var file in dir.GetFiles())
             {
                 var inputs = File.ReadAllText(file.FullName);
 
-                object computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
+                Computer computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
 
-                computerList.Add(computer as Computer);
+                computerList.Add(computer.uniqueKey,computer);
             }
             return computerList;
         }

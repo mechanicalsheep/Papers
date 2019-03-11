@@ -18,7 +18,13 @@ namespace Client
             form = clientForm;
             form.writeline("-==Client=-");
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("ServerToClient", HandleServerMessage);
-        
+            NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("getKey", (packetHeader, connection, input) =>
+            {
+                //form.writeline("Choco command: " + input.command);
+                //form.choco(input.command, input.username, input.password, input.domain);
+                connection.SendObject("giveKey",form.getUniqueKey());
+
+            });
             //choco command receiver!
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("choco", (packetHeader, connection, input) =>
             {

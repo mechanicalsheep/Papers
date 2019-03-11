@@ -21,21 +21,44 @@ namespace ServerForm
             NetworkComms.ConnectionEstablishShutdownDelegate clientEstablishDelegate = (connection) =>
 
             {
-               // form.ScanForConnections();
+                
                 string[] ipPort = connection.ConnectionInfo.RemoteEndPoint.ToString().Split(':');
+                string uniqueKey = GetUniqueKey(ipPort[0], Convert.ToInt32(ipPort[1]));
+                Console.WriteLine($"Server got UniqueKey {uniqueKey} from connection {ipPort[0]}");
+                if (form.computers.ContainsKey(uniqueKey))
+                    form.setOnline(uniqueKey, ipPort[0],ipPort[1]);
+                else
+                {
+                    form.getComputerData(ipPort[0], Convert.ToInt32(ipPort[1]));
+                    Computer computer = GetComputer(ipPort[0], Convert.ToInt32(ipPort[1]));
+                    form.computers.Add(computer.uniqueKey, computer);
+
+                    System.Windows.Forms.ListViewItem lvi = new System.Windows.Forms.ListViewItem(new[] { computer.name, computer.ip, ipPort[1], computer.uniqueKey });
+                    lvi.ForeColor = System.Drawing.Color.Blue;
+                    form.addtoListView(lvi);
+
+                }
                 Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.ToString());
-                form.AddOnlineComputer(GetComputerName(ipPort[0],Convert.ToInt32(ipPort[1]),"Whatevs"),ipPort[0], ipPort[1]);
-              
-                Console.WriteLine("Client " + connection.ConnectionInfo + " connected.");
+
+                //form.AddOnlineComputer(GetComputerName(ipPort[0],Convert.ToInt32(ipPort[1]),"Whatevs"),ipPort[0], ipPort[1]);
+               
+            Console.WriteLine("Client " + connection.ConnectionInfo + " connected.");
+
 
             };
             NetworkComms.ConnectionEstablishShutdownDelegate connectionShutdownDelegate = (connection) =>
               {
-                  string ipPort= connection.ConnectionInfo.RemoteEndPoint.ToString();
-                 // form.ScanForConnections();
-                  form.RemoveOfflineComputer(ipPort.Split(':').First());
-                  Console.WriteLine("Client" + connection.ConnectionInfo + "disconnected");
+                  /* string ipPort= connection.ConnectionInfo.RemoteEndPoint.ToString();
+                  // form.ScanForConnections();
+                   form.RemoveOfflineComputer(ipPort.Split(':').First());
+                   Console.WriteLine("Client" + connection.ConnectionInfo + "disconnected");
+                   */
+                  string[] ipPort = connection.ConnectionInfo.RemoteEndPoint.ToString().Split(':');
+                 // string uniqueKey = GetUniqueKey(ipPort[0], Convert.ToInt32(ipPort[1]));
+                  form.setOffline(ipPort[0]);
+
               };
+
             NetworkComms.AppendGlobalConnectionEstablishHandler(clientEstablishDelegate);
             NetworkComms.AppendGlobalConnectionCloseHandler(connectionShutdownDelegate);
 
@@ -50,6 +73,19 @@ namespace ServerForm
                 form.writeline(" - "+localEndpoint.Address+" "+localEndpoint.Port);
             }
            
+        }
+
+        public bool isAlive(string ip)
+        {
+            List<ConnectionInfo> connections= NetworkComms.AllConnectionInfo();
+            //bool alive = false;
+            foreach(var connection in connections)
+            {
+                if (connection.LocalEndPoint.ToString().Split(':').First() == ip)
+                    return true;
+            }
+            //ConnectionInfo connection = new ConnectionInfo(ip, port);
+            return false;
         }
 
         private void HandleAliveSend(PacketHeader packetHeader, Connection connection, string incomingObject)
@@ -103,7 +139,21 @@ namespace ServerForm
            
         }
 
-        
+        public string GetUniqueKey(string ip, int port)
+        {
+            try
+            {
+                string uniqueKey = NetworkComms.SendReceiveObject<string, string>("getKey", ip, port, "giveKey", 800000, "meow");
+                //form.writeline(clientMessage);
+                return uniqueKey;
+
+            }
+            catch (Exception err)
+            {
+                form.writeline($"ERROR: {err.Message}");
+                return "NOT AVAILABLE";
+            }
+        }
         public string GetComputerName(string ip, int port, string message)
         {
             //form.writeline("Going to send the following");

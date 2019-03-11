@@ -16,14 +16,14 @@ namespace ServerForm
     {
         ServerNet serverNet;
         ServerDataHandler data;
-        List<Computer> computers;
+        public Dictionary<string,Computer> computers;
         public ServerForm()
         {
             //Console.WriteLine("hellow?");
             InitializeComponent();
             serverNet = new ServerNet(this);
+            computers = new Dictionary<string, Computer>();
             data = new ServerDataHandler();
-            computers = new List<Computer>();
             initializeComputers();
 
             lv_computers.Columns.Add("Computer Name",120,HorizontalAlignment.Left);
@@ -33,17 +33,68 @@ namespace ServerForm
            
 
         }
-        public void initializeComputers()
+      public void addtoListView(ListViewItem listViewItem)
         {
-            computers = data.GenerateComputerList();
-            writeline("Computer list Count: " + computers.Count);
-            foreach(var computer in computers)
+            if (lv_computers.InvokeRequired)
             {
-                ListViewItem lvi = new ListViewItem(new[] { computer.name, computer.ip,"1234", computer.uniqueKey});
-                lvi.ForeColor = Color.Gray;
-                lv_computers.Items.Add(lvi);
+                lv_computers.Invoke(new Action(()=>
+                {
+                    lv_computers.Items.Add(listViewItem);
+                }));
+            }
+            else
+            {
+                lv_computers.Items.Add(listViewItem);
             }
         }
+        public void initializeComputers()
+        {
+            if (lv_computers.InvokeRequired)
+            {
+                lv_computers.Invoke(new Action(() =>
+                {
+            lv_computers.Items.Clear();
+                    computers = data.GenerateComputerList();
+                    writeline("Computer list Count: " + computers.Count);
+                    foreach (var computer in computers)
+                    {
+                        ListViewItem lvi = new ListViewItem(new[] { computer.Value.name, computer.Value.ip, "", computer.Key });
+                       /* if (serverNet.isAlive(computer.Value.ip))
+                            lvi.ForeColor = Color.Blue;
+                        else*/
+                            lvi.ForeColor = Color.Gray;
+
+                        //if (NetworkCommsDotNet.NetworkComms.)
+                        lv_computers.Items.Add(lvi);
+                    }
+                }));
+            }
+            else
+            {
+                lv_computers.Items.Clear();
+                computers = data.GenerateComputerList();
+                writeline("Computer list Count: " + computers.Count);
+                foreach(var computer in computers)
+                {
+                    ListViewItem lvi = new ListViewItem(new[] { computer.Value.name, computer.Value.ip,"", computer.Key});
+                    lvi.ForeColor = Color.Gray;
+                    lv_computers.Items.Add(lvi);
+                }
+
+            }
+
+        }
+       /* public void updateList(string ComputerName, string ip, string port)
+        {
+            Computer match = computers.Where(x => x.name == ComputerName);
+            if (match!= null)
+            {
+                Console.WriteLine("MAtch is : " + (Computer)match);
+                Computer tempComp=computers[computers.IndexOf(match as Computer)];
+                tempComp.ip = "haha";
+                data.SaveObjectData(tempComp, tempComp.name, "Computers");
+            }
+        }*/
         public void writeline(string message)
         {
             //added an invoke in case the writeline is used by a different thread.
@@ -66,6 +117,67 @@ namespace ServerForm
 
 
         }
+        public void setOnline(string key, string ip, string port)
+        {
+            if (lv_computers.InvokeRequired)
+            {
+                lv_computers.Invoke(new Action(() => {
+
+                    lv_computers.FindItemWithText(key).ForeColor = Color.Green;
+                    lv_computers.FindItemWithText(key).SubItems[1].Text = ip;
+                    lv_computers.FindItemWithText(key).SubItems[2].Text = port;
+
+
+                }));
+
+            }
+            else
+            {
+               
+                lv_computers.FindItemWithText(key).ForeColor = Color.Green;
+                lv_computers.FindItemWithText(key).SubItems[1].Text = ip;
+                lv_computers.FindItemWithText(key).SubItems[2].Text = port;
+
+            }
+        }
+        public void setOnline(string key)
+        {
+            if (lv_computers.InvokeRequired)
+            {
+                lv_computers.Invoke(new Action(() => {
+
+                    //lv_computers.Items.Remove(lv_computers.FindItemWithText(item));
+                    lv_computers.FindItemWithText(key).ForeColor = Color.Green;
+
+                }));
+
+            }
+            else
+            {
+                lv_computers.FindItemWithText(key).ForeColor = Color.Green;
+
+            }
+        }
+
+        public void setOffline(string key)
+        {
+            if (lv_computers.InvokeRequired)
+            {
+                lv_computers.Invoke(new Action(() => {
+
+                    //lv_computers.Items.Remove(lv_computers.FindItemWithText(item));
+                    lv_computers.FindItemWithText(key).ForeColor = Color.Gray;
+
+                }));
+
+            }
+            else
+            {
+                lv_computers.FindItemWithText(key).ForeColor = Color.Gray;
+
+            }
+        }
+
         public void AddOnlineComputer(string computerName,string IP, string port)
         {
           
