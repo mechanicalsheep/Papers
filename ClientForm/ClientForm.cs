@@ -26,6 +26,7 @@ namespace Client
         ClientNet clientNet;
         ClientDataHandler data;
         ManagementClass mc = new ManagementClass();
+        //ManagementObjectCollection infos;
 
 
         public ClientForm()
@@ -43,8 +44,8 @@ namespace Client
             GetComputerData();
             
             data.SaveObjectData(computer, computer.name, "ref");
+           
 
-            
             tb_installer_path.KeyDown += Tb_installer_path_KeyDown;
             
             aTimer = new System.Timers.Timer();
@@ -52,7 +53,7 @@ namespace Client
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
 
-            GetComputerModel();
+            //GetComputerModel();
 
         }
 
@@ -63,16 +64,37 @@ namespace Client
                 choco(tb_command.Text, tb_username.Text, tb_password.Text, tb_domain.Text);
             }
         }
-        void GetComputerModel()
+        string GetComputerModel()
         {
             ManagementObjectCollection infos = mc.GetInstances();
+            string model="";
             Console.WriteLine("infos.count = " + infos.Count);
             foreach (var info in infos)
             {
                 
-                Console.WriteLine("Method "+ info["Model"].ToString());
+              model=info["Model"].ToString();
             }
-            
+            return model;
+        }
+        string GetRam()
+        {
+            string ram = "";
+
+            ManagementObjectCollection infos = mc.GetInstances();
+            foreach (var info in infos)
+            {
+
+                ram = info["TotalPhysicalMemory"].ToString();
+            }
+            double gbram = Convert.ToDouble(ram) / 1024 / 1024 / 1024;
+           
+            Console.WriteLine("RAM: " + Math.Round(gbram).ToString());
+            return Math.Round(gbram).ToString();
+
+        }
+        string GetUser()
+        {
+            return Environment.UserName;
         }
         void GetComputerData()
         {
@@ -83,7 +105,10 @@ namespace Client
             computer.chocoSoftwares = getChocoInstalls();
             computer.dateTime = getDateTime();
             computer.ip = clientNet.getIP();
-            Console.WriteLine("ip got from client: "+computer.ip);
+            computer.username = GetUser();
+            computer.model = GetComputerModel();
+            computer.ram = GetRam();
+            //Console.WriteLine("ip got from client: "+computer.ip);
             //computer.port
 
 

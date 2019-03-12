@@ -35,7 +35,7 @@ namespace ServerForm
         [ProtoMember(12)]
         public List<string> chocoSoftwares { get; set; }
         [ProtoMember(13)]
-        public string computerModel { get; set; }
+        public string model { get; set; }
         [ProtoMember(14)]
         public string username { get; set; }
 
