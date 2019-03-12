@@ -31,7 +31,15 @@ namespace ServerForm
                 {
                     form.getComputerData(ipPort[0], Convert.ToInt32(ipPort[1]));
                     Computer computer = GetComputer(ipPort[0], Convert.ToInt32(ipPort[1]));
+                    try
+                    {
                     form.computers.Add(computer.uniqueKey, computer);
+
+                    }
+                    catch
+                    {
+
+                    }
 
                     System.Windows.Forms.ListViewItem lvi = new System.Windows.Forms.ListViewItem(new[] { computer.name, computer.ip, ipPort[1], computer.uniqueKey });
                     lvi.ForeColor = System.Drawing.Color.Blue;

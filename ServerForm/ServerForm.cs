@@ -314,6 +314,14 @@ namespace ServerForm
                 }
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string computerKey = lv_computers.Items[0].SubItems[3].Text;
+            Computer computer = computers[computerKey];
+            ComputerInfoForm meow = new ComputerInfoForm(computer);
+            meow.Show();
+        }
     }
     
     

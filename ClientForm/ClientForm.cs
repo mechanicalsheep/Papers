@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 using System.Diagnostics;
 using System.IO;
-
+using System.Management;
 using System.Timers;
 using System.Windows.Forms;
 using System.Net;
@@ -25,10 +25,12 @@ namespace Client
         public Computer computer;
         ClientNet clientNet;
         ClientDataHandler data;
-        //Installer installer;
+        ManagementClass mc = new ManagementClass();
+
+
         public ClientForm()
         {
-           
+            mc.Path = new ManagementPath("Win32_ComputerSystem");
             InitializeComponent();
 
             computer = new Computer(getComputerName());
@@ -49,7 +51,8 @@ namespace Client
             aTimer.Elapsed += new ElapsedEventHandler(stillAlive);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
-           
+
+            GetComputerModel();
 
         }
 
@@ -60,7 +63,17 @@ namespace Client
                 choco(tb_command.Text, tb_username.Text, tb_password.Text, tb_domain.Text);
             }
         }
-
+        void GetComputerModel()
+        {
+            ManagementObjectCollection infos = mc.GetInstances();
+            Console.WriteLine("infos.count = " + infos.Count);
+            foreach (var info in infos)
+            {
+                
+                Console.WriteLine("Method "+ info["Model"].ToString());
+            }
+            
+        }
         void GetComputerData()
         {
            
@@ -118,6 +131,7 @@ namespace Client
         {
             if (message != null)
             clientNet.sendMessage(ip,port,message);
+            //System.Environment.
         }
         private void stillAlive(object sender, ElapsedEventArgs e)
         {

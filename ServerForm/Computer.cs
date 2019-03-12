@@ -34,6 +34,10 @@ namespace ServerForm
         public string note { get; set; }
         [ProtoMember(12)]
         public List<string> chocoSoftwares { get; set; }
+        [ProtoMember(13)]
+        public string computerModel { get; set; }
+        [ProtoMember(14)]
+        public string username { get; set; }
 
 
         //needed for protobuf
