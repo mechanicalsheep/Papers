@@ -30,19 +30,23 @@
         {
             this.lbl_ComputerName = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tb_IP = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.tb_Group = new System.Windows.Forms.TextBox();
             this.lb_Softwares = new System.Windows.Forms.ListBox();
             this.btn_plus = new System.Windows.Forms.Button();
             this.btn_minus = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.lbl_Model = new System.Windows.Forms.Label();
+            this.lbl_RAM = new System.Windows.Forms.Label();
+            this.lbl_ip = new System.Windows.Forms.Label();
+            this.lbl_OS = new System.Windows.Forms.Label();
+            this.lbl_Group = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.lbl_snapshotDate = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -64,17 +68,10 @@
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
-            // tb_IP
-            // 
-            this.tb_IP.Location = new System.Drawing.Point(186, 97);
-            this.tb_IP.Name = "tb_IP";
-            this.tb_IP.Size = new System.Drawing.Size(100, 20);
-            this.tb_IP.TabIndex = 2;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 40);
+            this.label2.Location = new System.Drawing.Point(52, 26);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(23, 13);
             this.label2.TabIndex = 3;
@@ -83,18 +80,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 62);
+            this.label3.Location = new System.Drawing.Point(38, 52);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(42, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Group :";
-            // 
-            // tb_Group
-            // 
-            this.tb_Group.Location = new System.Drawing.Point(186, 136);
-            this.tb_Group.Name = "tb_Group";
-            this.tb_Group.Size = new System.Drawing.Size(100, 20);
-            this.tb_Group.TabIndex = 4;
             // 
             // lb_Softwares
             // 
@@ -126,28 +116,26 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 88);
+            this.label1.Location = new System.Drawing.Point(52, 74);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(28, 13);
             this.label1.TabIndex = 10;
             this.label1.Text = "OS :";
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(186, 175);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 9;
-            // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.lbl_Model);
+            this.groupBox1.Controls.Add(this.lbl_RAM);
+            this.groupBox1.Controls.Add(this.lbl_ip);
+            this.groupBox1.Controls.Add(this.lbl_OS);
+            this.groupBox1.Controls.Add(this.lbl_Group);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(111, 215);
+            this.groupBox1.Location = new System.Drawing.Point(141, 78);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(321, 191);
             this.groupBox1.TabIndex = 11;
@@ -157,7 +145,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 110);
+            this.label4.Location = new System.Drawing.Point(38, 96);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(42, 13);
             this.label4.TabIndex = 11;
@@ -166,7 +154,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(11, 138);
+            this.label5.Location = new System.Drawing.Point(43, 124);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 13);
             this.label5.TabIndex = 13;
@@ -175,26 +163,88 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(161, 16);
+            this.label6.Location = new System.Drawing.Point(262, 52);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(78, 13);
+            this.label6.Size = new System.Drawing.Size(84, 13);
             this.label6.TabIndex = 12;
-            this.label6.Text = "Snapshot Date";
+            this.label6.Text = "Snapshot Date :";
+            // 
+            // lbl_Model
+            // 
+            this.lbl_Model.AutoSize = true;
+            this.lbl_Model.Location = new System.Drawing.Point(81, 96);
+            this.lbl_Model.Name = "lbl_Model";
+            this.lbl_Model.Size = new System.Drawing.Size(42, 13);
+            this.lbl_Model.TabIndex = 17;
+            this.lbl_Model.Text = "Model :";
+            // 
+            // lbl_RAM
+            // 
+            this.lbl_RAM.AutoSize = true;
+            this.lbl_RAM.Location = new System.Drawing.Point(81, 124);
+            this.lbl_RAM.Name = "lbl_RAM";
+            this.lbl_RAM.Size = new System.Drawing.Size(15, 13);
+            this.lbl_RAM.TabIndex = 18;
+            this.lbl_RAM.Text = "R";
+            // 
+            // lbl_ip
+            // 
+            this.lbl_ip.AutoSize = true;
+            this.lbl_ip.Location = new System.Drawing.Point(81, 26);
+            this.lbl_ip.Name = "lbl_ip";
+            this.lbl_ip.Size = new System.Drawing.Size(23, 13);
+            this.lbl_ip.TabIndex = 14;
+            this.lbl_ip.Text = "IP :";
+            // 
+            // lbl_OS
+            // 
+            this.lbl_OS.AutoSize = true;
+            this.lbl_OS.Location = new System.Drawing.Point(86, 74);
+            this.lbl_OS.Name = "lbl_OS";
+            this.lbl_OS.Size = new System.Drawing.Size(28, 13);
+            this.lbl_OS.TabIndex = 16;
+            this.lbl_OS.Text = "OS :";
+            // 
+            // lbl_Group
+            // 
+            this.lbl_Group.AutoSize = true;
+            this.lbl_Group.Location = new System.Drawing.Point(81, 52);
+            this.lbl_Group.Name = "lbl_Group";
+            this.lbl_Group.Size = new System.Drawing.Size(15, 13);
+            this.lbl_Group.TabIndex = 15;
+            this.lbl_Group.Text = "G";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(97, 124);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(22, 13);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "GB";
+            // 
+            // lbl_snapshotDate
+            // 
+            this.lbl_snapshotDate.AutoSize = true;
+            this.lbl_snapshotDate.Location = new System.Drawing.Point(346, 52);
+            this.lbl_snapshotDate.Name = "lbl_snapshotDate";
+            this.lbl_snapshotDate.Size = new System.Drawing.Size(78, 13);
+            this.lbl_snapshotDate.TabIndex = 20;
+            this.lbl_snapshotDate.Text = "Snapshot Date";
             // 
             // ComputerInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(767, 452);
+            this.Controls.Add(this.lbl_snapshotDate);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btn_minus);
             this.Controls.Add(this.btn_plus);
             this.Controls.Add(this.lb_Softwares);
-            this.Controls.Add(this.tb_Group);
-            this.Controls.Add(this.tb_IP);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lbl_ComputerName);
+            this.Controls.Add(this.label6);
             this.Name = "ComputerInfoForm";
             this.Text = "ComputerInfoForm";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -209,18 +259,22 @@
 
         private System.Windows.Forms.Label lbl_ComputerName;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.TextBox tb_IP;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox tb_Group;
         private System.Windows.Forms.ListBox lb_Softwares;
         private System.Windows.Forms.Button btn_plus;
         private System.Windows.Forms.Button btn_minus;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lbl_snapshotDate;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lbl_Model;
+        private System.Windows.Forms.Label lbl_RAM;
+        private System.Windows.Forms.Label lbl_ip;
+        private System.Windows.Forms.Label lbl_OS;
+        private System.Windows.Forms.Label lbl_Group;
     }
 }

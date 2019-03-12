@@ -16,8 +16,13 @@ namespace ServerForm
         {
             InitializeComponent();
             lbl_ComputerName.Text = computer.name;
-            tb_IP.Text = computer.ip;
-            tb_Group.Text = computer.group;
+            lbl_snapshotDate.Text = computer.dateTime;
+            lbl_ip.Text = computer.ip;
+            lbl_Group.Text = computer.group;
+            lbl_OS.Text = computer.OS;
+            lbl_Model.Text = computer.model;
+            lbl_RAM.Text = computer.ram;
+
 
            
             foreach(var software in computer.softwares)
@@ -36,7 +41,7 @@ namespace ServerForm
 
         private void btn_plus_Click(object sender, EventArgs e)
         {
-            lbl_ComputerName.Text = tb_IP.Text;
+           // lbl_ComputerName.Text = tb_IP.Text;
         }
     }
 }
