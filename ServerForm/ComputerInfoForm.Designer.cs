@@ -172,54 +172,60 @@
             // lbl_Model
             // 
             this.lbl_Model.AutoSize = true;
+            this.lbl_Model.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Model.Location = new System.Drawing.Point(81, 96);
             this.lbl_Model.Name = "lbl_Model";
-            this.lbl_Model.Size = new System.Drawing.Size(42, 13);
+            this.lbl_Model.Size = new System.Drawing.Size(49, 13);
             this.lbl_Model.TabIndex = 17;
             this.lbl_Model.Text = "Model :";
             // 
             // lbl_RAM
             // 
             this.lbl_RAM.AutoSize = true;
+            this.lbl_RAM.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_RAM.Location = new System.Drawing.Point(81, 124);
             this.lbl_RAM.Name = "lbl_RAM";
-            this.lbl_RAM.Size = new System.Drawing.Size(15, 13);
+            this.lbl_RAM.Size = new System.Drawing.Size(16, 13);
             this.lbl_RAM.TabIndex = 18;
             this.lbl_RAM.Text = "R";
             // 
             // lbl_ip
             // 
             this.lbl_ip.AutoSize = true;
+            this.lbl_ip.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_ip.Location = new System.Drawing.Point(81, 26);
             this.lbl_ip.Name = "lbl_ip";
-            this.lbl_ip.Size = new System.Drawing.Size(23, 13);
+            this.lbl_ip.Size = new System.Drawing.Size(27, 13);
             this.lbl_ip.TabIndex = 14;
             this.lbl_ip.Text = "IP :";
             // 
             // lbl_OS
             // 
             this.lbl_OS.AutoSize = true;
+            this.lbl_OS.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_OS.Location = new System.Drawing.Point(86, 74);
             this.lbl_OS.Name = "lbl_OS";
-            this.lbl_OS.Size = new System.Drawing.Size(28, 13);
+            this.lbl_OS.Size = new System.Drawing.Size(32, 13);
             this.lbl_OS.TabIndex = 16;
             this.lbl_OS.Text = "OS :";
             // 
             // lbl_Group
             // 
             this.lbl_Group.AutoSize = true;
+            this.lbl_Group.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Group.Location = new System.Drawing.Point(81, 52);
             this.lbl_Group.Name = "lbl_Group";
-            this.lbl_Group.Size = new System.Drawing.Size(15, 13);
+            this.lbl_Group.Size = new System.Drawing.Size(16, 13);
             this.lbl_Group.TabIndex = 15;
             this.lbl_Group.Text = "G";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(97, 124);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(22, 13);
+            this.label7.Size = new System.Drawing.Size(24, 13);
             this.label7.TabIndex = 19;
             this.label7.Text = "GB";
             // 
