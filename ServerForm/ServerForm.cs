@@ -59,6 +59,7 @@ namespace ServerForm
                     foreach (var computer in computers)
                     {
                         ListViewItem lvi = new ListViewItem(new[] { computer.Value.name, computer.Value.ip, "", computer.Key });
+                        lvi.Tag = computer;
                        /* if (serverNet.isAlive(computer.Value.ip))
                             lvi.ForeColor = Color.Blue;
                         else*/
@@ -77,12 +78,22 @@ namespace ServerForm
                 foreach(var computer in computers)
                 {
                     ListViewItem lvi = new ListViewItem(new[] { computer.Value.name, computer.Value.ip,"", computer.Key});
+                    lvi.Tag = computer.Value;
                     lvi.ForeColor = Color.Gray;
                     lv_computers.Items.Add(lvi);
                 }
 
             }
 
+        }
+        public void ListTag()
+        {
+            foreach(ListViewItem item in lv_computers.SelectedItems)
+            {
+                Computer computer = (Computer)item.Tag;
+                Console.WriteLine($"Computer is date is {computer.dateTime}");
+
+            }
         }
        /* public void updateList(string ComputerName, string ip, string port)
         {
@@ -165,7 +176,6 @@ namespace ServerForm
             {
                 lv_computers.Invoke(new Action(() => {
 
-                    //lv_computers.Items.Remove(lv_computers.FindItemWithText(item));
                     lv_computers.FindItemWithText(key).ForeColor = Color.Gray;
 
                 }));
@@ -321,6 +331,16 @@ namespace ServerForm
             Computer computer = computers[computerKey];
             ComputerInfoForm meow = new ComputerInfoForm(computer);
             meow.Show();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_Scan_Click(object sender, EventArgs e)
+        {
+            ListTag();
         }
     }
     

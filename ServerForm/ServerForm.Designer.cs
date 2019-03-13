@@ -42,6 +42,7 @@
             this.btn_getComputer = new System.Windows.Forms.Button();
             this.lv_computers = new System.Windows.Forms.ListView();
             this.button1 = new System.Windows.Forms.Button();
+            this.cb_groups = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // lb_output
@@ -60,6 +61,7 @@
             this.btn_Scan.TabIndex = 1;
             this.btn_Scan.Text = "Scan";
             this.btn_Scan.UseVisualStyleBackColor = true;
+            this.btn_Scan.Click += new System.EventHandler(this.btn_Scan_Click);
             // 
             // btn_send
             // 
@@ -148,7 +150,7 @@
             // 
             // lv_computers
             // 
-            this.lv_computers.Location = new System.Drawing.Point(33, 30);
+            this.lv_computers.Location = new System.Drawing.Point(33, 58);
             this.lv_computers.Name = "lv_computers";
             this.lv_computers.Size = new System.Drawing.Size(400, 224);
             this.lv_computers.TabIndex = 12;
@@ -166,11 +168,28 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // cb_groups
+            // 
+            this.cb_groups.FormattingEnabled = true;
+            this.cb_groups.Items.AddRange(new object[] {
+            "All",
+            "Domain",
+            "BYOD",
+            "Server",
+            "Computer Labs"});
+            this.cb_groups.Location = new System.Drawing.Point(120, 31);
+            this.cb_groups.Name = "cb_groups";
+            this.cb_groups.Size = new System.Drawing.Size(175, 21);
+            this.cb_groups.TabIndex = 14;
+            this.cb_groups.Text = "Filter Group";
+            this.cb_groups.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
             // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(762, 517);
+            this.Controls.Add(this.cb_groups);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.lv_computers);
             this.Controls.Add(this.btn_getComputer);
@@ -208,6 +227,7 @@
         private System.Windows.Forms.Button btn_getComputer;
         private System.Windows.Forms.ListView lv_computers;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox cb_groups;
     }
 }
 
