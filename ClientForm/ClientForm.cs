@@ -15,9 +15,11 @@ namespace Client
 {
     public partial class ClientForm : Form
     {
-        
+
 
         //testing
+        Settings settings = new Settings();
+
         string ip;
         int port;
         System.Timers.Timer aTimer;
@@ -31,11 +33,15 @@ namespace Client
 
         public ClientForm()
         {
+            settings.setGroup("meow");
+            settings.setKey("212234634564564564");
+
             mc.Path = new ManagementPath("Win32_ComputerSystem");
             InitializeComponent();
 
             computer = new Computer(getComputerName());
             data = new ClientDataHandler();
+            data.SaveObjectData(settings, "test", "test");
             ip = "192.168.11.105";
             //ip = "192.168.8.100";
             port = 11111;
