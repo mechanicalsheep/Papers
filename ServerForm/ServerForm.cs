@@ -34,6 +34,47 @@ namespace ServerForm
            
 
         }
+        public void addComputerToList(Computer computer)
+        {
+            if (lv_computers.InvokeRequired)
+            {
+                lv_computers.Invoke(new Action(()=> 
+                {
+                    if (computers[computer.uniqueKey] != null)
+                    {
+                        
+                     ListViewItem lvi = new ListViewItem(new[] {computer.name, computer.ip, "", computer.uniqueKey });
+                    if (computers[computer.uniqueKey].online == false)
+                        lvi.ForeColor = Color.Gray;
+                  
+                    else
+                        lvi.ForeColor = Color.DarkViolet;
+
+                    if (lv_computers.FindItemWithText(computer.uniqueKey) == null)
+                        lv_computers.Items.Add(lvi);
+                    
+                    }
+
+                }));
+            }
+            else
+            {
+                 if (computers[computer.uniqueKey] != null)
+                    {
+                        
+                     ListViewItem lvi = new ListViewItem(new[] {computer.name, computer.ip, "", computer.uniqueKey });
+                    if (computers[computer.uniqueKey].online == false)
+                        lvi.ForeColor = Color.Gray;
+                  
+                    else
+                        lvi.ForeColor = Color.DarkViolet;
+
+                    if (lv_computers.FindItemWithText(computer.uniqueKey) == null)
+                        lv_computers.Items.Add(lvi);
+                    
+                    }
+            }
+        }
       public void addtoListView(ListViewItem listViewItem)
         {
             if (lv_computers.InvokeRequired)
@@ -41,7 +82,13 @@ namespace ServerForm
                 lv_computers.Invoke(new Action(()=>
                 {
                     Computer computer = (Computer)listViewItem.Tag;
-                    if(lv_computers.FindItemWithText(computer.uniqueKey)==null)
+                    if (computer.online == false)
+                        listViewItem.ForeColor = Color.Gray;
+                    else
+                        listViewItem.ForeColor = Color.Green;
+
+
+                    if (lv_computers.FindItemWithText(computer.uniqueKey)==null)
                     lv_computers.Items.Add(listViewItem);
                 }));
             }
@@ -119,10 +166,14 @@ namespace ServerForm
             if (lv_computers.InvokeRequired)
             {
                 lv_computers.Invoke(new Action(() => {
-
-                    lv_computers.FindItemWithText(key).ForeColor = Color.Green;
+                    if(lv_computers.FindItemWithText(key)!=null)
+                    {
+                        Console.WriteLine("Setting " + key + " online");
+                        computers[key].online = true;
+                        lv_computers.FindItemWithText(key).ForeColor = Color.Green;
                     lv_computers.FindItemWithText(key).SubItems[1].Text = ip;
                     lv_computers.FindItemWithText(key).SubItems[2].Text = port;
+                    }
 
 
                 }));
@@ -130,30 +181,43 @@ namespace ServerForm
             }
             else
             {
-               
-                lv_computers.FindItemWithText(key).ForeColor = Color.Green;
+                if (lv_computers.FindItemWithText(key) != null)
+                {
+                    Console.WriteLine("Setting " + key + " online");
+                    computers[key].online = true;
+                    lv_computers.FindItemWithText(key).ForeColor = Color.Green;
                 lv_computers.FindItemWithText(key).SubItems[1].Text = ip;
                 lv_computers.FindItemWithText(key).SubItems[2].Text = port;
 
+                }
+
             }
         }
-        public void setOnline(string key)
+      /*  public void setOnline(string key)
         {
             if (lv_computers.InvokeRequired)
             {
                 lv_computers.Invoke(new Action(() => {
-
-                  lv_computers.FindItemWithText(key).ForeColor = Color.Green;
-
+                    if (lv_computers.FindItemWithText(key) != null)
+                    {
+                        lv_computers.FindItemWithText(key).ForeColor = Color.Green;
+                        
+                    }
+                    computers[key].online = true;
                 }));
 
             }
             else
             {
-                lv_computers.FindItemWithText(key).ForeColor = Color.Green;
+                if (lv_computers.FindItemWithText(key) != null)
+                {
+                    lv_computers.FindItemWithText(key).ForeColor = Color.Green;
+
+                }
+                computers[key].online = true;
 
             }
-        }
+        }*/
         public List<Computer> Filter(string group)
         {
             lv_computers.Items.Clear();
@@ -338,8 +402,10 @@ namespace ServerForm
             List<Computer> test = Filter(cb_groups.Text);
             foreach(var computer in test)
             {
-                Console.WriteLine(computer.name);
-                ListViewItem lvi = new ListViewItem(new[] { computer.name, computer.ip, "", computer.uniqueKey });
+               // Console.WriteLine(computer.name);
+                //ListViewItem lvi = new ListViewItem(new[] { computer.name, computer.ip, "", computer.uniqueKey });
+                addComputerToList(computer);
+                Console.WriteLine($"{computer.name} is online? {computer.online}");
             }
 
             

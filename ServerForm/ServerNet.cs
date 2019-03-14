@@ -41,10 +41,10 @@ namespace ServerForm
 
                     }
 
-                    System.Windows.Forms.ListViewItem lvi = new System.Windows.Forms.ListViewItem(new[] { computer.name, computer.ip, ipPort[1], computer.uniqueKey });
-                    lvi.ForeColor = System.Drawing.Color.Blue;
-                    lvi.Tag = computer;
-                    form.addtoListView(lvi);
+                    //System.Windows.Forms.ListViewItem lvi = new System.Windows.Forms.ListViewItem(new[] { computer.name, computer.ip, ipPort[1], computer.uniqueKey });
+                    //lvi.ForeColor = System.Drawing.Color.Blue;
+                    //lvi.Tag = computer;
+                    form.addComputerToList(computer);
 
                 }
                 Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.ToString());
