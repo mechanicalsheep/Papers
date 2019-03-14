@@ -17,6 +17,7 @@ namespace ServerForm
         ServerNet serverNet;
         ServerDataHandler data;
         public Dictionary<string,Computer> computers;
+        
         public ServerForm()
         {
             //Console.WriteLine("hellow?");
@@ -39,6 +40,8 @@ namespace ServerForm
             {
                 lv_computers.Invoke(new Action(()=>
                 {
+                    Computer computer = (Computer)listViewItem.Tag;
+                    if(lv_computers.FindItemWithText(computer.uniqueKey)==null)
                     lv_computers.Items.Add(listViewItem);
                 }));
             }
@@ -53,21 +56,18 @@ namespace ServerForm
             {
                 lv_computers.Invoke(new Action(() =>
                 {
-            lv_computers.Items.Clear();
+                    
+                    lv_computers.Items.Clear();
                     computers = data.GenerateComputerList();
                     writeline("Computer list Count: " + computers.Count);
                     foreach (var computer in computers)
                     {
                         ListViewItem lvi = new ListViewItem(new[] { computer.Value.name, computer.Value.ip, "", computer.Key });
-                        lvi.Tag = computer;
-                       /* if (serverNet.isAlive(computer.Value.ip))
-                            lvi.ForeColor = Color.Blue;
-                        else*/
-                            lvi.ForeColor = Color.Gray;
-
-                        //if (NetworkCommsDotNet.NetworkComms.)
+                        lvi.Tag = computer.Value;
+                        lvi.ForeColor = Color.Gray;
                         lv_computers.Items.Add(lvi);
                     }
+                    
                 }));
             }
             else
@@ -86,26 +86,12 @@ namespace ServerForm
             }
 
         }
-        public void ListTag()
+        public void dummyshit()
         {
-            foreach(ListViewItem item in lv_computers.SelectedItems)
-            {
-                Computer computer = (Computer)item.Tag;
-                Console.WriteLine($"Computer is date is {computer.dateTime}");
-
-            }
+            lv_computers.Items.Clear();
+            lv_computers.Items.Add("hahaha");
         }
-       /* public void updateList(string ComputerName, string ip, string port)
-        {
-            Computer match = computers.Where(x => x.name == ComputerName);
-            if (match!= null)
-            {
-                Console.WriteLine("MAtch is : " + (Computer)match);
-                Computer tempComp=computers[computers.IndexOf(match as Computer)];
-                tempComp.ip = "haha";
-                data.SaveObjectData(tempComp, tempComp.name, "Computers");
-            }
-        }*/
+    
         public void writeline(string message)
         {
             //added an invoke in case the writeline is used by a different thread.
@@ -157,8 +143,7 @@ namespace ServerForm
             {
                 lv_computers.Invoke(new Action(() => {
 
-                    //lv_computers.Items.Remove(lv_computers.FindItemWithText(item));
-                    lv_computers.FindItemWithText(key).ForeColor = Color.Green;
+                  lv_computers.FindItemWithText(key).ForeColor = Color.Green;
 
                 }));
 
@@ -169,7 +154,20 @@ namespace ServerForm
 
             }
         }
+        public List<Computer> Filter(string group)
+        {
+            lv_computers.Items.Clear();
+            IEnumerable<Computer> compEnum = computers.Values;
+            switch (group)
+            {
+                case "All":
+                    return compEnum.ToList();
+                default:
+                    return compEnum.Where(computer => computer.group == group).ToList();
 
+            }
+
+        }
         public void setOffline(string key)
         {
             if (lv_computers.InvokeRequired)
@@ -327,7 +325,7 @@ namespace ServerForm
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string computerKey = lv_computers.Items[0].SubItems[3].Text;
+            string computerKey = lv_computers.SelectedItems[0].SubItems[3].Text;
             Computer computer = computers[computerKey];
             ComputerInfoForm meow = new ComputerInfoForm(computer);
             meow.Show();
@@ -335,12 +333,21 @@ namespace ServerForm
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+          
+            Console.WriteLine("e.tostring is " + cb_groups.Text);
+            List<Computer> test = Filter(cb_groups.Text);
+            foreach(var computer in test)
+            {
+                Console.WriteLine(computer.name);
+                ListViewItem lvi = new ListViewItem(new[] { computer.name, computer.ip, "", computer.uniqueKey });
+            }
 
+            
         }
 
         private void btn_Scan_Click(object sender, EventArgs e)
         {
-            ListTag();
+            
         }
     }
     
