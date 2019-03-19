@@ -28,6 +28,7 @@ namespace ServerForm
             lbl_OS.Text = computer.OS;
             lbl_Model.Text = computer.model;
             lbl_RAM.Text = computer.ram;
+            lbl_username.Text = computer.username;
 
 
            

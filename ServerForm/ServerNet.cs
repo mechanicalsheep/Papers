@@ -36,7 +36,10 @@ namespace ServerForm
                     Computer computer = GetComputer(ipPort[0], Convert.ToInt32(ipPort[1]));
                     try
                     {
+                        computer.online = true;
+                        //form.setOnline(computer.uniqueKey, ipPort[0], ipPort[1]);
                     form.computers.Add(computer.uniqueKey, computer);
+
 
                     }
                     catch
