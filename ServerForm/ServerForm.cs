@@ -14,7 +14,7 @@ namespace ServerForm
 {
     public partial class ServerForm : Form
     {
-        ServerNet serverNet;
+        public ServerNet serverNet;
         ServerDataHandler data;
         public Dictionary<string,Computer> computers;
         
@@ -44,6 +44,7 @@ namespace ServerForm
                     {
                         
                      ListViewItem lvi = new ListViewItem(new[] {computer.name, computer.ip, "", computer.uniqueKey });
+                        writeline("Computer added with name: " + computer.name);
                     if (computers[computer.uniqueKey].online == false)
                         lvi.ForeColor = Color.Gray;
                   
@@ -391,7 +392,7 @@ namespace ServerForm
         {
             string computerKey = lv_computers.SelectedItems[0].SubItems[3].Text;
             Computer computer = computers[computerKey];
-            ComputerInfoForm meow = new ComputerInfoForm(computer);
+            ComputerInfoForm meow = new ComputerInfoForm(this,computer);
             meow.Show();
         }
 

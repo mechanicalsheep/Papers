@@ -72,7 +72,15 @@ namespace ServerForm
 
                 Computer computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
 
+                try
+                {
                 computerList.Add(computer.uniqueKey,computer);
+
+                }
+                catch
+                {
+                    Console.WriteLine("ERROR IN GENERATECOMPUTERLIST(): THE UNIQUE KEY POSSIBLY WAS ALREADY ADDED.");
+                }
             }
             return computerList;
         }

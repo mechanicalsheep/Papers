@@ -8,7 +8,7 @@ using ProtoBuf;
 namespace Client
 {
     [ProtoContract]
-    class Settings
+    public class Settings
     {
         [ProtoMember(1)]
         public string uniquekey { get; set; }

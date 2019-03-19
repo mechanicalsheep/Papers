@@ -26,7 +26,10 @@ namespace ServerForm
                 string uniqueKey = GetUniqueKey(ipPort[0], Convert.ToInt32(ipPort[1]));
                 Console.WriteLine($"Server got UniqueKey {uniqueKey} from connection {ipPort[0]}");
                 if (form.computers.ContainsKey(uniqueKey))
+                {
                     form.setOnline(uniqueKey, ipPort[0],ipPort[1]);
+                    form.writeline("Setting " + form.computers[uniqueKey].name + " online");
+                }
                 else
                 {
                     form.getComputerData(ipPort[0], Convert.ToInt32(ipPort[1]));
@@ -82,6 +85,11 @@ namespace ServerForm
                 form.writeline(" - "+localEndpoint.Address+" "+localEndpoint.Port);
             }
            
+        }
+
+        public void setGroup(string ip, int port, string group)
+        {
+            NetworkComms.SendObject("setGroup", ip, port, group);
         }
 
         public bool isAlive(string ip)

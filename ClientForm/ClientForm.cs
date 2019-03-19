@@ -19,29 +19,34 @@ namespace Client
 
         //testing
         Settings settings = new Settings();
-
+        string settingPath;
+        string fileNameSettings;
         string ip;
         int port;
         System.Timers.Timer aTimer;
+        string fullSettingFilePath;
 
         public Computer computer;
         ClientNet clientNet;
         ClientDataHandler data;
         ManagementClass mc = new ManagementClass();
+  
         //ManagementObjectCollection infos;
 
 
         public ClientForm()
         {
-            settings.setGroup("meow");
-            settings.setKey("212234634564564564");
+           
+            settingPath=Directory.GetCurrentDirectory()+"\\test\\";
+            fileNameSettings = "Settings";
+            fullSettingFilePath = settingPath + fileNameSettings+".json";
 
             mc.Path = new ManagementPath("Win32_ComputerSystem");
             InitializeComponent();
 
             computer = new Computer(getComputerName());
             data = new ClientDataHandler();
-            data.SaveObjectData(settings, "test", "test");
+            
             ip = "192.168.11.105";
             //ip = "192.168.8.100";
             port = 11111;
@@ -59,8 +64,8 @@ namespace Client
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
 
-            //GetComputerModel();
-
+            cb_groups.Text = data.GetSettings(fullSettingFilePath).group;
+          
         }
 
         private void Tb_installer_path_KeyDown(object sender, KeyEventArgs e)
@@ -98,6 +103,13 @@ namespace Client
             return Math.Round(gbram).ToString();
 
         }
+
+       public void setGroup(string group)
+        {
+            Settings tempSetting = data.GetSettings(fullSettingFilePath);
+            tempSetting.group = group;
+            data.SaveObjectData(tempSetting,fileNameSettings,"test");
+        }
         string GetUser()
         {
             return Environment.UserName;
@@ -114,12 +126,23 @@ namespace Client
             computer.username = GetUser();
             computer.model = GetComputerModel();
             computer.ram = GetRam();
-            //Console.WriteLine("ip got from client: "+computer.ip);
-            //computer.port
+            computer.group = getGroup();
+
+            writeline("Computer group is: " + computer.group);
 
 
-
-
+        }
+        string getGroup()
+        {
+            Settings tempSetting = data.GetSettings(fullSettingFilePath);
+            try
+            {
+            return tempSetting.group;
+            }
+            catch
+            {
+                return null;
+            }
         }
         public string getDateTime()
         {
@@ -208,7 +231,8 @@ namespace Client
                 string GuidString = Convert.ToBase64String(g.ToByteArray());
                 GuidString = GuidString.Replace("=", "");
                 GuidString = GuidString.Replace("+", "");
-            //data.saveInitFile(GuidString);
+            settings.setKey(GuidString);
+            data.SaveObjectData(settings,"Settings","test");
             data.SaveObjectData(GuidString, "init", "ref");
             
             return GuidString;
@@ -323,6 +347,14 @@ namespace Client
             computer.dateTime = getDateTime();
             data.SaveObjectData(computer, computer.name, "ref");
             writeline("note saved!");
+        }
+
+    
+
+        private void btn_saveGroup_Click(object sender, EventArgs e)
+        {
+            setGroup(cb_groups.Text);
+            writeline($"Group {cb_groups.Text} saved.");
         }
     }
 

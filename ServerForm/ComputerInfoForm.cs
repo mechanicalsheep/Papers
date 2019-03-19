@@ -14,11 +14,14 @@ namespace ServerForm
     {
         bool toggle = false;
         Computer computer;
-        public ComputerInfoForm(Computer computer)
+        ServerForm form;
+        public ComputerInfoForm(ServerForm form, Computer computer)
         {
             InitializeComponent();
+            this.form = form;
             this.computer = computer;
             lbl_ComputerName.Text = computer.name;
+
             lbl_snapshotDate.Text = computer.dateTime;
             lbl_ip.Text = computer.ip;
             tb_group.Text = computer.group;
@@ -54,9 +57,10 @@ namespace ServerForm
             tb_group.Enabled = toggle;
             if (toggle)
                 btn_EditGroup.Text = "Save";
-            
+
             else
-               
+               if (btn_EditGroup.Text == "Save")
+               /// form.serverNet.setGroup();
                 btn_EditGroup.Text = "Edit Group";
             //Console.WriteLine("toggle is: "+toggle);
         }

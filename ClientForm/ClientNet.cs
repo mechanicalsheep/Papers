@@ -25,6 +25,10 @@ namespace Client
                 connection.SendObject("giveKey",form.getUniqueKey());
 
             });
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("setGroup", (packetHeader, connection, group) =>
+             {
+                 form.setGroup(group);
+             });
             //choco command receiver!
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("choco", (packetHeader, connection, input) =>
             {
@@ -75,12 +79,12 @@ namespace Client
         {
             try
             {
-                Console.WriteLine("sending object to "+ip+ " from ");
+                //Console.WriteLine("sending object to "+ip+ " from ");
                 NetworkComms.SendObject("sendAlive", ip, port,"i'm alive");
             }
             catch (Exception err)
             {
-                Console.WriteLine("sendAlive exception thrown: " + err.Message);
+                //Console.WriteLine("sendAlive exception thrown: " + err.Message);
             }
         }
         public void sendMessage(string ip, int port, string message)
@@ -92,7 +96,7 @@ namespace Client
             }
             catch(Exception err)
             {
-                Console.WriteLine("exception thrown: " + err.Message);
+                //Console.WriteLine("exception thrown: " + err.Message);
             }
         }
 

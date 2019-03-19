@@ -48,6 +48,8 @@
             this.tb_command = new System.Windows.Forms.TextBox();
             this.tb_note = new System.Windows.Forms.TextBox();
             this.btn_Note = new System.Windows.Forms.Button();
+            this.cb_groups = new System.Windows.Forms.ComboBox();
+            this.btn_saveGroup = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lb_output
@@ -218,11 +220,38 @@
             this.btn_Note.UseVisualStyleBackColor = true;
             this.btn_Note.Click += new System.EventHandler(this.btn_Note_Click);
             // 
+            // cb_groups
+            // 
+            this.cb_groups.FormattingEnabled = true;
+            this.cb_groups.Items.AddRange(new object[] {
+            "Default",
+            "BYOD",
+            "Domain",
+            "Computer Lab",
+            ""});
+            this.cb_groups.Location = new System.Drawing.Point(59, 280);
+            this.cb_groups.Name = "cb_groups";
+            this.cb_groups.Size = new System.Drawing.Size(121, 21);
+            this.cb_groups.TabIndex = 20;
+            
+            // 
+            // btn_saveGroup
+            // 
+            this.btn_saveGroup.Location = new System.Drawing.Point(186, 280);
+            this.btn_saveGroup.Name = "btn_saveGroup";
+            this.btn_saveGroup.Size = new System.Drawing.Size(75, 23);
+            this.btn_saveGroup.TabIndex = 21;
+            this.btn_saveGroup.Text = "Save";
+            this.btn_saveGroup.UseVisualStyleBackColor = true;
+            this.btn_saveGroup.Click += new System.EventHandler(this.btn_saveGroup_Click);
+            // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 383);
+            this.Controls.Add(this.btn_saveGroup);
+            this.Controls.Add(this.cb_groups);
             this.Controls.Add(this.btn_Note);
             this.Controls.Add(this.tb_note);
             this.Controls.Add(this.label6);
@@ -272,6 +301,8 @@
         private System.Windows.Forms.TextBox tb_command;
         private System.Windows.Forms.TextBox tb_note;
         private System.Windows.Forms.Button btn_Note;
+        private System.Windows.Forms.ComboBox cb_groups;
+        private System.Windows.Forms.Button btn_saveGroup;
     }
 }
 

@@ -14,9 +14,9 @@ namespace Client
         public Computer computer;
         string file;
         object obj;
-        
+        //public Settings set;
 
-     
+
         public ClientDataHandler()
         {
 
@@ -40,7 +40,28 @@ namespace Client
             return computer.uniqueKey;
         }
 
-      
+       
+
+      public Settings GetSettings(string path)
+        {
+            Settings settings;
+            
+            
+            try
+            {
+                var inputs = File.ReadAllText(path);
+
+                settings = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(inputs);
+
+                return settings;
+            }
+            catch (Exception er)
+            {
+                Console.WriteLine("UNABLE TO GET SETTINGS: " + er);
+            }
+            return null;
+        }
+    
 
 
         public void saveInitFile(string UniqueKey)
