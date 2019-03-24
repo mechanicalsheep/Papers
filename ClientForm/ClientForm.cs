@@ -46,9 +46,16 @@ namespace Client
 
             computer = new Computer(getComputerName());
             data = new ClientDataHandler();
-            
+
+            ///server-shady as server
+            //ip = "192.168.11.193";
+
+            /// SHADY as Server
             ip = "192.168.11.105";
+
+            ///MSI as server
             //ip = "192.168.8.100";
+
             port = 11111;
             
             clientNet = new ClientNet(this);
@@ -263,8 +270,8 @@ namespace Client
         public void choco(string Command, string username, string password, string domain)
         {
            Installer installer = new Installer(this);
-            if (username == "")
-                username = "administrator";
+            //if (username == "")
+                //username = "administrator";
             NetworkCredential credential = new NetworkCredential(username, password, domain);
             List<string> output = installer.Install(Command, credential);
             foreach (var outs in output)

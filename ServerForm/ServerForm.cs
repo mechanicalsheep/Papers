@@ -43,17 +43,31 @@ namespace ServerForm
                     if (computers[computer.uniqueKey] != null)
                     {
                         
-                     ListViewItem lvi = new ListViewItem(new[] {computer.name, computer.ip, "", computer.uniqueKey });
-                        writeline("Computer added with name: " + computer.name);
                     if (computers[computer.uniqueKey].online == false)
+                        {
+                     ListViewItem lvi = new ListViewItem(new[] {computer.name, computer.ip, computer.port, computer.uniqueKey });
                         lvi.ForeColor = Color.Gray;
-                  
-                    else
-                        lvi.ForeColor = Color.DarkViolet;
 
-                    if (lv_computers.FindItemWithText(computer.uniqueKey) == null)
-                        lv_computers.Items.Add(lvi);
+                        }
+
+                        else
+                        {
+                            ListViewItem lvi = new ListViewItem(new[] { computer.name, computer.ip, computer.port, computer.uniqueKey });
+
+                            lvi.ForeColor = Color.DarkViolet;
+
+                        }
+                        writeline("Computer added with name: " + computer.name);
+
+                    //if (lv_computers.FindItemWithText(computer.uniqueKey) == null)
+                    //    lv_computers.Items.Add(lvi);
+                        
                     
+                    }
+                    else
+                    {
+                        //computers.Add(computer.uniqueKey, computer);
+                        
                     }
 
                 }));
@@ -63,7 +77,7 @@ namespace ServerForm
                  if (computers[computer.uniqueKey] != null)
                     {
                         
-                     ListViewItem lvi = new ListViewItem(new[] {computer.name, computer.ip, "", computer.uniqueKey });
+                     ListViewItem lvi = new ListViewItem(new[] {computer.name, computer.ip, computer.port, computer.uniqueKey });
                     if (computers[computer.uniqueKey].online == false)
                         lvi.ForeColor = Color.Gray;
                   
@@ -134,11 +148,7 @@ namespace ServerForm
             }
 
         }
-        public void dummyshit()
-        {
-            lv_computers.Items.Clear();
-            lv_computers.Items.Add("hahaha");
-        }
+       
     
         public void writeline(string message)
         {
@@ -171,6 +181,8 @@ namespace ServerForm
                     {
                         Console.WriteLine("Setting " + key + " online");
                         computers[key].online = true;
+                        computers[key].port = port;
+                        computers[key].ip = ip;
                         lv_computers.FindItemWithText(key).ForeColor = Color.Green;
                     lv_computers.FindItemWithText(key).SubItems[1].Text = ip;
                     lv_computers.FindItemWithText(key).SubItems[2].Text = port;
@@ -186,6 +198,8 @@ namespace ServerForm
                 {
                     Console.WriteLine("Setting " + key + " online");
                     computers[key].online = true;
+                    computers[key].port = port;
+                    computers[key].ip = ip;
                     lv_computers.FindItemWithText(key).ForeColor = Color.Green;
                 lv_computers.FindItemWithText(key).SubItems[1].Text = ip;
                 lv_computers.FindItemWithText(key).SubItems[2].Text = port;
@@ -247,7 +261,7 @@ namespace ServerForm
             else
             {
                 lv_computers.FindItemWithText(key).ForeColor = Color.Gray;
-
+                
             }
         }
 
@@ -398,8 +412,6 @@ namespace ServerForm
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-          
-            Console.WriteLine("e.tostring is " + cb_groups.Text);
             List<Computer> test = Filter(cb_groups.Text);
             foreach(var computer in test)
             {
@@ -409,7 +421,6 @@ namespace ServerForm
                 Console.WriteLine($"{computer.name} is online? {computer.online}");
             }
 
-            
         }
 
         private void btn_Scan_Click(object sender, EventArgs e)

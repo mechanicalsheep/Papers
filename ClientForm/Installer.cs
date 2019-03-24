@@ -90,19 +90,22 @@ namespace Client
            
             if (credential.Password != "" && credential.UserName != "")
             {
+                form.writeline("username and password not empty");
                 p.StartInfo.UserName = credential.UserName;
                 p.StartInfo.Password = credential.SecurePassword;
                 if (credential.Domain != "")
                     p.StartInfo.Domain = credential.Domain;
                 else
                     p.StartInfo.Domain=Environment.UserDomainName;
+
+                p.StartInfo.Verb = "runas";
             }
             else
             {
                 //TODO: WHAT IF ADMIN NOT WORKING 
                 //do SOMETHING HERE!
             }
-            p.StartInfo.Verb = "runas";
+            
             string strCmdText;
            
             strCmdText = "/C choco "+Command;
@@ -146,6 +149,7 @@ namespace Client
             return outList;
             
         }
+       
         void installChocolatey(NetworkCredential Credential)
         {
             Console.WriteLine("Starting to install chocolatey");
@@ -158,6 +162,7 @@ namespace Client
 
             if (Credential.Password != "" && Credential.UserName != "")
              {
+               
                  p.StartInfo.UserName = Credential.UserName;
                  p.StartInfo.Password = Credential.SecurePassword;
                 if (Credential.Domain != "")
@@ -165,8 +170,11 @@ namespace Client
                 else
                     p.StartInfo.Domain = Environment.UserDomainName;
              }
-             
+            //p.StartInfo.UserName = Environment.UserName;
             
+
+            form.writeline("attempting to run with credentials: " + p.StartInfo.UserName);
+
             string command = "@\"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command \"iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))\" && SET \"PATH=%PATH%;%ALLUSERSPROFILE%\\chocolatey\\bin\"";
        
             Console.WriteLine(command);
@@ -178,11 +186,11 @@ namespace Client
             p.EnableRaisingEvents = true;
             p.Exited += (sender, e) => 
             {
-                Console.WriteLine("PROCESS COMPLETE");
-                form.sendMessage("Choco is now installed");
+               form.writeline("PROCESS COMPLETE");
+               // form.sendMessage("Choco is now installed");
                 
             };
-            Console.WriteLine($"Running {p.StartInfo.FileName} in {p.StartInfo.WorkingDirectory} using User: {p.StartInfo.UserName} Password:{p.StartInfo.PasswordInClearText} Domain: {p.StartInfo.Domain}");
+            //Console.WriteLine($"Running {p.StartInfo.FileName} in {p.StartInfo.WorkingDirectory} using User: {p.StartInfo.UserName} Password:{p.StartInfo.PasswordInClearText} Domain: {p.StartInfo.Domain}");
             form.writeline($"Running {p.StartInfo.FileName} in {p.StartInfo.WorkingDirectory} using User: {p.StartInfo.UserName} Password:{p.StartInfo.PasswordInClearText} Domain: {p.StartInfo.Domain}");
             p.Start();
             p.WaitForExit();

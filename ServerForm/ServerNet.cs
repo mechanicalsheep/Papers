@@ -27,6 +27,7 @@ namespace ServerForm
                 Console.WriteLine($"Server got UniqueKey {uniqueKey} from connection {ipPort[0]}");
                 if (form.computers.ContainsKey(uniqueKey))
                 {
+                    form.computers[uniqueKey].port = ipPort[1];
                     form.setOnline(uniqueKey, ipPort[0],ipPort[1]);
                     form.writeline("Setting " + form.computers[uniqueKey].name + " online");
                 }
@@ -37,6 +38,7 @@ namespace ServerForm
                     try
                     {
                         computer.online = true;
+                        computer.port = ipPort[1];
                         //form.setOnline(computer.uniqueKey, ipPort[0], ipPort[1]);
                     form.computers.Add(computer.uniqueKey, computer);
 

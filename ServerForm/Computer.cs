@@ -38,6 +38,8 @@ namespace ServerForm
         public string model { get; set; }
         [ProtoMember(14)]
         public string username { get; set; }
+        [ProtoMember(15)]
+        public string port { get; set; }
 
 
         //needed for protobuf

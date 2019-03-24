@@ -68,6 +68,7 @@
     <Compile Include="ClientNet.cs" />
     <Compile Include="Computer.cs" />
     <Compile Include="Installer.cs" />
+    <Compile Include="ProcessAsUser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
