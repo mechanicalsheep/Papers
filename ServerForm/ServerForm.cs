@@ -59,16 +59,11 @@ namespace ServerForm
                         }
                         writeline("Computer added with name: " + computer.name);
 
-                    //if (lv_computers.FindItemWithText(computer.uniqueKey) == null)
-                    //    lv_computers.Items.Add(lvi);
+                   
                         
                     
                     }
-                    else
-                    {
-                        //computers.Add(computer.uniqueKey, computer);
-                        
-                    }
+                   
 
                 }));
             }
