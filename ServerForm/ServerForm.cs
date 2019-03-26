@@ -20,7 +20,7 @@ namespace ServerForm
         
         public ServerForm()
         {
-            //Console.WriteLine("hellow?");
+           
             InitializeComponent();
             serverNet = new ServerNet(this);
             computers = new Dictionary<string, Computer>();
@@ -164,8 +164,7 @@ namespace ServerForm
                 lb_output.SelectedIndex = -1;
 
             }
-
-
+            
         }
         public void setOnline(string key, string ip, string port)
         {
@@ -203,31 +202,7 @@ namespace ServerForm
 
             }
         }
-      /*  public void setOnline(string key)
-        {
-            if (lv_computers.InvokeRequired)
-            {
-                lv_computers.Invoke(new Action(() => {
-                    if (lv_computers.FindItemWithText(key) != null)
-                    {
-                        lv_computers.FindItemWithText(key).ForeColor = Color.Green;
-                        
-                    }
-                    computers[key].online = true;
-                }));
-
-            }
-            else
-            {
-                if (lv_computers.FindItemWithText(key) != null)
-                {
-                    lv_computers.FindItemWithText(key).ForeColor = Color.Green;
-
-                }
-                computers[key].online = true;
-
-            }
-        }*/
+     
         public List<Computer> Filter(string group)
         {
             lv_computers.Items.Clear();
@@ -410,8 +385,6 @@ namespace ServerForm
             List<Computer> test = Filter(cb_groups.Text);
             foreach(var computer in test)
             {
-               // Console.WriteLine(computer.name);
-                //ListViewItem lvi = new ListViewItem(new[] { computer.name, computer.ip, "", computer.uniqueKey });
                 addComputerToList(computer);
                 Console.WriteLine($"{computer.name} is online? {computer.online}");
             }

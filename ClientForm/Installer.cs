@@ -72,6 +72,46 @@ namespace Client
             p.Close();
             return outList;
         }
+       /* public string getAnyDeskKey()
+        {
+            string anyDeskKey="";
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.CreateNoWindow = true;
+
+                string strCmdText;
+
+                //strCmdText = "/C choco " + Command;
+                // Correct way to launch a process with arguments
+                p.StartInfo.FileName = Directory.GetCurrentDirectory() + "\\tools\\anydeskid.bat";
+
+                // p.StartInfo.Arguments = strCmdText;
+
+                p.OutputDataReceived += new DataReceivedEventHandler((s, e) =>
+                {
+                    Console.WriteLine(e.Data);
+
+                    form.writeline(e.Data);
+                    anyDeskKey= e.Data;
+                });
+                p.ErrorDataReceived += new DataReceivedEventHandler((s, e) =>
+                {
+                    Console.WriteLine("ErrorHandler " + e.Data);
+                    //outList.Add(e.Data);
+                    if (e.Data != null)
+                        form.writeline(e.Data);
+                });
+                p.Start();
+                p.BeginOutputReadLine();
+                p.BeginErrorReadLine();
+                p.WaitForExit();
+                p.Close();
+            return anyDeskKey;
+           
+
+        }*/
         public List<string> Install(string Command, NetworkCredential credential)
         {
             // Retrieve the Windows account token for the current user.

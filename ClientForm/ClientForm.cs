@@ -134,10 +134,70 @@ namespace Client
             computer.model = GetComputerModel();
             computer.ram = GetRam();
             computer.group = getGroup();
-
+            if (computer.softwares.Contains("AnyDesk"))
+            {
+                //Installer installer = new Installer(this);
+                getAnyDeskKey();
+                writeline("COMPUTER.ANYDESKKEY= " + computer.anyDesk);
+               //writeline( getAnyDeskKey());
+            }
             writeline("Computer group is: " + computer.group);
 
 
+        }
+        void getAnyDeskKey()
+        {
+            string anyDeskKey="";
+
+            Process p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.CreateNoWindow = true;
+
+
+            //strCmdText = "/C choco " + Command;
+            // Correct way to launch a process with arguments
+            p.StartInfo.FileName = Directory.GetCurrentDirectory()+"\\tools\\anydeskid.bat";
+
+           // p.StartInfo.Arguments = strCmdText;
+
+            p.OutputDataReceived += new DataReceivedEventHandler((s, e) =>
+            {
+
+                //anyDeskKey = e.Data;
+                if (e.Data != null || e.Data == "")
+                {
+                anyDeskKey = e.Data;
+                Console.WriteLine("MEOW: "+anyDeskKey);
+                    computer.anyDesk = anyDeskKey;
+                    writeline(anyDeskKey);
+                    setAnyDeskKey(anyDeskKey);
+
+                }
+               //writeline(e.Data);
+            });
+            p.ErrorDataReceived += new DataReceivedEventHandler((s, e) =>
+            {
+                //Console.WriteLine("ErrorHandler " + e.Data);
+                //outList.Add(e.Data);
+                if (e.Data != null)
+                   writeline(e.Data);
+            });
+            p.Start();
+            p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
+            p.WaitForExit(Convert.ToInt32( TimeSpan.FromSeconds(1).TotalMilliseconds));
+           // p.WaitForExit();
+            writeline("anyDeskKey is: " + anyDeskKey);
+            p.Close();
+
+            //return anyDeskKey;
+        }
+
+        void setAnyDeskKey(string anyKey)
+        {
+            computer.anyDesk = anyKey;
         }
         string getGroup()
         {
@@ -213,9 +273,17 @@ namespace Client
             {
                 lb_output.Invoke(new Action(() =>
                 {
+                    try
+                    {
                     lb_output.Items.Add(message);
                     lb_output.SelectedIndex = lb_output.Items.Count - 1;
                     lb_output.SelectedIndex = -1;
+
+                    }
+                    catch
+                    {
+                        Console.WriteLine("ATTEMPTED TO WRITE NULL STRING IN FORM.WRITELINE()");
+                    }
                 }));
 
             }
@@ -283,8 +351,8 @@ namespace Client
             List<string> software = new List<string>();
             
 
-            Process process = new Process();
-            process.StartInfo = new ProcessStartInfo();
+            //Process process = new Process();
+            //process.StartInfo = new ProcessStartInfo();
             string uKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
             RegistryKey rk = Registry.LocalMachine.OpenSubKey(uKey);
 
