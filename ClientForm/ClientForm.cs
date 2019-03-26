@@ -110,6 +110,22 @@ namespace Client
             return Math.Round(gbram).ToString();
 
         }
+        string GetProcessor()
+        {
+            ManagementClass managementClass = new ManagementClass();
+            managementClass.Path = new ManagementPath("Win32_OperatingSystem");
+            
+             ManagementObjectCollection infos = managementClass.GetInstances();
+            string processor="";
+            Console.WriteLine("infos.count = " + infos.Count);
+            foreach (var info in infos)
+            {
+                
+              processor=info["OSArchitecture"].ToString();
+            }
+            return processor;
+        }
+
 
        public void setGroup(string group)
         {
@@ -142,6 +158,7 @@ namespace Client
                //writeline( getAnyDeskKey());
             }
             writeline("Computer group is: " + computer.group);
+            Console.WriteLine("Processor is: "+GetProcessor());
 
 
         }
@@ -158,6 +175,7 @@ namespace Client
 
             //strCmdText = "/C choco " + Command;
             // Correct way to launch a process with arguments
+            //writeline("Current directory");
             p.StartInfo.FileName = Directory.GetCurrentDirectory()+"\\tools\\anydeskid.bat";
 
            // p.StartInfo.Arguments = strCmdText;
