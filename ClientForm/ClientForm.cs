@@ -107,7 +107,7 @@ namespace Client
             double gbram = Convert.ToDouble(ram) / 1073741824; ;
            
             Console.WriteLine("RAM: " + Math.Round(gbram).ToString());
-            return Math.Round(gbram).ToString();
+            return Math.Ceiling(gbram).ToString();
             //return gbram.ToString();
 
         }
@@ -124,6 +124,7 @@ namespace Client
                 
               processor=info["OSArchitecture"].ToString();
             }
+            writeline(processor);
             return processor;
         }
 
