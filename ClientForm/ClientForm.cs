@@ -179,9 +179,13 @@ namespace Client
             //strCmdText = "/C choco " + Command;
             // Correct way to launch a process with arguments
             //writeline("Current directory");
-            p.StartInfo.FileName = Directory.GetCurrentDirectory()+"\\tools\\anydeskid.bat";
+            if(computer.processor=="64-bit")
+                p.StartInfo.FileName = Directory.GetCurrentDirectory()+"\\tools\\anydeskid.bat";
+            else
+                p.StartInfo.FileName = Directory.GetCurrentDirectory() + "\\tools\\anydeskidx86.bat";
 
-           // p.StartInfo.Arguments = strCmdText;
+
+            // p.StartInfo.Arguments = strCmdText;
 
             p.OutputDataReceived += new DataReceivedEventHandler((s, e) =>
             {
