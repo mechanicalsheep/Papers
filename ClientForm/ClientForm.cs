@@ -104,10 +104,11 @@ namespace Client
 
                 ram = info["TotalPhysicalMemory"].ToString();
             }
-            double gbram = Convert.ToDouble(ram) / 1024 / 1024 / 1024;
+            double gbram = Convert.ToDouble(ram) / 1073741824; ;
            
             Console.WriteLine("RAM: " + Math.Round(gbram).ToString());
             return Math.Round(gbram).ToString();
+            //return gbram.ToString();
 
         }
         string GetProcessor()
@@ -150,6 +151,7 @@ namespace Client
             computer.model = GetComputerModel();
             computer.ram = GetRam();
             computer.group = getGroup();
+            computer.processor = GetProcessor();
             if (computer.softwares.Contains("AnyDesk"))
             {
                 //Installer installer = new Installer(this);

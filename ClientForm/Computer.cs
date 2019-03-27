@@ -42,7 +42,8 @@ namespace Client
         public string port { get; set; }
         [ProtoMember(16)]
         public string anyDesk { get; set; }
-
+        [ProtoMember(17)]
+        public string processor { get; set; }
 
         //needed for protobuf
         protected Computer()

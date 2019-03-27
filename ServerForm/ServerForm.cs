@@ -40,28 +40,35 @@ namespace ServerForm
             {
                 lv_computers.Invoke(new Action(()=> 
                 {
-                    if (computers[computer.uniqueKey] != null)
+                    if (computers.ContainsKey(computer.uniqueKey))
                     {
-                        
+                        ListViewItem lvi;
                     if (computers[computer.uniqueKey].online == false)
                         {
-                     ListViewItem lvi = new ListViewItem(new[] {computer.name, computer.ip, computer.port, computer.uniqueKey });
+                      lvi = new ListViewItem(new[] {computer.name, computer.ip, computer.port, computer.uniqueKey });
                         lvi.ForeColor = Color.Gray;
 
                         }
 
                         else
                         {
-                            ListViewItem lvi = new ListViewItem(new[] { computer.name, computer.ip, computer.port, computer.uniqueKey });
+                             lvi = new ListViewItem(new[] { computer.name, computer.ip, computer.port, computer.uniqueKey });
 
                             lvi.ForeColor = Color.DarkViolet;
 
                         }
+                    
                         writeline("Computer added with name: " + computer.name);
+                        addtoListView(lvi);
 
                    
                         
                     
+                    }
+                    else
+                    {
+                        computers.Add(computer.uniqueKey, computer);
+
                     }
                    
 
