@@ -383,8 +383,10 @@ namespace ServerForm
         {
             string computerKey = lv_computers.SelectedItems[0].SubItems[3].Text;
             Computer computer = computers[computerKey];
+            Console.WriteLine("before opening ComputerInfo Form: computer.group= " + computer.group);
             ComputerInfoForm meow = new ComputerInfoForm(this,computer);
             meow.Show();
+            
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

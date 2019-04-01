@@ -15,8 +15,10 @@ namespace ServerForm
         bool toggle = false;
         Computer computer;
         ServerForm form;
+        ServerDataHandler data;
         public ComputerInfoForm(ServerForm form, Computer computer)
         {
+            data = new ServerDataHandler();
             InitializeComponent();
             this.form = form;
             this.computer = computer;
@@ -31,7 +33,8 @@ namespace ServerForm
             lbl_username.Text = computer.username;
 
 
-           
+            Console.WriteLine("computer.port= " + computer.port);
+            Console.WriteLine("computer.group= " + computer.group);
             foreach(var software in computer.softwares)
             {
                 lb_Softwares.Items.Add(software);
@@ -61,8 +64,13 @@ namespace ServerForm
 
             else
                if (btn_EditGroup.Text == "Save")
-               /// form.serverNet.setGroup();
+            {
+                computer.group = tb_group.Text;
+                data.SaveObjectData(computer,computer.name,"Computers");
+               form.serverNet.setGroup(computer.ip,Convert.ToInt32(computer.port),tb_group.Text);
                 btn_EditGroup.Text = "Edit Group";
+
+            }
             //Console.WriteLine("toggle is: "+toggle);
         }
     }

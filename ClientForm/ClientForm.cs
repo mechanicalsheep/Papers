@@ -35,7 +35,7 @@ namespace Client
         public ClientForm()
         {
            
-            settingPath=Directory.GetCurrentDirectory()+"\\test\\";
+            settingPath=Directory.GetCurrentDirectory()+"\\settings\\";
             fileNameSettings = "Settings";
             fullSettingFilePath = settingPath + fileNameSettings+".json";
 
@@ -92,6 +92,35 @@ namespace Client
             }
             return model;
         }
+        public void StartManifest(Computer Computer)
+        {
+            Console.WriteLine("already have this computer info.");
+            Computer computer = Computer;
+            Computer savedComputer = data.GetComputerData();
+            //if (savedComputer.uniqueKey != computer.uniqueKey)
+            //{
+                //they are different computer with possibly same name?
+                //computer.machineNote = "There is possibly another computer with the same name as " + computer.name;
+                //data.SaveObjectData(computer, computer.name, "WarningComps");
+            //}
+            if (computer.Equals(savedComputer))
+            {
+                Console.WriteLine("the computers are equal");
+                //don't do anything, we already have the computer snapshot and nothing changed.
+            }
+            else
+            {
+                Console.WriteLine("things have been changed");
+                Manifest manifest = new Manifest(savedComputer, computer);
+                Console.WriteLine("Manifest computer date is: " + manifest.dateTime);
+                string[] datestring = computer.dateTime.Split(':');
+                data.SaveObjectData(manifest, computer.name + "-" + datestring[0] + datestring[1], "Manifest\\" + computer.name);
+                data.SaveObjectData(computer, computer.name, "Computers");
+            }
+
+            Console.WriteLine("got data from " + savedComputer.name);
+
+        }
         string GetRam()
         {
             string ram = "";
@@ -131,7 +160,8 @@ namespace Client
         {
             Settings tempSetting = data.GetSettings(fullSettingFilePath);
             tempSetting.group = group;
-            data.SaveObjectData(tempSetting,fileNameSettings,"test");
+            data.SaveObjectData(tempSetting,fileNameSettings,"settings");
+            getGroup();
         }
         string GetUser()
         {
@@ -326,7 +356,7 @@ namespace Client
                 GuidString = GuidString.Replace("=", "");
                 GuidString = GuidString.Replace("+", "");
             settings.setKey(GuidString);
-            data.SaveObjectData(settings,"Settings","test");
+            data.SaveObjectData(settings,"Settings","settings");
             data.SaveObjectData(GuidString, "init", "ref");
             
             return GuidString;
