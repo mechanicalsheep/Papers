@@ -17,7 +17,7 @@ namespace Client
     {
 
 
-        //testing
+    
         Settings settings = new Settings();
         string settingPath;
         string fileNameSettings;
@@ -31,8 +31,6 @@ namespace Client
         ClientDataHandler data;
         ManagementClass mc = new ManagementClass();
   
-        //ManagementObjectCollection infos;
-
 
         public ClientForm()
         {
@@ -157,11 +155,11 @@ namespace Client
             {
                 //Installer installer = new Installer(this);
                 getAnyDeskKey();
-                writeline("COMPUTER.ANYDESKKEY= " + computer.anyDesk);
+                //writeline("COMPUTER.ANYDESKKEY= " + computer.anyDesk);
                //writeline( getAnyDeskKey());
             }
             writeline("Computer group is: " + computer.group);
-            Console.WriteLine("Processor is: "+GetProcessor());
+            Console.WriteLine("Processor is: "+computer.processor);
 
 
         }
@@ -176,38 +174,34 @@ namespace Client
             p.StartInfo.CreateNoWindow = true;
 
 
-            //strCmdText = "/C choco " + Command;
-            // Correct way to launch a process with arguments
-            //writeline("Current directory");
+           
             if(computer.processor=="64-bit")
                 p.StartInfo.FileName = Directory.GetCurrentDirectory()+"\\tools\\anydeskid.bat";
             else
                 p.StartInfo.FileName = Directory.GetCurrentDirectory() + "\\tools\\anydeskidx86.bat";
 
 
-            // p.StartInfo.Arguments = strCmdText;
+            
 
             p.OutputDataReceived += new DataReceivedEventHandler((s, e) =>
             {
 
-                //anyDeskKey = e.Data;
+               
                 if (e.Data != null || e.Data == "")
                 {
                 anyDeskKey = e.Data;
                 Console.WriteLine("MEOW: "+anyDeskKey);
                     computer.anyDesk = anyDeskKey;
-                    writeline(anyDeskKey);
-                    setAnyDeskKey(anyDeskKey);
+                    
 
                 }
-               //writeline(e.Data);
+             
             });
             p.ErrorDataReceived += new DataReceivedEventHandler((s, e) =>
             {
-                //Console.WriteLine("ErrorHandler " + e.Data);
-                //outList.Add(e.Data);
+              
                 if (e.Data != null)
-                   writeline(e.Data);
+                   writeline("Error running Anydesk Process: "+e.Data);
             });
             p.Start();
             p.BeginOutputReadLine();
@@ -217,7 +211,7 @@ namespace Client
             writeline("anyDeskKey is: " + anyDeskKey);
             p.Close();
 
-            //return anyDeskKey;
+            
         }
 
         void setAnyDeskKey(string anyKey)
@@ -363,8 +357,7 @@ namespace Client
         public void choco(string Command, string username, string password, string domain)
         {
            Installer installer = new Installer(this);
-            //if (username == "")
-                //username = "administrator";
+            
             NetworkCredential credential = new NetworkCredential(username, password, domain);
             List<string> output = installer.Install(Command, credential);
             foreach (var outs in output)

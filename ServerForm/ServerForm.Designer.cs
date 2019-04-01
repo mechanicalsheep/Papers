@@ -47,6 +47,8 @@
             // 
             // lb_output
             // 
+            this.lb_output.BackColor = System.Drawing.Color.Black;
+            this.lb_output.ForeColor = System.Drawing.Color.LimeGreen;
             this.lb_output.FormattingEnabled = true;
             this.lb_output.Location = new System.Drawing.Point(66, 319);
             this.lb_output.Name = "lb_output";
