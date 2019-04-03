@@ -5,54 +5,67 @@ using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 using ProtoBuf;
 
-namespace Client
+namespace Service
 {
 
-    public class ClientNet
+    public class ServiceNet
     {
-        
-        private ClientForm form;
-        string ip, port;
-        public ClientNet(ClientForm clientForm)
+
+        //private ClientForm form;
+        string ip;
+        string  port;
+        public ServiceNet()//clientForm)
         {
-            form = clientForm;
-            form.writeline("-==Client=-");
+            port = "11111";
+            ///server-shady as server
+            //ip = "192.168.11.193";
+
+            /// SHADY as Server
+            ip = "192.168.11.105";
+
+            ///MSI as server
+            //ip = "192.168.8.100";
+
+            //form = clientForm;
+            //form.writeline("-==Client=-");
+
+            sendAlive(ip, Convert.ToInt32(port));
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("ServerToClient", HandleServerMessage);
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("getKey", (packetHeader, connection, input) =>
             {
                 //form.writeline("Choco command: " + input.command);
                 //form.choco(input.command, input.username, input.password, input.domain);
-                connection.SendObject("giveKey",form.getUniqueKey());
+               // connection.SendObject("giveKey",form.getUniqueKey());
 
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("setGroup", (packetHeader, connection, group) =>
              {
-                 form.setGroup(group);
+                // form.setGroup(group);
              });
             //choco command receiver!
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("choco", (packetHeader, connection, input) =>
             {
-                form.writeline("Choco command: "+ input.command);
-                form.choco(input.command,input.username,input.password, input.domain);
+               // form.writeline("Choco command: "+ input.command);
+               // form.choco(input.command,input.username,input.password, input.domain);
                
             
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("GetComputer", (packet, connection, input) =>
              {
                  
-                 connection.SendObject<Computer>("SentComputer", form.getSavedComputerData());
+                 //connection.SendObject<Computer>("SentComputer", form.getSavedComputerData());
              });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("snrClient",(packetHeader, connection, input) =>
            {
-               form.writeline("received call from server, sending the server a message");
-              string message = form.getComputerName();
+              // form.writeline("received call from server, sending the server a message");
+            //  string message = form.getComputerName();
                
                //When this is received by the client it will complete the synchronous request
-               connection.SendObject("snrServer", message);
+             //  connection.SendObject("snrServer", message);
            });
             
             Connection.StartListening(ConnectionType.TCP, new IPEndPoint(IPAddress.Any, 0));
-            clientForm.writeline("Client Listening On: ");
+            //clientForm.writeline("Client Listening On: ");
             foreach (IPEndPoint localEndpoint in Connection.ExistingLocalListenEndPoints(ConnectionType.TCP))
             {
                
@@ -61,7 +74,7 @@ namespace Client
                 if (!endPointIP.Contains( "127.0.0.1" ) && endPointIP.Length>0)
                 {
 
-                    clientForm.writeline(" - " + localEndpoint.Address + " " + localEndpoint.Port);
+                   // clientForm.writeline(" - " + localEndpoint.Address + " " + localEndpoint.Port);
                     ip = localEndpoint.Address.ToString();
                     port = localEndpoint.Port.ToString();
                 }
@@ -80,7 +93,7 @@ namespace Client
             try
             {
                 //Console.WriteLine("sending object to "+ip+ " from ");
-                NetworkComms.SendObject("sendAlive", ip, port,"i'm alive");
+                NetworkComms.SendObject("sendAlive", ip, port,"THE SERVICE IS ONLINE!");
             }
             catch (Exception err)
             {
@@ -89,7 +102,7 @@ namespace Client
         }
         public void sendMessage(string ip, int port, string message)
         {
-            form.writeline($"SentFromClient ip: {ip} port: {port} message: {message} ");
+           // form.writeline($"SentFromClient ip: {ip} port: {port} message: {message} ");
             try
             {
             NetworkComms.SendObject("SentFromClient", ip, port, message);
@@ -104,7 +117,7 @@ namespace Client
         {
             string output = connection.ConnectionInfo.LocalEndPoint.ToString() + " is sending the following message: " +
                             incomingobject;
-            form.writeline(output);
+            //form.writeline(output);
         }
 
         
