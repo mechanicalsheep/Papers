@@ -82,6 +82,7 @@ namespace Client
 
             try
             {
+                //file = Directory.GetCurrentDirectory() + "\\ref" + computer.name + ".json";
                 var inputs = File.ReadAllText(file);
 
                 computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
@@ -92,6 +93,15 @@ namespace Client
             {
                 Console.WriteLine("Errors: "+er);
             }
+            return computer;
+        }
+        public Computer GetComputer(string path)
+        {
+
+            var inputs = File.ReadAllText(path);
+
+            computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
+
             return computer;
         }
             

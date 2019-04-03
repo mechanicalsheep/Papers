@@ -20,8 +20,10 @@ namespace Client
     
         Settings settings = new Settings();
         string settingPath;
-        string fileNameSettings;
+        string SettingsFilename;
+        string settingFolder;
         string ip;
+        string path;
         int port;
         System.Timers.Timer aTimer;
         string fullSettingFilePath;
@@ -34,10 +36,12 @@ namespace Client
 
         public ClientForm()
         {
-           
-            settingPath=Directory.GetCurrentDirectory()+"\\settings\\";
-            fileNameSettings = "Settings";
-            fullSettingFilePath = settingPath + fileNameSettings+".json";
+
+            path = Directory.GetCurrentDirectory();
+            settingFolder="settings";
+            SettingsFilename = "Settings";
+            fullSettingFilePath = $"{path}\\{settingFolder}\\{SettingsFilename}.json";
+
 
             mc.Path = new ManagementPath("Win32_ComputerSystem");
             InitializeComponent();
@@ -58,6 +62,8 @@ namespace Client
             
             clientNet = new ClientNet(this);
             GetComputerData();
+
+            StartManifest(computer);
             
             data.SaveObjectData(computer, computer.name, "ref");
            
@@ -94,9 +100,10 @@ namespace Client
         }
         public void StartManifest(Computer Computer)
         {
-            Console.WriteLine("already have this computer info.");
+          //  Console.WriteLine("already have this computer info.");
             Computer computer = Computer;
-            Computer savedComputer = data.GetComputerData();
+            string path = Directory.GetCurrentDirectory() + "\\ref\\" + computer.name+".json";
+            Computer savedComputer = data.GetComputer(path);
             //if (savedComputer.uniqueKey != computer.uniqueKey)
             //{
                 //they are different computer with possibly same name?
@@ -115,7 +122,7 @@ namespace Client
                 Console.WriteLine("Manifest computer date is: " + manifest.dateTime);
                 string[] datestring = computer.dateTime.Split(':');
                 data.SaveObjectData(manifest, computer.name + "-" + datestring[0] + datestring[1], "Manifest\\" + computer.name);
-                data.SaveObjectData(computer, computer.name, "Computers");
+                data.SaveObjectData(computer, computer.name, "ref");
             }
 
             Console.WriteLine("got data from " + savedComputer.name);
@@ -160,7 +167,7 @@ namespace Client
         {
             Settings tempSetting = data.GetSettings(fullSettingFilePath);
             tempSetting.group = group;
-            data.SaveObjectData(tempSetting,fileNameSettings,"settings");
+            data.SaveObjectData(tempSetting,SettingsFilename,"settings");
             getGroup();
         }
         string GetUser()
@@ -173,7 +180,9 @@ namespace Client
             computer.uniqueKey = getUniqueKey();
             computer.OS = getOS();
             computer.softwares = getInstallations();
-            computer.chocoSoftwares = getChocoInstalls();
+            //-- using getChocoInstallFiles instead to just read the files instead of running choco process to list installed. 
+            //-- computer.chocoSoftwares = getChocoInstalls();
+            computer.chocoSoftwares = getChocoInstallFiles();
             computer.dateTime = getDateTime();
             computer.ip = clientNet.getIP();
             computer.username = GetUser();
@@ -357,14 +366,14 @@ namespace Client
                 GuidString = GuidString.Replace("+", "");
             settings.setKey(GuidString);
             data.SaveObjectData(settings,"Settings","settings");
-            data.SaveObjectData(GuidString, "init", "ref");
+            data.SaveObjectData(GuidString, "init", "settings");
             
             return GuidString;
 
         }
         public string getUniqueKey()
         {
-            string initFile = Directory.GetCurrentDirectory() + "\\ref\\init.json";
+            string initFile = Directory.GetCurrentDirectory() + "\\Settings\\init.json";
             if (!File.Exists(initFile))
             {
                 writeline("no initial.json, generating Key...");
@@ -425,6 +434,29 @@ namespace Client
             }
             
             return software;
+        }
+        public List<string> getChocoInstallFiles()
+        {
+            string chocoPath = @"C:\ProgramData\chocolatey\lib";
+            
+            List<string> chocos = new List<string>();
+            if (Directory.Exists(chocoPath))
+            {
+                //string[] chocoArr = Directory.GetDirectories(chocoPath);
+                //Console.WriteLine("chocoArr[] size = " + chocoArr.Length);
+                //Console.WriteLine(Path.(chocoPath));
+                List<string> arr= new List<string>(Directory.EnumerateDirectories(chocoPath));
+                foreach (string folder in arr)
+                {
+                    chocos.Add(Path.GetFileName(folder));
+                }
+            }
+            else
+            {
+                writeline($"-==ERROR GETTING CHOCOLATEY INSTALLATIONS==-  Either chocolatey is not installed or default choco path:" +
+                    $"{chocoPath} was not found. ");
+            }
+            return chocos;
         }
         public List<string> getChocoInstalls()
         {

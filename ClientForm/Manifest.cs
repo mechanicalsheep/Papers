@@ -15,7 +15,7 @@ namespace Client
         public string oldName, oldGroup, oldNote, oldMachineNote, oldOS, oldRam, oldDateTime;
         
 
-        public List<string> softwareAdded, softwareRemoved;
+        public List<string> softwareAdded, softwareRemoved, chocoSoftwareAdded, chocoSoftwareRemoved;
 
         public Manifest(Computer Savedcomputer, Computer NewComputer)
         {
@@ -23,6 +23,8 @@ namespace Client
             newComputer = NewComputer;
             softwareAdded = new List<string>();
             softwareRemoved = new List<string>();
+            chocoSoftwareAdded = new List<string>();
+            chocoSoftwareRemoved = new List<string>();
 
            WhatChanged();
            // Console.WriteLine("Manifest computer dateTime= " + manifestComputer.dateTime);
@@ -68,6 +70,7 @@ namespace Client
                 oldRam = savedComputer.ram;
             }
 
+            //for normal software
             if (savedComputer.softwares.Count > newComputer.softwares.Count)
             {
                 foreach (var soft in savedComputer.softwares)
@@ -90,7 +93,31 @@ namespace Client
                     }
                 }
             }
-            
+
+            //for choco packages
+            if (savedComputer.chocoSoftwares.Count > newComputer.chocoSoftwares.Count)
+            {
+                foreach (var soft in savedComputer.chocoSoftwares)
+
+                {
+                    if (!newComputer.chocoSoftwares.Contains(soft))
+                    {
+                        chocoSoftwareRemoved.Add(soft);
+                    }
+                }
+            }
+            if (savedComputer.chocoSoftwares.Count < newComputer.chocoSoftwares.Count)
+            {
+                foreach (var soft in newComputer.chocoSoftwares)
+
+                {
+                    if (!savedComputer.chocoSoftwares.Contains(soft))
+                    {
+                        chocoSoftwareAdded.Add(soft);
+                    }
+                }
+            }
+
         }
     }
 }

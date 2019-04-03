@@ -84,6 +84,10 @@ namespace ServerForm
                             }
                         }
                     }
+                    else
+                    {
+                        return false;
+                    }
                     if (chocoSoftwares.Count == other.chocoSoftwares.Count)
                     {
                         foreach (var soft in chocoSoftwares)
@@ -93,6 +97,10 @@ namespace ServerForm
                                 return false;
                             }
                         }
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
                 else
