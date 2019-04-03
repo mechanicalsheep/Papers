@@ -19,19 +19,19 @@ namespace Service
             InitializeComponent();
            
             eventLog1 = new EventLog();
-            if (!EventLog.SourceExists("MySource"))
+            if (!EventLog.SourceExists("Paper"))
             {
-                EventLog.CreateEventSource("MySource", "MyNewLog");
+                EventLog.CreateEventSource("Paper", "PaperLog");
             }
 
-            eventLog1.Source = "MySource";
-            eventLog1.Log="MyNewLog";
+            eventLog1.Source = "Paper";
+            eventLog1.Log="PaperLog";
 
         }
 
         private void OnTimer(object sender, ElapsedEventArgs e)
         {
-            eventLog1.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
+            //eventLog1.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
         }
 
         protected override void OnStart(string[] args)
@@ -41,7 +41,7 @@ namespace Service
             // Set up a timer that triggers every minute.
             Timer timer = new Timer();
 
-            timer.Interval = 60000; // 60 seconds
+            timer.Interval = 6000; // 6 seconds
             timer.Elapsed += new ElapsedEventHandler(this.OnTimer);
             timer.Start();
         }
