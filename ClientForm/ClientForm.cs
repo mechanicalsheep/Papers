@@ -103,6 +103,8 @@ namespace Client
           //  Console.WriteLine("already have this computer info.");
             Computer computer = Computer;
             string path = Directory.GetCurrentDirectory() + "\\ref\\" + computer.name+".json";
+            if (File.Exists(path))
+            {
             Computer savedComputer = data.GetComputer(path);
             //if (savedComputer.uniqueKey != computer.uniqueKey)
             //{
@@ -126,6 +128,8 @@ namespace Client
             }
 
             Console.WriteLine("got data from " + savedComputer.name);
+
+            }
 
         }
         string GetRam()
@@ -172,7 +176,12 @@ namespace Client
         }
         string GetUser()
         {
-            return Environment.UserName;
+            string user= System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            writeline("current user is: " + user);
+            return user;
+
+            //the following returns cached user's in some cases that are not currently logged in.
+            //return Environment.UserName; 
         }
         void GetComputerData()
         {
