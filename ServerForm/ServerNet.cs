@@ -33,6 +33,9 @@ namespace ServerForm
                 }
                 else
                 {
+                    try
+                    {
+
                     form.getComputerData(ipPort[0], Convert.ToInt32(ipPort[1]));
                     Computer computer = GetComputer(ipPort[0], Convert.ToInt32(ipPort[1]));
                     try
@@ -53,13 +56,19 @@ namespace ServerForm
                     //lvi.ForeColor = System.Drawing.Color.Blue;
                     //lvi.Tag = computer;
                     form.addComputerToList(computer);
+                    }
+                    catch(Exception err)
+                    {
+                        Console.WriteLine("ServerNet Exception::: -"+err.Message);
+                    }
 
                 }
                 Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.ToString());
 
                 //form.AddOnlineComputer(GetComputerName(ipPort[0],Convert.ToInt32(ipPort[1]),"Whatevs"),ipPort[0], ipPort[1]);
                
-            Console.WriteLine("Client " + connection.ConnectionInfo + " connected.");
+            //Console.WriteLine("Client " + connection.ConnectionInfo + " connected.");
+                //form.writeline("Client " + connection.ConnectionInfo + " connected.");
 
 
             };
@@ -112,7 +121,7 @@ namespace ServerForm
 
         private void HandleAliveSend(PacketHeader packetHeader, Connection connection, string incomingObject)
         {
-            
+            form.writeline(connection + " is alive!");
         }
 
         public Computer GetComputer(string ip, int port)

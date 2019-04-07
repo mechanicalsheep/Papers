@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientDataHandler.cs" />
     <Compile Include="ServiceNet.cs" />
     <Compile Include="PaperService.cs">
       <SubType>Component</SubType>

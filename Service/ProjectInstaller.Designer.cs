@@ -40,7 +40,7 @@
             // serviceInstaller1
             // 
             this.serviceInstaller1.Description = "Service for Paperclient";
-            this.serviceInstaller1.DisplayName = "PaperService 1.0";
+            this.serviceInstaller1.DisplayName = "PaperService 2.0";
             this.serviceInstaller1.ServiceName = "PaperService";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 

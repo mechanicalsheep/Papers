@@ -29,7 +29,7 @@ namespace Service
             //form = clientForm;
             //form.writeline("-==Client=-");
 
-            sendAlive(ip, Convert.ToInt32(port));
+            //sendAlive(ip, Convert.ToInt32(port));
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("ServerToClient", HandleServerMessage);
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("getKey", (packetHeader, connection, input) =>
             {
