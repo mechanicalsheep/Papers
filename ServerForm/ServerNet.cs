@@ -21,7 +21,7 @@ namespace ServerForm
             NetworkComms.ConnectionEstablishShutdownDelegate clientEstablishDelegate = (connection) =>
 
             {
-                
+                form.writeline(connection + " has connected in ClientEstablishDelegate");
                 string[] ipPort = connection.ConnectionInfo.RemoteEndPoint.ToString().Split(':');
                 string uniqueKey = GetUniqueKey(ipPort[0], Convert.ToInt32(ipPort[1]));
                 Console.WriteLine($"Server got UniqueKey {uniqueKey} from connection {ipPort[0]}");
@@ -80,7 +80,8 @@ namespace ServerForm
                    Console.WriteLine("Client" + connection.ConnectionInfo + "disconnected");
                    */
                   string[] ipPort = connection.ConnectionInfo.RemoteEndPoint.ToString().Split(':');
-                 // string uniqueKey = GetUniqueKey(ipPort[0], Convert.ToInt32(ipPort[1]));
+                  // string uniqueKey = GetUniqueKey(ipPort[0], Convert.ToInt32(ipPort[1]));
+                  form.writeline(connection + " has disconnected.");
                   form.setOffline(ipPort[0]);
 
               };
@@ -121,7 +122,7 @@ namespace ServerForm
 
         private void HandleAliveSend(PacketHeader packetHeader, Connection connection, string incomingObject)
         {
-            form.writeline(connection + " is alive!");
+            form.writeline(connection + " is alive! Key= "+incomingObject);
         }
 
         public Computer GetComputer(string ip, int port)

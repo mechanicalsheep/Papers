@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
@@ -17,7 +18,9 @@ namespace Service
         int port;
         Timer aTimer;
         private int eventId = 1;
+        string uniqueKey;
         ServiceNet serviceNet;
+        ServiceDataHandler data = new ServiceDataHandler(@"D:\projects\Papers\ClientForm\bin\Debug\");
 
         public PaperService()
         {
@@ -33,10 +36,13 @@ namespace Service
             //ip = "192.168.8.100";
 
             port = 11111;
-           serviceNet = new ServiceNet();
+            uniqueKey = data.getInit(@"D:\projects\Papers\ClientForm\bin\Debug\settings\init.json");
+            serviceNet = new ServiceNet(uniqueKey);
 
+            //data.SaveObjectData("hello!","serviceLog","Meow");
+           
 
-            eventLog1 = new EventLog();
+             eventLog1 = new EventLog();
             if (!EventLog.SourceExists("Paper"))
             {
                 EventLog.CreateEventSource("Paper", "PaperLog");
@@ -44,6 +50,8 @@ namespace Service
 
             eventLog1.Source = "Paper";
             eventLog1.Log="PaperLog";
+
+            eventLog1.WriteEntry("Current Directory is: "+Directory.GetCurrentDirectory());
 
         }
         private void stillAlive(object sender, ElapsedEventArgs e)

@@ -14,8 +14,10 @@ namespace Service
         //private ClientForm form;
         string ip;
         string  port;
-        public ServiceNet()//clientForm)
+        string key;
+        public ServiceNet(string Key)//clientForm)
         {
+            key = Key;
             port = "11111";
             ///server-shady as server
             //ip = "192.168.11.193";
@@ -93,11 +95,12 @@ namespace Service
             try
             {
                 //Console.WriteLine("sending object to "+ip+ " from ");
-                NetworkComms.SendObject("sendAlive", ip, port,"THE SERVICE IS ONLINE!");
+              
+                NetworkComms.SendObject("sendAlive", ip, port,key);
             }
             catch (Exception err)
             {
-                //Console.WriteLine("sendAlive exception thrown: " + err.Message);
+                Console.WriteLine("sendAlive exception thrown: " + err.Message);
             }
         }
         public void sendMessage(string ip, int port, string message)
