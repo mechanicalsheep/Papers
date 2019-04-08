@@ -39,16 +39,16 @@ namespace ServerForm
             File.WriteAllText(file, output);
         }
      
-        public bool ComputerExists(string computer)
+        public bool ComputerExists(string uniqueKey)
         {
             
-            return File.Exists(computerPath+"\\"+computer+".json");
+            return File.Exists(computerPath+"\\"+uniqueKey+".json");
         }
-        public Computer GetComputer(string computerName)
+        public Computer GetComputer(string computerKey)
         {
             try
             {
-            string compFile = computerPath + "\\" + computerName + ".json";
+            string compFile = computerPath + "\\" + computerKey + ".json";
             var inputs = File.ReadAllText(compFile);
                 object computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
 

@@ -308,12 +308,12 @@ namespace ServerForm
         {
             Console.WriteLine("already have this computer info.");
             Computer computer = Computer;
-            Computer savedComputer = data.GetComputer(computer.name);
+            Computer savedComputer = data.GetComputer(computer.uniqueKey);
             if (savedComputer.uniqueKey!=computer.uniqueKey)
             {
                 //they are different computer with possibly same name?
                 computer.machineNote = "There is possibly another computer with the same name as " + computer.name;
-                data.SaveObjectData(computer, computer.name, "WarningComps");
+                data.SaveObjectData(computer, computer.uniqueKey, "WarningComps");
             }
             else if (computer.Equals(savedComputer))
             {
@@ -326,8 +326,8 @@ namespace ServerForm
                 Manifest manifest = new Manifest(savedComputer, computer);
                 Console.WriteLine("Manifest computer date is: "+manifest.dateTime);
                 string[] datestring = computer.dateTime.Split(':');
-                data.SaveObjectData(manifest, computer.name + "-" + datestring[0]+datestring[1],"Manifest\\"+computer.name);
-                data.SaveObjectData(computer, computer.name, "Computers");
+                data.SaveObjectData(manifest, computer.uniqueKey + "-" + datestring[0]+datestring[1],"Manifest\\"+computer.uniqueKey);
+                data.SaveObjectData(computer, computer.uniqueKey, "Computers");
             }
 
             Console.WriteLine("got data from " + savedComputer.name);
@@ -343,14 +343,14 @@ namespace ServerForm
             writeline("Computer: " + computer.name);
             writeline("OS: " + computer.OS);
 
-            if (data.ComputerExists(computer.name))
+            if (data.ComputerExists(computer.uniqueKey))
             {
                 //add to the manifest
                 StartManifest(computer);
             }
             else
             {
-                data.SaveObjectData(computer, computer.name, "Computers");
+                data.SaveObjectData(computer, computer.uniqueKey, "Computers");
             }
         }
         private void btn_getComputer_Click(object sender, EventArgs e)

@@ -66,7 +66,7 @@ namespace ServerForm
                if (btn_EditGroup.Text == "Save")
             {
                 computer.group = tb_group.Text;
-                data.SaveObjectData(computer,computer.name,"Computers");
+                data.SaveObjectData(computer,computer.uniqueKey,"Computers");
                form.serverNet.setGroup(computer.ip,Convert.ToInt32(computer.port),tb_group.Text);
                 btn_EditGroup.Text = "Edit Group";
 
