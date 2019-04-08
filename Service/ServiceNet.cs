@@ -37,7 +37,7 @@ namespace Service
             {
                 //form.writeline("Choco command: " + input.command);
                 //form.choco(input.command, input.username, input.password, input.domain);
-               // connection.SendObject("giveKey",form.getUniqueKey());
+                connection.SendObject("giveKey", key);
 
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("setGroup", (packetHeader, connection, group) =>
