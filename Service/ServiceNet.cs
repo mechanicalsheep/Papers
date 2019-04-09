@@ -15,16 +15,20 @@ namespace Service
         string ip;
         string  port;
         string key;
-        public ServiceNet(string Key)//clientForm)
+        Computer computer;
+        ServiceDataHandler data;
+        
+        public ServiceNet(ServiceDataHandler dataHandler)
         {
-            key = Key;
-            port = "11111";
+            data = dataHandler;
+            //computer = data.getComputer();
+            key = data.uniqueKey;
             ///server-shady as server
             //ip = "192.168.11.193";
 
             /// SHADY as Server
             ip = "192.168.11.105";
-
+             computer = data.getComputer();
             ///MSI as server
             //ip = "192.168.8.100";
 
@@ -54,8 +58,8 @@ namespace Service
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("GetComputer", (packet, connection, input) =>
              {
-                 
-                 //connection.SendObject<Computer>("SentComputer", form.getSavedComputerData());
+                
+                 connection.SendObject<Computer>("SentComputer",computer);
              });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("snrClient",(packetHeader, connection, input) =>
            {

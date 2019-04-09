@@ -9,9 +9,10 @@ namespace Service
     public class ServiceDataHandler
     {
 
-
+        public string path { get; set; }
         public string initPath { get; set; }
         public string computerPath { get; set; }
+        public string uniqueKey { get; set; }
         //public Computer computer;
         string file;
         object obj;
@@ -20,18 +21,22 @@ namespace Service
 
         public ServiceDataHandler(string Path)
         {
-            initPath = Path;
+            path = Path;
+            initPath = path+"settings\\init.json";
+            uniqueKey = getKey();
+
+            computerPath = path + "ref\\" + uniqueKey + ".json";
         }
 
         public void SaveObjectData(object obj, string FileName, string FolderName)
         {
 
-            initPath = initPath + "\\" + FolderName;
-            if (!Directory.Exists(initPath))
-                Directory.CreateDirectory(initPath);
+            string Path = path + "\\" + FolderName;
+            if (!Directory.Exists(Path))
+                Directory.CreateDirectory(Path);
             //computer = Computer;
             this.obj = obj;
-            file = initPath + @"\" + FileName + ".json";
+            file = Path + @"\" + FileName + ".json";
 
             var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(obj);
 
@@ -39,13 +44,13 @@ namespace Service
         }
 
 
-        public string getInit(string path)
+        public string getKey()
         {
 
 
             try
             {
-                var file = File.ReadAllText(path);
+                var file = File.ReadAllText(initPath);
                 var input = newt.Newtonsoft.Json.JsonConvert.DeserializeObject(file);
                 return (string)input;
 
@@ -59,11 +64,20 @@ namespace Service
 
         }
 
-        public Computer getComputer(string path)
+        public Computer getComputer()
         {
-            var file = File.ReadAllText(path);
+            try
+            {
+
+            var file = File.ReadAllText(computerPath);
             var input = newt.Newtonsoft.Json.JsonConvert.DeserializeObject(file);
             return (Computer)input;
+            }
+            catch(Exception err)
+            {
+                Console.WriteLine("getComputer() has thrown an error" + err);
+                return null;
+            }
 
         }
 

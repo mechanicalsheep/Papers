@@ -17,10 +17,11 @@ namespace Service
         string ip;
         int port;
         Timer aTimer;
-        private int eventId = 1;
+        //private int eventId = 1;
         string uniqueKey;
         ServiceNet serviceNet;
         ServiceDataHandler data = new ServiceDataHandler(@"D:\projects\Papers\ClientForm\bin\Debug\");
+        Computer computer;
 
         public PaperService()
         {
@@ -36,8 +37,9 @@ namespace Service
             //ip = "192.168.8.100";
 
             port = 11111;
-            uniqueKey = data.getInit(@"D:\projects\Papers\ClientForm\bin\Debug\settings\init.json");
-            serviceNet = new ServiceNet(uniqueKey);
+            uniqueKey = data.uniqueKey;
+           // computer = data.getComputer(@"D:\projects\Papers\ClientForm\bin\Debug\ref\"+uniqueKey+".json");
+            serviceNet = new ServiceNet(data);
 
             //data.SaveObjectData("hello!","serviceLog","Meow");
            
