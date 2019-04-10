@@ -15,31 +15,44 @@ namespace Testings
         //private int eventId = 1;
         string uniqueKey;
         ServiceNet serviceNet;
-        ServiceDataHandler data = new ServiceDataHandler(@"D:\projects\Papers\ClientForm\bin\Debug\");
+        public string path { get; set; }
+        ServiceDataHandler data;
+        DataGatherer dataGatherer;
         Computer computer;
         public Program()
         {
-            ///server-shady as server
-            //ip = "192.168.11.193";
-
-            /// SHADY as Server
-            ip = "192.168.11.105";
-
-            ///MSI as server
-            //ip = "192.168.8.100";
-
-            port = 11111;
-            uniqueKey = data.uniqueKey;
-            // computer = data.getComputer(@"D:\projects\Papers\ClientForm\bin\Debug\ref\"+uniqueKey+".json");
-            serviceNet = new ServiceNet(data);
-
-            //data.SaveObjectData("hello!","serviceLog","Meow");
             onStart();
 
         }
 
         public void onStart()
         {
+            path = @"D:\projects\Papers\ClientForm\bin\Debug\";
+            dataGatherer = new DataGatherer(path);
+            data = new ServiceDataHandler(path);
+            serviceNet = new ServiceNet(path);
+            computer = data.getComputer();
+            computer.ip = serviceNet.getIP();
+            Console.WriteLine("IP from serviceNEt that will be saved is: " + dataGatherer.ip);
+            data.SaveObjectData(computer, computer.uniqueKey, "ref");
+
+
+            ///server-shady as server
+            ip = "192.168.11.193";
+
+            /// SHADY as Server
+            //ip = "192.168.11.105";
+
+            ///MSI as server
+            //ip = "192.168.8.100";
+
+            port = 11111;
+            uniqueKey = data.uniqueKey;
+         
+            // computer = data.getComputer(@"D:\projects\Papers\ClientForm\bin\Debug\ref\"+uniqueKey+".json");
+           
+
+            //data.SaveObjectData("hello!","serviceLog","Meow");
 
             aTimer = new Timer();
             aTimer.Elapsed += new ElapsedEventHandler(stillAlive);

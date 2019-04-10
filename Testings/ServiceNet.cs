@@ -13,26 +13,30 @@ namespace Testings
 
         //private ClientForm form;
         string ip;
-        string  port;
+        string  localport;
+        int serverPort;
         string key;
         Computer computer;
+        // DataGatherer gatherer;
         ServiceDataHandler data;
         
-        public ServiceNet(ServiceDataHandler dataHandler)
+        public ServiceNet(string path)
         {
-            data = dataHandler;
-            //computer = data.getComputer();
-            key = data.uniqueKey;
+            ServiceDataHandler data = new ServiceDataHandler(path);
+           
+            computer = data.getComputer();
+            key = computer.uniqueKey;
+          
+            Console.WriteLine("Got computer: " + computer.name);
+
             ///server-shady as server
-            //ip = "192.168.11.193";
+            ip = "192.168.11.193";
 
             /// SHADY as Server
-            ip = "192.168.11.105";
-             computer = data.getComputer();
-            Console.WriteLine("Got computer: " + computer.name);
+            //ip = "192.168.11.105";
             ///MSI as server
             //ip = "192.168.8.100";
-
+            serverPort = 11111;
             //form = clientForm;
             //form.writeline("-==Client=-");
 
@@ -59,7 +63,7 @@ namespace Testings
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("GetComputer", (packet, connection, input) =>
              {
-                 Console.WriteLine("Sending computer name: " + computer.name + " that is stored in" + data.computerPath);
+                 //Console.WriteLine("Sending computer name: " + computer.name + " that is stored in" + data.computerPath);
                  connection.SendObject<Computer>("SentComputer",computer);
              });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("snrClient",(packetHeader, connection, input) =>
@@ -83,9 +87,10 @@ namespace Testings
 
                    // clientForm.writeline(" - " + localEndpoint.Address + " " + localEndpoint.Port);
                     ip = localEndpoint.Address.ToString();
-                    port = localEndpoint.Port.ToString();
+                    localport = localEndpoint.Port.ToString();
                 }
             }
+           
         }
     public string getIP()
         {
@@ -93,7 +98,7 @@ namespace Testings
         }
         public string getPort()
         {
-            return port;
+            return localport;
         }
         public void sendAlive(string ip, int port)
         {

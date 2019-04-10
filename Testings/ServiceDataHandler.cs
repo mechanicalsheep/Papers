@@ -17,6 +17,7 @@ namespace Testings
         string file;
         object obj;
         //public Settings set;
+        Computer computer;
 
 
         public ServiceDataHandler(string Path)
@@ -80,6 +81,59 @@ namespace Testings
                 return null;
             }
 
+        }
+        public Settings GetSettings(string path)
+        {
+            Settings settings;
+
+
+            try
+            {
+                var inputs = File.ReadAllText(path);
+
+                settings = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(inputs);
+
+                return settings;
+            }
+            catch (Exception er)
+            {
+                Console.WriteLine("UNABLE TO GET SETTINGS: " + er);
+            }
+            return null;
+        }
+
+
+
+        public void saveInitFile(string UniqueKey)
+        {
+            try
+            {
+                var initPath = Directory.GetCurrentDirectory() + "\\init.json";
+                var input = newt.Newtonsoft.Json.JsonConvert.SerializeObject(UniqueKey);
+                File.WriteAllText(initPath, input);
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("PaperExcceptions from SaveInitFile() Method: " + err.Message);
+            }
+        }
+        public Computer GetComputerData()
+        {
+
+            try
+            {
+                //file = Directory.GetCurrentDirectory() + "\\ref" + computer.name + ".json";
+                var inputs = File.ReadAllText(file);
+
+                computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
+
+                return computer;
+            }
+            catch (Exception er)
+            {
+                Console.WriteLine("Errors: " + er);
+            }
+            return computer;
         }
 
     }
