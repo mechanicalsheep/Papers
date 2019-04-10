@@ -20,28 +20,16 @@ namespace Service
         //private int eventId = 1;
         string uniqueKey;
         ServiceNet serviceNet;
-        ServiceDataHandler data = new ServiceDataHandler(@"D:\projects\Papers\ClientForm\bin\Debug\");
+        public string path { get; set; }
+        ServiceDataHandler data;
+        DataGatherer dataGatherer;
         Computer computer;
 
         public PaperService()
         {
            
             InitializeComponent();
-            ///server-shady as server
-            //ip = "192.168.11.193";
-
-            /// SHADY as Server
-            ip = "192.168.11.105";
-
-            ///MSI as server
-            //ip = "192.168.8.100";
-
-            port = 11111;
-            uniqueKey = data.uniqueKey;
-           // computer = data.getComputer(@"D:\projects\Papers\ClientForm\bin\Debug\ref\"+uniqueKey+".json");
-            serviceNet = new ServiceNet(data);
-
-            //data.SaveObjectData("hello!","serviceLog","Meow");
+           
            
 
              eventLog1 = new EventLog();
@@ -77,16 +65,39 @@ namespace Service
 
         protected override void OnStart(string[] args)
         {
-            //ClientDataHandler data = new ClientDataHandler();
-            //string hello = "it's working!";
-            //data.SaveObjectData(hello, "HELLO", "Works");
-            //eventLog1.WriteEntry("In OnStart");
-            // Set up a timer that triggers every minute.
-            Timer timer = new Timer();
-            
-            timer.Interval = 6000; // 6 seconds
-            timer.Elapsed += new ElapsedEventHandler(this.OnTimer);
-            timer.Start();
+            /* //ClientDataHandler data = new ClientDataHandler();
+             //string hello = "it's working!";
+             //data.SaveObjectData(hello, "HELLO", "Works");
+             //eventLog1.WriteEntry("In OnStart");
+             // Set up a timer that triggers every minute.
+             Timer timer = new Timer();
+
+             timer.Interval = 6000; // 6 seconds
+             timer.Elapsed += new ElapsedEventHandler(this.OnTimer);
+             timer.Start();
+             */
+            path = @"D:\projects\Papers\ClientForm\bin\Debug\";
+            dataGatherer = new DataGatherer(path);
+            data = new ServiceDataHandler(path);
+            serviceNet = new ServiceNet(path);
+            computer = data.getComputer();
+            computer.ip = serviceNet.getIP();
+            computer.machineNote = "haha it worked";
+            Console.WriteLine("IP from serviceNEt that will be saved is: " + computer.ip);
+            data.SaveObjectData(computer, computer.uniqueKey, "ref");
+
+
+            ///server-shady as server
+            ip = "192.168.11.193";
+
+            /// SHADY as Server
+            //ip = "192.168.11.105";
+
+            ///MSI as server
+            //ip = "192.168.8.100";
+
+            port = 11111;
+            uniqueKey = data.uniqueKey;
 
             eventLog1.WriteEntry("Starting timer for sendAlive()");
             aTimer = new Timer();

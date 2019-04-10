@@ -38,9 +38,11 @@ namespace ServerForm
 
                     form.getComputerData(ipPort[0], Convert.ToInt32(ipPort[1]));
                     Computer computer = GetComputer(ipPort[0], Convert.ToInt32(ipPort[1]));
+                        computer.ip = ipPort[0];
                     try
                     {
                         computer.online = true;
+                            computer.ip = ipPort[0];
                         computer.port = ipPort[1];
                         //form.setOnline(computer.uniqueKey, ipPort[0], ipPort[1]);
                     form.computers.Add(computer.uniqueKey, computer);
@@ -74,13 +76,9 @@ namespace ServerForm
             };
             NetworkComms.ConnectionEstablishShutdownDelegate connectionShutdownDelegate = (connection) =>
               {
-                  /* string ipPort= connection.ConnectionInfo.RemoteEndPoint.ToString();
-                  // form.ScanForConnections();
-                   form.RemoveOfflineComputer(ipPort.Split(':').First());
-                   Console.WriteLine("Client" + connection.ConnectionInfo + "disconnected");
-                   */
+             
                   string[] ipPort = connection.ConnectionInfo.RemoteEndPoint.ToString().Split(':');
-                  // string uniqueKey = GetUniqueKey(ipPort[0], Convert.ToInt32(ipPort[1]));
+                
                   form.writeline(connection + " has disconnected.");
                   form.setOffline(ipPort[0]);
 

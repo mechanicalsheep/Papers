@@ -53,7 +53,7 @@ namespace ServerForm
                         else
                         {
                              lvi = new ListViewItem(new[] { computer.name, computer.ip, computer.port, computer.uniqueKey });
-
+                            
                             lvi.ForeColor = Color.DarkViolet;
 
                         }
@@ -229,7 +229,8 @@ namespace ServerForm
             if (lv_computers.InvokeRequired)
             {
                 lv_computers.Invoke(new Action(() => {
-
+                    Console.WriteLine("lv_computers.length = " + lv_computers.Items.Count);
+                    Console.WriteLine("finditemwithvalue(" + key + ") =" + lv_computers.FindItemWithText(key).Text);
                     lv_computers.FindItemWithText(key).ForeColor = Color.Gray;
 
                 }));

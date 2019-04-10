@@ -13,25 +13,30 @@ namespace Service
 
         //private ClientForm form;
         string ip;
-        string  port;
+        string  localport;
+        int serverPort;
         string key;
         Computer computer;
+        // DataGatherer gatherer;
         ServiceDataHandler data;
         
-        public ServiceNet(ServiceDataHandler dataHandler)
+        public ServiceNet(string path)
         {
-            data = dataHandler;
-            //computer = data.getComputer();
-            key = data.uniqueKey;
+            ServiceDataHandler data = new ServiceDataHandler(path);
+           
+            computer = data.getComputer();
+            key = computer.uniqueKey;
+          
+            Console.WriteLine("Got computer: " + computer.name);
+
             ///server-shady as server
-            //ip = "192.168.11.193";
+            ip = "192.168.11.193";
 
             /// SHADY as Server
-            ip = "192.168.11.105";
-             computer = data.getComputer();
+            //ip = "192.168.11.105";
             ///MSI as server
             //ip = "192.168.8.100";
-
+            serverPort = 11111;
             //form = clientForm;
             //form.writeline("-==Client=-");
 
@@ -58,7 +63,7 @@ namespace Service
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("GetComputer", (packet, connection, input) =>
              {
-                
+                 //Console.WriteLine("Sending computer name: " + computer.name + " that is stored in" + data.computerPath);
                  connection.SendObject<Computer>("SentComputer",computer);
              });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("snrClient",(packetHeader, connection, input) =>
@@ -82,9 +87,10 @@ namespace Service
 
                    // clientForm.writeline(" - " + localEndpoint.Address + " " + localEndpoint.Port);
                     ip = localEndpoint.Address.ToString();
-                    port = localEndpoint.Port.ToString();
+                    localport = localEndpoint.Port.ToString();
                 }
             }
+           
         }
     public string getIP()
         {
@@ -92,7 +98,7 @@ namespace Service
         }
         public string getPort()
         {
-            return port;
+            return localport;
         }
         public void sendAlive(string ip, int port)
         {
@@ -104,7 +110,7 @@ namespace Service
             }
             catch (Exception err)
             {
-                Console.WriteLine("sendAlive exception thrown: " + err.Message);
+                Console.WriteLine("sendAlive exception thrown: ");// + err.Message);
             }
         }
         public void sendMessage(string ip, int port, string message)
