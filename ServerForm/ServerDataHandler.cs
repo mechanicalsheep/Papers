@@ -66,6 +66,9 @@ namespace ServerForm
         {
             Dictionary<string,Computer> computerList = new Dictionary<string, Computer>();
             DirectoryInfo dir = new DirectoryInfo(computerPath);
+            if (dir.Exists)
+            {
+
             foreach(var file in dir.GetFiles())
             {
                 var inputs = File.ReadAllText(file.FullName);
@@ -81,6 +84,11 @@ namespace ServerForm
                 {
                     Console.WriteLine("ERROR IN GENERATECOMPUTERLIST(): THE UNIQUE KEY POSSIBLY WAS ALREADY ADDED.");
                 }
+            }
+            }
+            else
+            {
+                Directory.CreateDirectory(computerPath);
             }
             return computerList;
         }

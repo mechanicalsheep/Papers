@@ -4,7 +4,7 @@ using System.IO;
 
 using System;
 
-namespace Service
+namespace Testings
 {
     public class ServiceDataHandler
     {
