@@ -185,7 +185,7 @@ namespace Service
             computer.chocoSoftwares = getChocoInstallFiles();
             computer.dateTime = getDateTime();
             computer.ip = ip;
-            computer.username = GetUser();
+            //computer.username = GetUser();
             computer.model = GetComputerModel();
             computer.ram = GetRam();
             computer.group = getGroup();

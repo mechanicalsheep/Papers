@@ -38,10 +38,10 @@ namespace Testings
 
             Console.WriteLine("username logged in is: " + computer.username);
             ///server-shady as server
-            ip = "192.168.11.193";
+            //ip = "192.168.11.193";
 
             /// SHADY as Server
-            //ip = "192.168.11.105";
+            ip = "192.168.11.105";
 
             ///MSI as server
             //ip = "192.168.8.100";

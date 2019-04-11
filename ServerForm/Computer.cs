@@ -44,6 +44,8 @@ namespace ServerForm
         public string anyDesk { get; set; }
         [ProtoMember(17)]
         public string processor { get; set; }
+        [ProtoMember(18)]
+        public Dictionary<string, DateTime> allUsers { get; set; }
 
 
         //needed for protobuf
@@ -71,7 +73,7 @@ namespace ServerForm
             if (uniqueKey == other.uniqueKey)
             {
 
-                if (name == other.name && OS == other.OS && ram == other.ram && group == other.group && machineNote==other.machineNote && note==other.note)
+                if (name == other.name && OS == other.OS && ram == other.ram && group == other.group && machineNote == other.machineNote && note == other.note && username == other.username)
                 {
                     //if all the others are true, they are the same computer, let's check if the softwares have changed.
                     if (softwares.Count == other.softwares.Count)
@@ -102,6 +104,23 @@ namespace ServerForm
                     {
                         return false;
                     }
+                    if (allUsers.Count == other.allUsers.Count)
+                    {
+                        foreach (var user in allUsers)
+                        {
+                            if (!other.allUsers.ContainsKey(user.Key) && other.allUsers[user.Key].ToString() != allUsers[user.Key].ToString())
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+        
+
+       
                 }
                 else
                 {
