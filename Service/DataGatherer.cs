@@ -135,15 +135,45 @@ namespace Service
             data.SaveObjectData(tempSetting, SettingsFilename, "settings");
             getGroup();
         }
-        string GetUser()
+        /*string GetUser()
         {
-            string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            //writeline("current user is: " + user);
-            return user;
+            ManagementObjectSearcher Processes = new ManagementObjectSearcher("SELECT * FROM Win32_Process");
+            string username="noUser";
+            foreach (System.Management.ManagementObject Process in Processes.Get())
+            {
+                if (Process["ExecutablePath"] != null &&
+                    System.IO.Path.GetFileName(Process["ExecutablePath"].ToString()).ToLower() == "explorer.exe")
+                {
+                    string[] OwnerInfo = new string[2];
+                    Process.InvokeMethod("GetOwner", (object[])OwnerInfo);
 
-            //the following returns cached user's in some cases that are not currently logged in.
-            //return Environment.UserName; 
+                    username = OwnerInfo[0];
+                    Console.WriteLine(string.Format("Windows Logged-in Interactive UserName={0}", username));
+
+                   
+                }
+            }
+            return username;
+            /* string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+             //writeline("current user is: " + user);
+             return user;
+
+             //the following returns cached user's in some cases that are not currently logged in.
+             //return Environment.UserName; 
+             
+        }*/
+        Dictionary<string,DateTime>GetUsers()
+        {
+            Dictionary<string, DateTime> users = new Dictionary<string, DateTime>();
+            DirectoryInfo dir = new DirectoryInfo(@"C:\Users\");
+            foreach (var folder in dir.GetDirectories())
+            {
+                users.Add(folder.Name,folder.LastAccessTime);
+                Console.WriteLine("User: " + folder.Name + " last logged in " + folder.LastAccessTime);
+            }
+            return users;
         }
+
         void GetComputerData()
         {
 

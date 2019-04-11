@@ -1,6 +1,7 @@
 ﻿using ProtoBuf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 
 namespace Service
@@ -44,6 +45,8 @@ namespace Service
         public string anyDesk { get; set; }
         [ProtoMember(17)]
         public string processor { get; set; }
+        [ProtoMember(18)]
+        public Dictionary<string, DateTime> allUsers { get; set; }
 
 
         //needed for protobuf

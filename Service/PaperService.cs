@@ -85,6 +85,7 @@ namespace Service
             computer.machineNote = "haha it worked";
             Console.WriteLine("IP from serviceNEt that will be saved is: " + computer.ip);
             data.SaveObjectData(computer, computer.uniqueKey, "ref");
+            Console.WriteLine("username logged in is: " +computer.username);
 
 
             ///server-shady as server

@@ -92,6 +92,10 @@ namespace Testings
             }
            
         }
+        public void sendComputer(string ip, int port, Computer computer)
+        {
+           NetworkComms.SendObject<Computer>("SentComputer", ip,port,computer);
+        }
     public string getIP()
         {
             return ip;

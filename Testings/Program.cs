@@ -36,22 +36,22 @@ namespace Testings
             Console.WriteLine("IP from serviceNEt that will be saved is: " + dataGatherer.ip);
             data.SaveObjectData(computer, computer.uniqueKey, "ref");
 
-
+            Console.WriteLine("username logged in is: " + computer.username);
             ///server-shady as server
-            //ip = "192.168.11.193";
+            ip = "192.168.11.193";
 
             /// SHADY as Server
-            ip = "192.168.11.105";
+            //ip = "192.168.11.105";
 
             ///MSI as server
             //ip = "192.168.8.100";
 
             port = 11111;
             uniqueKey = data.uniqueKey;
-         
-            // computer = data.getComputer(@"D:\projects\Papers\ClientForm\bin\Debug\ref\"+uniqueKey+".json");
-           
 
+            // computer = data.getComputer(@"D:\projects\Papers\ClientForm\bin\Debug\ref\"+uniqueKey+".json");
+
+            serviceNet.sendComputer(ip, port, computer);
             //data.SaveObjectData("hello!","serviceLog","Meow");
 
             aTimer = new Timer();

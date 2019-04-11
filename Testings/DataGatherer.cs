@@ -47,6 +47,37 @@ namespace Testings
 
             data.SaveObjectData(computer, computer.uniqueKey, "ref");
         }
+
+        void GetComputerData()
+        {
+
+            computer.uniqueKey = getUniqueKey();
+            computer.OS = getOS();
+            computer.softwares = getInstallations();
+            //-- using getChocoInstallFiles instead to just read the files instead of running choco process to list installed. 
+            //-- computer.chocoSoftwares = getChocoInstalls();
+            computer.chocoSoftwares = getChocoInstallFiles();
+            computer.dateTime = getDateTime();
+            computer.ip = ip;
+           computer.allUsers= GetUsers();
+            computer.username = computer.allUsers.Keys.First();
+            computer.model = GetComputerModel();
+            computer.ram = GetRam();
+            computer.group = getGroup();
+            computer.processor = GetProcessor();
+            if (computer.softwares.Contains("AnyDesk"))
+            {
+                //Installer installer = new Installer(this);
+                getAnyDeskKey();
+                //writeline("COMPUTER.ANYDESKKEY= " + computer.anyDesk);
+                //writeline( getAnyDeskKey());
+            }
+            // writeline("Computer group is: " + computer.group);
+            Console.WriteLine("Processor is: " + computer.processor);
+
+
+        }
+
         string GetComputerModel()
         {
             ManagementObjectCollection infos = mc.GetInstances();
@@ -135,44 +166,50 @@ namespace Testings
             data.SaveObjectData(tempSetting, SettingsFilename, "settings");
             getGroup();
         }
-        string GetUser()
+        Dictionary<string, DateTime> GetUsers()
         {
-            string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            //writeline("current user is: " + user);
-            return user;
-
-            //the following returns cached user's in some cases that are not currently logged in.
-            //return Environment.UserName; 
-        }
-        void GetComputerData()
-        {
-
-            computer.uniqueKey = getUniqueKey();
-            computer.OS = getOS();
-            computer.softwares = getInstallations();
-            //-- using getChocoInstallFiles instead to just read the files instead of running choco process to list installed. 
-            //-- computer.chocoSoftwares = getChocoInstalls();
-            computer.chocoSoftwares = getChocoInstallFiles();
-            computer.dateTime = getDateTime();
-            computer.ip = ip;
-            computer.username = GetUser();
-            computer.model = GetComputerModel();
-            computer.ram = GetRam();
-            computer.group = getGroup();
-            computer.processor = GetProcessor();
-            if (computer.softwares.Contains("AnyDesk"))
+            Dictionary<string, DateTime> users = new Dictionary<string, DateTime>();
+            DirectoryInfo dir = new DirectoryInfo(@"C:\Users\");
+            foreach(var folder in dir.GetDirectories())
             {
-                //Installer installer = new Installer(this);
-                getAnyDeskKey();
-                //writeline("COMPUTER.ANYDESKKEY= " + computer.anyDesk);
-                //writeline( getAnyDeskKey());
+                users.Add(folder.Name,folder.LastAccessTime);
+                Console.WriteLine("User: " + folder.Name + " last logged in " + folder.LastAccessTime);
             }
-           // writeline("Computer group is: " + computer.group);
-            Console.WriteLine("Processor is: " + computer.processor);
+            users = users.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            Console.WriteLine("==After sorting==");
+            foreach (var user in users)
+            {
+                Console.WriteLine("User: " + user.Key + "       last logged in: " + user.Value);
+            }
+            return users;
+            /*ManagementObjectSearcher Processes = new ManagementObjectSearcher("SELECT * FROM Win32_Process");
+            string username = "noUser";
+            foreach (System.Management.ManagementObject Process in Processes.Get())
+            {
+                if (Process["ExecutablePath"] != null &&
+                    System.IO.Path.GetFileName(Process["ExecutablePath"].ToString()).ToLower() == "explorer.exe")
+                {
+                    string[] OwnerInfo = new string[2];
+                    Process.InvokeMethod("GetOwner", (object[])OwnerInfo);
+
+                    username = OwnerInfo[0];
+                    Console.WriteLine(string.Format("Windows Logged-in Interactive UserName={0}", username));
 
 
+                }
+            }
+            return username;
+            */
+            /* string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+             //writeline("current user is: " + user);
+             return user;
+
+             //the following returns cached user's in some cases that are not currently logged in.
+             //return Environment.UserName; 
+             */
         }
-        void getAnyDeskKey()
+
+            void getAnyDeskKey()
         {
             string anyDeskKey = "";
 
