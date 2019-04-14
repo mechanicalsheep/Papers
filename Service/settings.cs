@@ -15,6 +15,8 @@ namespace Service
         public string uniquekey { get; set; }
         [ProtoMember(2)]
         public string group { get; set; }
+        [ProtoMember(3)]
+        public string version { get; set; }
         
         ServiceDataHandler data;
         public Settings()
@@ -43,6 +45,7 @@ namespace Service
         {
             return group;
         }
+       
      
     }
 }

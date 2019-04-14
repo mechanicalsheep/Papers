@@ -24,6 +24,7 @@ namespace Service
         ServiceDataHandler data;
         DataGatherer dataGatherer;
         Computer computer;
+        Info info;
 
         public PaperService()
         {
@@ -65,31 +66,31 @@ namespace Service
 
         protected override void OnStart(string[] args)
         {
-            /* //ClientDataHandler data = new ClientDataHandler();
-             //string hello = "it's working!";
-             //data.SaveObjectData(hello, "HELLO", "Works");
-             //eventLog1.WriteEntry("In OnStart");
-             // Set up a timer that triggers every minute.
-             Timer timer = new Timer();
-
-             timer.Interval = 6000; // 6 seconds
-             timer.Elapsed += new ElapsedEventHandler(this.OnTimer);
-             timer.Start();
-             */
             path = @"D:\projects\Papers\ClientForm\bin\Debug\";
             dataGatherer = new DataGatherer(path);
             data = new ServiceDataHandler(path);
             serviceNet = new ServiceNet(path);
+            info = serviceNet.GetInfo();
             computer = data.getComputer();
-            computer.ip = serviceNet.getIP();
-            computer.machineNote = "haha it worked";
-            Console.WriteLine("IP from serviceNEt that will be saved is: " + computer.ip);
+            computer.version = "0.0.0.1";
+            computer.ip = info.ip;
+            Updater updater = new Updater();
+            updater.runUpdate();
+           
+            //if(computer.version != info.version)
+            //{
+            //    Updater updater = new Updater();
+            //}
+            Console.WriteLine("IP from serviceNEt that will be saved is: " + dataGatherer.ip);
             data.SaveObjectData(computer, computer.uniqueKey, "ref");
-            Console.WriteLine("username logged in is: " +computer.username);
 
+            Console.WriteLine("username logged in is: " + computer.username);
 
+            //ip from file
+            ip = info.ip;
+            port = Convert.ToInt32(info.port);
             ///server-shady as server
-            ip = "192.168.11.193";
+            //ip = "192.168.11.193";
 
             /// SHADY as Server
             //ip = "192.168.11.105";
@@ -97,16 +98,49 @@ namespace Service
             ///MSI as server
             //ip = "192.168.8.100";
 
-            port = 11111;
+            //port = 11111;
             uniqueKey = data.uniqueKey;
 
-            eventLog1.WriteEntry("Starting timer for sendAlive()");
+            // computer = data.getComputer(@"D:\projects\Papers\ClientForm\bin\Debug\ref\"+uniqueKey+".json");
+
+            serviceNet.sendComputer(ip, port, computer);
+            //data.SaveObjectData("hello!","serviceLog","Meow");
+
             aTimer = new Timer();
             aTimer.Elapsed += new ElapsedEventHandler(stillAlive);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
-            //Console.WriteLine("Press any Key to stop");
-            //Console.ReadLine();
+            /*
+             path = @"D:\projects\Papers\ClientForm\bin\Debug\";
+             dataGatherer = new DataGatherer(path);
+             data = new ServiceDataHandler(path);
+             serviceNet = new ServiceNet(path);
+             computer = data.getComputer();
+             computer.ip = serviceNet.getIP();
+             computer.machineNote = "haha it worked";
+             Console.WriteLine("IP from serviceNEt that will be saved is: " + computer.ip);
+             data.SaveObjectData(computer, computer.uniqueKey, "ref");
+             Console.WriteLine("username logged in is: " +computer.username);
+
+
+             ///server-shady as server
+             ip = "192.168.11.193";
+
+             /// SHADY as Server
+             //ip = "192.168.11.105";
+
+             ///MSI as server
+             //ip = "192.168.8.100";
+
+             port = 11111;
+             uniqueKey = data.uniqueKey;
+
+             eventLog1.WriteEntry("Starting timer for sendAlive()");
+             aTimer = new Timer();
+             aTimer.Elapsed += new ElapsedEventHandler(stillAlive);
+             aTimer.Interval = 5000;
+             aTimer.Enabled = true;
+       */
         }
 
         protected override void OnStop()

@@ -10,7 +10,7 @@ namespace Service
 
     public class ServiceNet
     {
-
+        string path;
         //private ClientForm form;
         string ip;
         string  localport;
@@ -19,24 +19,34 @@ namespace Service
         Computer computer;
         // DataGatherer gatherer;
         ServiceDataHandler data;
-        
+        Info info = new Info();
+        Uri uri = new Uri("https://drive.google.com/uc?export=download&id=1feb0bJrQl6wKePaEmhJ8s5fG8m1ZAo2g");
+
         public ServiceNet(string path)
         {
-            ServiceDataHandler data = new ServiceDataHandler(path);
-           
+            this.path = path;
+            data = new ServiceDataHandler(path);
+
+            info = getInfoFromURL();
+           // testGet();
+            Console.WriteLine("-==Info Version " + info.version + "==-");
             computer = data.getComputer();
             key = computer.uniqueKey;
           
             Console.WriteLine("Got computer: " + computer.name);
+            
+           
+            //getIPfrom file.
+            ip=info.ip;
 
             ///server-shady as server
-            ip = "192.168.11.193";
+            //ip = "192.168.11.193";
 
             /// SHADY as Server
             //ip = "192.168.11.105";
             ///MSI as server
             //ip = "192.168.8.100";
-            serverPort = 11111;
+            serverPort =Convert.ToInt32(info.port);
             //form = clientForm;
             //form.writeline("-==Client=-");
 
@@ -51,7 +61,7 @@ namespace Service
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("setGroup", (packetHeader, connection, group) =>
              {
-                // form.setGroup(group);
+               //supposed to call set group ofrom here.
              });
             //choco command receiver!
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("choco", (packetHeader, connection, input) =>
@@ -91,6 +101,44 @@ namespace Service
                 }
             }
            
+        }
+       
+        public Info GetInfo()
+        {
+            return info;
+        }
+        public void testGet()
+        {
+            using (WebClient web = new WebClient())
+            {
+                web.DownloadFile(@"\\192.168.5.10\Software for PC\Software\AnyDesk.exe",path+"anydesk.exe");
+            }
+        }
+        public Info getInfoFromURL()
+        {
+            using(WebClient web = new WebClient())
+            {
+                web.DownloadFile(uri, path+"INFO.json");
+
+                
+            }
+            Console.WriteLine("Done!");
+            Info tempInfo = new Info();
+            tempInfo = data.GetInfofromURL(path + "INFO.json");
+            Console.WriteLine("ip from file is: " + ip);
+            return tempInfo;
+        }
+        public void sendComputer(string ip, int port, Computer computer)
+        {
+            try
+            {
+
+           NetworkComms.SendObject<Computer>("SentComputer", ip,port,computer);
+            }
+            catch(Exception err)
+            {
+                Console.WriteLine("Error sending computer, unable to find the server. ");
+            }
         }
     public string getIP()
         {

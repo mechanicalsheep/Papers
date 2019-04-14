@@ -1,6 +1,7 @@
 ﻿extern alias newt;
 
 using System.IO;
+using System.IO.Compression;
 
 using System;
 
@@ -44,6 +45,21 @@ namespace Service
             File.WriteAllText(file, output);
         }
 
+        public Info GetInfofromURL(string Path)
+        {
+            try
+            {
+                var file = File.ReadAllText(Path);
+                var input = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Info>(file);
+                return input;
+
+            }
+            catch(Exception err)
+            {
+                Console.WriteLine("Error retrieving Info from getIPfromURL");
+                return null;
+            }
+        }
 
         public string getKey()
         {

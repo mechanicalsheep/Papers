@@ -21,7 +21,7 @@ namespace Service
         int port;
         System.Timers.Timer aTimer;
         string fullSettingFilePath;
-
+        Info info;
         public Computer computer;
         //ClientNet clientNet;
        ServiceDataHandler data;
@@ -29,6 +29,7 @@ namespace Service
 
         public DataGatherer(string Path)
         {
+          
             path = Path;
             settingFolder = "settings";
             SettingsFilename = "Settings";
@@ -41,12 +42,54 @@ namespace Service
 
             computer = new Computer(getComputerName());
             data = new ServiceDataHandler(path);
+
+            info = data.GetInfofromURL(path + "\\INFO.json");
             GetComputerData();
 
             StartManifest(computer);
 
             data.SaveObjectData(computer, computer.uniqueKey, "ref");
         }
+       
+        public void setVersion(string Version)
+        {
+            Settings tempSetting = data.GetSettings(fullSettingFilePath);
+            tempSetting.version = Version;
+            data.SaveObjectData(tempSetting, SettingsFilename, "settings");
+            getGroup();
+        }
+        void GetComputerData()
+        {
+
+            computer.uniqueKey = getUniqueKey();
+            computer.OS = getOS();
+            computer.softwares = getInstallations();
+            //-- using getChocoInstallFiles instead to just read the files instead of running choco process to list installed. 
+            //-- computer.chocoSoftwares = getChocoInstalls();
+            computer.chocoSoftwares = getChocoInstallFiles();
+            computer.dateTime = getDateTime();
+            computer.ip = ip;
+           computer.allUsers= GetUsers();
+            computer.username = computer.allUsers.Keys.First();
+            computer.model = GetComputerModel();
+            computer.ram = GetRam();
+            computer.group = getGroup();
+            computer.processor = GetProcessor();
+            computer.machineNote = "Version: " +info.version;
+
+            if (computer.softwares.Contains("AnyDesk"))
+            {
+                //Installer installer = new Installer(this);
+                getAnyDeskKey();
+                //writeline("COMPUTER.ANYDESKKEY= " + computer.anyDesk);
+                //writeline( getAnyDeskKey());
+            }
+            // writeline("Computer group is: " + computer.group);
+            Console.WriteLine("Processor is: " + computer.processor);
+
+
+        }
+
         string GetComputerModel()
         {
             ManagementObjectCollection infos = mc.GetInstances();
@@ -135,10 +178,24 @@ namespace Service
             data.SaveObjectData(tempSetting, SettingsFilename, "settings");
             getGroup();
         }
-        /*string GetUser()
+        Dictionary<string, DateTime> GetUsers()
         {
-            ManagementObjectSearcher Processes = new ManagementObjectSearcher("SELECT * FROM Win32_Process");
-            string username="noUser";
+            Dictionary<string, DateTime> users = new Dictionary<string, DateTime>();
+            DirectoryInfo dir = new DirectoryInfo(@"C:\Users\");
+            foreach(var folder in dir.GetDirectories())
+            {
+                users.Add(folder.Name,folder.LastAccessTime);
+                Console.WriteLine("User: " + folder.Name + " last logged in " + folder.LastAccessTime);
+            }
+            users = users.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            Console.WriteLine("==After sorting==");
+            foreach (var user in users)
+            {
+                Console.WriteLine("User: " + user.Key + "       last logged in: " + user.Value);
+            }
+            return users;
+            /*ManagementObjectSearcher Processes = new ManagementObjectSearcher("SELECT * FROM Win32_Process");
+            string username = "noUser";
             foreach (System.Management.ManagementObject Process in Processes.Get())
             {
                 if (Process["ExecutablePath"] != null &&
@@ -150,59 +207,21 @@ namespace Service
                     username = OwnerInfo[0];
                     Console.WriteLine(string.Format("Windows Logged-in Interactive UserName={0}", username));
 
-                   
+
                 }
             }
             return username;
+            */
             /* string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
              //writeline("current user is: " + user);
              return user;
 
              //the following returns cached user's in some cases that are not currently logged in.
              //return Environment.UserName; 
-             
-        }*/
-        Dictionary<string,DateTime>GetUsers()
-        {
-            Dictionary<string, DateTime> users = new Dictionary<string, DateTime>();
-            DirectoryInfo dir = new DirectoryInfo(@"C:\Users\");
-            foreach (var folder in dir.GetDirectories())
-            {
-                users.Add(folder.Name,folder.LastAccessTime);
-                Console.WriteLine("User: " + folder.Name + " last logged in " + folder.LastAccessTime);
-            }
-            return users;
+             */
         }
 
-        void GetComputerData()
-        {
-
-            computer.uniqueKey = getUniqueKey();
-            computer.OS = getOS();
-            computer.softwares = getInstallations();
-            //-- using getChocoInstallFiles instead to just read the files instead of running choco process to list installed. 
-            //-- computer.chocoSoftwares = getChocoInstalls();
-            computer.chocoSoftwares = getChocoInstallFiles();
-            computer.dateTime = getDateTime();
-            computer.ip = ip;
-            //computer.username = GetUser();
-            computer.model = GetComputerModel();
-            computer.ram = GetRam();
-            computer.group = getGroup();
-            computer.processor = GetProcessor();
-            if (computer.softwares.Contains("AnyDesk"))
-            {
-                //Installer installer = new Installer(this);
-                getAnyDeskKey();
-                //writeline("COMPUTER.ANYDESKKEY= " + computer.anyDesk);
-                //writeline( getAnyDeskKey());
-            }
-           // writeline("Computer group is: " + computer.group);
-            Console.WriteLine("Processor is: " + computer.processor);
-
-
-        }
-        void getAnyDeskKey()
+            void getAnyDeskKey()
         {
             string anyDeskKey = "";
 

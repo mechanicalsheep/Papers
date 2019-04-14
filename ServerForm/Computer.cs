@@ -46,6 +46,8 @@ namespace ServerForm
         public string processor { get; set; }
         [ProtoMember(18)]
         public Dictionary<string, DateTime> allUsers { get; set; }
+        [ProtoMember(19)]
+        public string version { get; set; }
 
 
         //needed for protobuf

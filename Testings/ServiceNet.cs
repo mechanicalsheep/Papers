@@ -102,6 +102,11 @@ namespace Testings
             }
            
         }
+
+        public Info GetInfo()
+        {
+            return info;
+        }
         public Info getInfoFromURL()
         {
             using(WebClient web = new WebClient())
@@ -113,7 +118,7 @@ namespace Testings
             Console.WriteLine("Done!");
             Info tempInfo = new Info();
             tempInfo = data.GetInfofromURL(path + "INFO.json");
-            Console.WriteLine("ip from file is: " + ip);
+            Console.WriteLine("ip from file is: " + tempInfo.ip);
             return tempInfo;
         }
         public void sendComputer(string ip, int port, Computer computer)

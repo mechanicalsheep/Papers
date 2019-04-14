@@ -13,6 +13,7 @@ namespace Service
      
         public string name, group, note, machineNote, OS, ram, dateTime;
         public string oldName, oldGroup, oldNote, oldMachineNote, oldOS, oldRam, oldDateTime;
+        public Dictionary<string, string> allUsers, oldAllUsers;
         
 
         public List<string> softwareAdded, softwareRemoved, chocoSoftwareAdded, chocoSoftwareRemoved;
@@ -25,6 +26,7 @@ namespace Service
             softwareRemoved = new List<string>();
             chocoSoftwareAdded = new List<string>();
             chocoSoftwareRemoved = new List<string>();
+            allUsers = oldAllUsers = new Dictionary<string, string>();
 
            WhatChanged();
            // Console.WriteLine("Manifest computer dateTime= " + manifestComputer.dateTime);
@@ -117,6 +119,30 @@ namespace Service
                     }
                 }
             }
+
+            //for AllUsers
+            /*if (savedComputer.allUsers.Count > newComputer.allUsers.Count)
+            {
+                foreach (var user in savedComputer.allUsers)
+
+                {
+                    if (!newComputer.allUsers.Contains(user))
+                    {
+                        softwareRemoved.Add(user);
+                    }
+                }
+            }
+            if (savedComputer.softwares.Count < newComputer.softwares.Count)
+            {
+                foreach (var soft in newComputer.softwares)
+
+                {
+                    if (!savedComputer.softwares.Contains(soft))
+                    {
+                        softwareAdded.Add(soft);
+                    }
+                }
+            }*/
 
         }
     }

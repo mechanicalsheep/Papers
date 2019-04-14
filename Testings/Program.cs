@@ -19,6 +19,7 @@ namespace Testings
         ServiceDataHandler data;
         DataGatherer dataGatherer;
         Computer computer;
+        Info info;
         public Program()
         {
             onStart();
@@ -31,17 +32,23 @@ namespace Testings
             dataGatherer = new DataGatherer(path);
             data = new ServiceDataHandler(path);
             serviceNet = new ServiceNet(path);
+            info = serviceNet.GetInfo();
             computer = data.getComputer();
-            computer.ip = serviceNet.getIP();
+            computer.ip = info.ip;
             Console.WriteLine("IP from serviceNEt that will be saved is: " + dataGatherer.ip);
             data.SaveObjectData(computer, computer.uniqueKey, "ref");
 
             Console.WriteLine("username logged in is: " + computer.username);
+
+            //get ip from file.
+            ip = info.ip;
+            port = Convert.ToInt32(info.port);
+            
             ///server-shady as server
             //ip = "192.168.11.193";
 
             /// SHADY as Server
-            ip = "192.168.11.105";
+           // ip = "192.168.11.105";
 
             ///MSI as server
             //ip = "192.168.8.100";
