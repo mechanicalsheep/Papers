@@ -10,7 +10,7 @@ namespace Testings
 
     public class ServiceNet
     {
-
+        string path;
         //private ClientForm form;
         string ip;
         string  localport;
@@ -19,24 +19,34 @@ namespace Testings
         Computer computer;
         // DataGatherer gatherer;
         ServiceDataHandler data;
-        
+        Info info = new Info();
+        Uri uri = new Uri("https://drive.google.com/uc?export=download&id=1feb0bJrQl6wKePaEmhJ8s5fG8m1ZAo2g");
+
+
         public ServiceNet(string path)
         {
-            ServiceDataHandler data = new ServiceDataHandler(path);
-           
+            this.path = path;
+            data = new ServiceDataHandler(path);
+
+            info = getInfoFromURL();
+            Console.WriteLine("-==Info Version " + info.version + "==-");
             computer = data.getComputer();
             key = computer.uniqueKey;
           
             Console.WriteLine("Got computer: " + computer.name);
+            
+           
+            //getIPfrom file.
+            ip=info.ip;
 
             ///server-shady as server
-            ip = "192.168.11.193";
+            //ip = "192.168.11.193";
 
             /// SHADY as Server
             //ip = "192.168.11.105";
             ///MSI as server
             //ip = "192.168.8.100";
-            serverPort = 11111;
+            serverPort =Convert.ToInt32(info.port);
             //form = clientForm;
             //form.writeline("-==Client=-");
 
@@ -92,9 +102,31 @@ namespace Testings
             }
            
         }
+        public Info getInfoFromURL()
+        {
+            using(WebClient web = new WebClient())
+            {
+                web.DownloadFile(uri, path+"INFO.json");
+
+                
+            }
+            Console.WriteLine("Done!");
+            Info tempInfo = new Info();
+            tempInfo = data.GetInfofromURL(path + "INFO.json");
+            Console.WriteLine("ip from file is: " + ip);
+            return tempInfo;
+        }
         public void sendComputer(string ip, int port, Computer computer)
         {
+            try
+            {
+
            NetworkComms.SendObject<Computer>("SentComputer", ip,port,computer);
+            }
+            catch(Exception err)
+            {
+                Console.WriteLine("Error sending computer, unable to find the server. ");
+            }
         }
     public string getIP()
         {
