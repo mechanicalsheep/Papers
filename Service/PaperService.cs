@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -16,24 +17,24 @@ namespace Service
     {
         string ip;
         int port;
-        Timer aTimer;
+        System.Timers.Timer aTimer;
         //private int eventId = 1;
         string uniqueKey;
         ServiceNet serviceNet;
         public string path { get; set; }
         ServiceDataHandler data;
         DataGatherer dataGatherer;
-        Computer computer;
-        Info info;
+        public Computer computer;
+        public Info info;
 
         public PaperService()
         {
            
             InitializeComponent();
-           
-           
 
-             eventLog1 = new EventLog();
+          
+
+            eventLog1 = new EventLog();
             if (!EventLog.SourceExists("Paper"))
             {
                 EventLog.CreateEventSource("Paper", "PaperLog");
@@ -67,20 +68,24 @@ namespace Service
         protected override void OnStart(string[] args)
         {
             path = @"D:\projects\Papers\ClientForm\bin\Debug\";
+            string currentPath = @"D:\projects\Papers\Service\bin\Debug\";
             dataGatherer = new DataGatherer(path);
             data = new ServiceDataHandler(path);
             serviceNet = new ServiceNet(path);
             info = serviceNet.GetInfo();
             computer = data.getComputer();
-            computer.version = "0.0.0.1";
+            computer.version = "0.0.0.0";
             computer.ip = info.ip;
-            Updater updater = new Updater();
-            updater.runUpdate();
-           
-            //if(computer.version != info.version)
-            //{
-            //    Updater updater = new Updater();
-            //}
+
+            ServiceController sc = new ServiceController("PaperService");
+
+            /*Updater updater = new Updater();
+             updater.RunUpdate();
+             /*if(computer.version != info.version)
+             {
+                 Updater updater = new Updater();
+                 updater.RunUpdate();
+             }*/
             Console.WriteLine("IP from serviceNEt that will be saved is: " + dataGatherer.ip);
             data.SaveObjectData(computer, computer.uniqueKey, "ref");
 
@@ -106,43 +111,29 @@ namespace Service
             serviceNet.sendComputer(ip, port, computer);
             //data.SaveObjectData("hello!","serviceLog","Meow");
 
-            aTimer = new Timer();
+            aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(stillAlive);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
-            /*
-             path = @"D:\projects\Papers\ClientForm\bin\Debug\";
-             dataGatherer = new DataGatherer(path);
-             data = new ServiceDataHandler(path);
-             serviceNet = new ServiceNet(path);
-             computer = data.getComputer();
-             computer.ip = serviceNet.getIP();
-             computer.machineNote = "haha it worked";
-             Console.WriteLine("IP from serviceNEt that will be saved is: " + computer.ip);
-             data.SaveObjectData(computer, computer.uniqueKey, "ref");
-             Console.WriteLine("username logged in is: " +computer.username);
+
+            /* if (sc.Status == ServiceControllerStatus.StartPending)
+             {
+                 sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 10));
+             }*/
+
+            Thread t = new Thread(() =>
+            {
+                sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0,0,10));
+                Updater updater = new Updater(this);
+                updater.RunUpdate();
+                // Add something to do after the status updates
+            });
+            t.Start();
 
 
-             ///server-shady as server
-             ip = "192.168.11.193";
-
-             /// SHADY as Server
-             //ip = "192.168.11.105";
-
-             ///MSI as server
-             //ip = "192.168.8.100";
-
-             port = 11111;
-             uniqueKey = data.uniqueKey;
-
-             eventLog1.WriteEntry("Starting timer for sendAlive()");
-             aTimer = new Timer();
-             aTimer.Elapsed += new ElapsedEventHandler(stillAlive);
-             aTimer.Interval = 5000;
-             aTimer.Enabled = true;
-       */
         }
 
+        
         protected override void OnStop()
         {
             eventLog1.WriteEntry("In OnStop.");
