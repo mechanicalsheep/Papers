@@ -43,7 +43,7 @@ namespace Service
             eventLog1.Source = "Paper";
             eventLog1.Log="PaperLog";
 
-            eventLog1.WriteEntry("Current Directory is: "+Directory.GetCurrentDirectory());
+           // eventLog1.WriteEntry("Current Directory is: "+Directory.GetCurrentDirectory());
 
         }
         private void stillAlive(object sender, ElapsedEventArgs e)
@@ -69,15 +69,20 @@ namespace Service
         {
             path = @"D:\projects\Papers\ClientForm\bin\Debug\";
             string currentPath = @"D:\projects\Papers\Service\bin\Debug\";
-            dataGatherer = new DataGatherer(path);
-            data = new ServiceDataHandler(path);
-            serviceNet = new ServiceNet(path);
+            dataGatherer = new DataGatherer(currentPath);
+            data = new ServiceDataHandler(currentPath);
+            serviceNet = new ServiceNet(currentPath);
             info = serviceNet.GetInfo();
             computer = data.getComputer();
-            computer.version = "0.0.0.0";
+            if (!File.Exists(currentPath + "Version.json"))
+            {
+                string Version = "0.0.0.0";
+                data.SaveObjectDatatoPath(Version, @"D:\projects\Papers\Service\bin\Debug", "Version");
+            }
+           // computer.version = "0.0.0.0";
             computer.ip = info.ip;
 
-            ServiceController sc = new ServiceController("PaperService");
+           ServiceController sc = new ServiceController("PaperService");
 
             /*Updater updater = new Updater();
              updater.RunUpdate();
@@ -123,10 +128,15 @@ namespace Service
 
             Thread t = new Thread(() =>
             {
-                sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0,0,10));
-                Updater updater = new Updater(this);
-                updater.RunUpdate();
-                // Add something to do after the status updates
+               sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0,0,10));
+                if (computer.version != info.version)
+                {
+                    Updater updater = new Updater(info,computer.version);
+                updater.CallUpdater();
+
+                }
+              // updater.RunUpdate();
+                
             });
             t.Start();
 

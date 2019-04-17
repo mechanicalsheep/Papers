@@ -1,6 +1,7 @@
 ﻿extern alias newt;
 
 using System.IO;
+using System.IO.Compression;
 
 using System;
 
@@ -19,7 +20,11 @@ namespace Testings
         //public Settings set;
         Computer computer;
 
-
+        //create serviceDataHandler for generic writing and reading instead of data gathering based.
+        public ServiceDataHandler()
+        {
+            //should only use for saving objectdata with path
+        }
         public ServiceDataHandler(string Path)
         {
             path = Path;
@@ -37,6 +42,20 @@ namespace Testings
                 Directory.CreateDirectory(Path);
             //computer = Computer;
             this.obj = obj;
+            file = Path + @"\" + FileName + ".json";
+
+            var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+
+            File.WriteAllText(file, output);
+        }
+        public void SaveObjectDatatoPath(object Object, string Path, string FileName)
+        {
+
+            string path = Path;
+            if (!Directory.Exists(Path))
+                Directory.CreateDirectory(Path);
+            //computer = Computer;
+           object obj = Object;
             file = Path + @"\" + FileName + ".json";
 
             var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(obj);
@@ -67,6 +86,25 @@ namespace Testings
             try
             {
                 var file = File.ReadAllText(initPath);
+                var input = newt.Newtonsoft.Json.JsonConvert.DeserializeObject(file);
+                return (string)input;
+
+            }
+            catch
+            {
+                return null;
+            }
+
+
+
+        }
+        public string getString(string path)
+        {
+
+
+            try
+            {
+                var file = File.ReadAllText(path);
                 var input = newt.Newtonsoft.Json.JsonConvert.DeserializeObject(file);
                 return (string)input;
 

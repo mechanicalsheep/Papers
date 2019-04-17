@@ -62,7 +62,25 @@ namespace Service
 
             File.WriteAllText(file, output);
         }
+        public string getString(string path)
+        {
 
+
+            try
+            {
+                var file = File.ReadAllText(path);
+                var input = newt.Newtonsoft.Json.JsonConvert.DeserializeObject(file);
+                return (string)input;
+
+            }
+            catch
+            {
+                return null;
+            }
+
+
+
+        }
         public Info GetInfofromURL(string Path)
         {
             try

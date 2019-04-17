@@ -75,7 +75,8 @@ namespace Service
             computer.ram = GetRam();
             computer.group = getGroup();
             computer.processor = GetProcessor();
-            computer.machineNote = "Version: " +info.version;
+            computer.version = getVersion();
+           // computer.machineNote = "Version: " +info.version;
 
             if (computer.softwares.Contains("AnyDesk"))
             {
@@ -88,6 +89,11 @@ namespace Service
             Console.WriteLine("Processor is: " + computer.processor);
 
 
+        }
+        public string getVersion()
+        {
+           string version= data.getString(path + "Version.json");
+            return version;
         }
 
         string GetComputerModel()
@@ -106,8 +112,8 @@ namespace Service
         {
             //  Console.WriteLine("already have this computer info.");
             Computer computer = Computer;
-            string path = Directory.GetCurrentDirectory() + "\\ref\\" + computer.uniqueKey + ".json";
-            if (File.Exists(path))
+            string computerPath = path + "\\ref\\" + computer.uniqueKey + ".json";
+            if (File.Exists(computerPath))
             {
                 Computer savedComputer = data.getComputer();
                 //if (savedComputer.uniqueKey != computer.uniqueKey)

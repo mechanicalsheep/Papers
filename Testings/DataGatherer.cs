@@ -21,7 +21,7 @@ namespace Testings
         int port;
         System.Timers.Timer aTimer;
         string fullSettingFilePath;
-
+        Info info;
         public Computer computer;
         //ClientNet clientNet;
        ServiceDataHandler data;
@@ -29,6 +29,7 @@ namespace Testings
 
         public DataGatherer(string Path)
         {
+          
             path = Path;
             settingFolder = "settings";
             SettingsFilename = "Settings";
@@ -41,13 +42,22 @@ namespace Testings
 
             computer = new Computer(getComputerName());
             data = new ServiceDataHandler(path);
+
+            info = data.GetInfofromURL(path + "\\INFO.json");
             GetComputerData();
 
             StartManifest(computer);
 
             data.SaveObjectData(computer, computer.uniqueKey, "ref");
         }
-
+       
+        public void setVersion(string Version)
+        {
+            Settings tempSetting = data.GetSettings(fullSettingFilePath);
+            tempSetting.version = Version;
+            data.SaveObjectData(tempSetting, SettingsFilename, "settings");
+            getGroup();
+        }
         void GetComputerData()
         {
 
@@ -65,6 +75,8 @@ namespace Testings
             computer.ram = GetRam();
             computer.group = getGroup();
             computer.processor = GetProcessor();
+            //computer.machineNote = "Version: " +info.version;
+
             if (computer.softwares.Contains("AnyDesk"))
             {
                 //Installer installer = new Installer(this);
@@ -94,8 +106,8 @@ namespace Testings
         {
             //  Console.WriteLine("already have this computer info.");
             Computer computer = Computer;
-            string path = Directory.GetCurrentDirectory() + "\\ref\\" + computer.uniqueKey + ".json";
-            if (File.Exists(path))
+            string computerPath = path + "\\ref\\" + computer.uniqueKey + ".json";
+            if (File.Exists(computerPath))
             {
                 Computer savedComputer = data.getComputer();
                 //if (savedComputer.uniqueKey != computer.uniqueKey)

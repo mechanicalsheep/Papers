@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "ServerForm\Server.csproj", "{FDE7447E-DF10-4070-9657-D2CDD381CABB}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{94A7AD9B-413C-449C-B8CA-7B9493DB8AAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testings", "Testings\Testings.csproj", "{E7259778-5A03-4993-A7D5-30C020967232}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{AF7B5463-C485-4C70-8226-A9DA6B4BFC03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E7259778-5A03-4993-A7D5-30C020967232}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7259778-5A03-4993-A7D5-30C020967232}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7259778-5A03-4993-A7D5-30C020967232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF7B5463-C485-4C70-8226-A9DA6B4BFC03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF7B5463-C485-4C70-8226-A9DA6B4BFC03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF7B5463-C485-4C70-8226-A9DA6B4BFC03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF7B5463-C485-4C70-8226-A9DA6B4BFC03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -22,13 +22,13 @@ namespace Testings
         Info info = new Info();
         Uri uri = new Uri("https://drive.google.com/uc?export=download&id=1feb0bJrQl6wKePaEmhJ8s5fG8m1ZAo2g");
 
-
         public ServiceNet(string path)
         {
             this.path = path;
             data = new ServiceDataHandler(path);
 
             info = getInfoFromURL();
+           // testGet();
             Console.WriteLine("-==Info Version " + info.version + "==-");
             computer = data.getComputer();
             key = computer.uniqueKey;
@@ -61,7 +61,7 @@ namespace Testings
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("setGroup", (packetHeader, connection, group) =>
              {
-                // form.setGroup(group);
+               //supposed to call set group ofrom here.
              });
             //choco command receiver!
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("choco", (packetHeader, connection, input) =>
@@ -102,10 +102,17 @@ namespace Testings
             }
            
         }
-
+       
         public Info GetInfo()
         {
             return info;
+        }
+        public void testGet()
+        {
+            using (WebClient web = new WebClient())
+            {
+                web.DownloadFile(@"\\192.168.5.10\Software for PC\Software\AnyDesk.exe",path+"anydesk.exe");
+            }
         }
         public Info getInfoFromURL()
         {
@@ -118,7 +125,7 @@ namespace Testings
             Console.WriteLine("Done!");
             Info tempInfo = new Info();
             tempInfo = data.GetInfofromURL(path + "INFO.json");
-            Console.WriteLine("ip from file is: " + tempInfo.ip);
+            Console.WriteLine("ip from file is: " + ip);
             return tempInfo;
         }
         public void sendComputer(string ip, int port, Computer computer)

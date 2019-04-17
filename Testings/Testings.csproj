@@ -60,6 +60,7 @@
     <Compile Include="ServiceDataHandler.cs" />
     <Compile Include="ServiceNet.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Updater.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
