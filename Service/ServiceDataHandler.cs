@@ -62,6 +62,20 @@ namespace Service
 
             File.WriteAllText(file, output);
         }
+        public void SaveOutputtoPath(object Object, string Path, string FileName)
+        {
+
+            string path = Path;
+            if (!Directory.Exists(Path))
+                Directory.CreateDirectory(Path);
+            //computer = Computer;
+            object obj = Object;
+            file = Path + @"\" + FileName + ".json";
+
+            var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+
+            File.WriteAllText(file, output);
+        }
         public string getString(string path)
         {
 

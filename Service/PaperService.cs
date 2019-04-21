@@ -71,9 +71,13 @@ namespace Service
             string currentPath = @"D:\projects\Papers\Service\bin\Debug\";
             dataGatherer = new DataGatherer(currentPath);
             data = new ServiceDataHandler(currentPath);
+            //string yes = "I DID IT";
+            //data.SaveObjectDatatoPath(yes, @"D:\projects\Papers\Service\bin\Debug", "YES");
             serviceNet = new ServiceNet(currentPath);
             info = serviceNet.GetInfo();
             computer = data.getComputer();
+            
+          
             if (!File.Exists(currentPath + "Version.json"))
             {
                 string Version = "0.0.0.0";
@@ -132,10 +136,11 @@ namespace Service
                 if (computer.version != info.version)
                 {
                     Updater updater = new Updater(info,computer.version);
-                updater.CallUpdater();
+                    updater.CallUpdater();
 
                 }
-              // updater.RunUpdate();
+                // updater.RunUpdate();
+                
                 
             });
             t.Start();

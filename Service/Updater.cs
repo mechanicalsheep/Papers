@@ -40,17 +40,39 @@ namespace Service
 
                 Process p = new Process();
                 p.StartInfo.FileName = @"D:\projects\Papers\Service\bin\Debug\tools\updater.bat";
-            
-                p.Start();
-             
+                p.StartInfo.Verb = "runas";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.CreateNoWindow = true;
+            List<string> output = new List<string>();
+            p.OutputDataReceived += new DataReceivedEventHandler((s, e) =>
+            {
+                output.Add(e.Data);
 
 
-            
+            });
+            p.ErrorDataReceived += new DataReceivedEventHandler((s, e) =>
+            {
+                output.Add("Error!!: " + e.Data);
+
+               
+            });
+
+            p.Start();
+            p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
+           // p.WaitForExit(Convert.ToInt32(TimeSpan.FromSeconds(15).TotalMilliseconds));
+            p.Close();
+            data.SaveObjectDatatoPath(output, @"D:\projects\Papers\Service\bin\Debug\", "OUPUT");
+
+
+
         }
         public void RunUpdate()
         {
             //TimeSpan time = new TimeSpan(0,0,10);
-            string newVersionPath = $@"\\{info.ip}\PaperClient\{info.version}.zip";
+            string newVersionPath = $@"\\{ info.ip}\PaperClient\{info.version}.zip";
            // Uri uri = new Uri("www.google.com");
             //data.SaveObjectDatatoPath(newVersionPath, @"D:\projects\Papers\Service\bin\Debug\", "xx");
             //data.SaveObjectDatatoPath(uri, @"D:\projects\Papers\Service\bin\Debug\", "xx");
