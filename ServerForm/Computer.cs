@@ -92,6 +92,13 @@ namespace ServerForm
                     {
                         return false;
                     }
+                    if(chocoSoftwares==null && other.chocoSoftwares == null)
+                     {
+
+                     }
+                    else
+                        {
+
                     if (chocoSoftwares.Count == other.chocoSoftwares.Count)
                     {
                         foreach (var soft in chocoSoftwares)
@@ -102,10 +109,14 @@ namespace ServerForm
                             }
                         }
                     }
+
                     else
                     {
                         return false;
                     }
+                           
+                        }
+                    
                     if (allUsers.Count == other.allUsers.Count)
                     {
                         foreach (var user in allUsers)

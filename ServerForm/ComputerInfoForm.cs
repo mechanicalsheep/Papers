@@ -40,11 +40,16 @@ namespace ServerForm
                 lb_Softwares.Items.Add(software);
             }
 
-            lb_Softwares.Items.Add("=========Cholatey Installations=========");
-
-            foreach (var chocolate in computer.chocoSoftwares)
+            if (computer.chocoSoftwares != null)
             {
-                lb_Softwares.Items.Add(chocolate);
+
+                lb_Softwares.Items.Add("=========Cholatey Installations=========");
+
+                foreach (var chocolate in computer.chocoSoftwares)
+                {
+                    lb_Softwares.Items.Add(chocolate);
+                }
+
             }
            
         }

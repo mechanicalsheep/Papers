@@ -310,19 +310,24 @@ namespace ServerForm
             Console.WriteLine("already have this computer info.");
             Computer computer = Computer;
             Computer savedComputer = data.GetComputer(computer.uniqueKey);
+            writeline("Saved computer name is " + savedComputer.name);
+            writeline("computer name is " + computer.name);
             if (savedComputer.uniqueKey!=computer.uniqueKey)
             {
+                writeline("unique keys don't match");
                 //they are different computer with possibly same name?
                 computer.machineNote = "There is possibly another computer with the same name as " + computer.name;
                 data.SaveObjectData(computer, computer.uniqueKey, "WarningComps");
             }
             else if (computer.Equals(savedComputer))
             {
+                writeline("The computers equal eachother!");
                 Console.WriteLine("the computers are equal");
                 //don't do anything, we already have the computer snapshot and nothing changed.
             }
             else
             {
+                writeline("Computers do not equal eachother");
                 Console.WriteLine("things have been changed");
                 Manifest manifest = new Manifest(savedComputer, computer);
                 Console.WriteLine("Manifest computer date is: "+manifest.dateTime);

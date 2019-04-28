@@ -30,6 +30,7 @@ namespace ServerForm
                     //send data once it connects.
                     form.computers[uniqueKey] = GetComputer(ipPort[0], Convert.ToInt32(ipPort[1]));
                     form.writeline($"Updating {form.computers[uniqueKey].name} to include user: {form.computers[uniqueKey].username}");
+                    form.writeline("Computers[] unique key is: "+form.computers[uniqueKey].uniqueKey);
                     form.StartManifest(form.computers[uniqueKey]);
 
                     //the rest
