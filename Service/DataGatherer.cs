@@ -243,51 +243,67 @@ namespace Service
             void getAnyDeskKey()
         {
             string anyDeskKey = "";
-            Process p = new Process();
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.RedirectStandardError = true;
-            p.StartInfo.CreateNoWindow = true;
 
-
-
-            if (computer.processor == "64-bit")
-                p.StartInfo.FileName = path + "\\tools\\anydeskid.bat";
-            else
-                p.StartInfo.FileName = path + "\\tools\\anydeskidx86.bat";
-
-
-
-
-            p.OutputDataReceived += new DataReceivedEventHandler((s, e) =>
+            try
             {
-
-
-                if (e.Data != null || e.Data == "")
+                using (Process p = new Process())
                 {
-                    anyDeskKey = e.Data;
-                    Console.WriteLine("MEOW: " + anyDeskKey);
-                    computer.anyDesk = anyDeskKey;
+
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.RedirectStandardError = true;
+                    p.StartInfo.CreateNoWindow = true;
 
 
+
+                    if (computer.processor == "64-bit")
+                        p.StartInfo.FileName = path + "\\tools\\anydeskid.bat";
+                    else
+                        p.StartInfo.FileName = path + "\\tools\\anydeskidx86.bat";
+
+
+
+
+                    p.OutputDataReceived += new DataReceivedEventHandler((s, e) =>
+                    {
+
+
+                        if (e.Data != null || e.Data == "")
+                        {
+                            anyDeskKey = e.Data;
+                            Console.WriteLine("MEOW: " + anyDeskKey);
+                            computer.anyDesk = anyDeskKey;
+
+
+                        }
+
+                    });
+                    p.ErrorDataReceived += new DataReceivedEventHandler((s, e) =>
+                    {
+
+                        if (e.Data != null)
+                            eventlog.WriteEntry("Error running Anydesk Process: " + e.Data);
+                        Console.WriteLine("Error running Anydesk Process: " + e.Data);
+                    });
+                    p.Start();
+                    p.BeginOutputReadLine();
+                    p.BeginErrorReadLine();
+                    p.WaitForExit(Convert.ToInt32(TimeSpan.FromSeconds(1).TotalMilliseconds));
+                    // p.WaitForExit();
+
+                    Console.WriteLine("anyDeskKey is: " + anyDeskKey);
+                   // p.Close();
+                    //p.Dispose();
                 }
-
-            });
-            p.ErrorDataReceived += new DataReceivedEventHandler((s, e) =>
+            }
+            catch (Exception err)
             {
-
-                if (e.Data != null)
-                    eventlog.WriteEntry("Error running Anydesk Process: " + e.Data);
-                    Console.WriteLine("Error running Anydesk Process: " + e.Data);
-            });
-            p.Start();
-            p.BeginOutputReadLine();
-            p.BeginErrorReadLine();
-            p.WaitForExit(Convert.ToInt32(TimeSpan.FromSeconds(1).TotalMilliseconds));
-            // p.WaitForExit();
-           
-            Console.WriteLine("anyDeskKey is: " + anyDeskKey);
-            p.Close();
+                using (StreamWriter file =
+         new StreamWriter($@"{ path }\anyDeskFailure.txt", true))
+                {
+                    file.WriteLine("There was an error processing anyDesk Process: " + err);
+                }
+            }
 
 
         }
@@ -374,7 +390,7 @@ namespace Service
             GuidString = GuidString.Replace("/", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
             GuidString = GuidString.Replace("|", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
             GuidString = GuidString.Replace("-", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
-
+            
             settings.setKey(GuidString);
             data.SaveObjectData(settings, "Settings", "settings");
             data.SaveObjectData(GuidString, "init", "settings");

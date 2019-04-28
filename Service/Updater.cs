@@ -45,8 +45,10 @@ namespace Service
             RunUpdate();
             try
             {
+using(Process p = new Process())
+                {
 
-            Process p = new Process();
+            //Process p = new Process();
                 p.StartInfo.FileName = path+@"\tools\updater.bat";
                 p.StartInfo.Verb = "runas";
                 p.StartInfo.UseShellExecute = false;
@@ -73,7 +75,9 @@ namespace Service
           //  p.BeginOutputReadLine();
           //  p.BeginErrorReadLine();
          // p.WaitForExit(Convert.ToInt32(TimeSpan.FromSeconds(15).TotalMilliseconds));
-            p.Close();
+            //p.Close();
+             //   p.Dispose();
+                }
            // data.SaveObjectDatatoPath(output, path+@"\", "OUPUT");
 
             }

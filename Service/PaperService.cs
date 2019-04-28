@@ -177,6 +177,7 @@ namespace Service
         protected override void OnStop()
         {
             eventLog1.WriteEntry("In OnStop.");
+            
         }
 
         private void eventLog1_EntryWritten(object sender, EntryWrittenEventArgs e)
