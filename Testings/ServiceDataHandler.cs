@@ -62,7 +62,39 @@ namespace Testings
 
             File.WriteAllText(file, output);
         }
+        public void SaveOutputtoPath(object Object, string Path, string FileName)
+        {
 
+            string path = Path;
+            if (!Directory.Exists(Path))
+                Directory.CreateDirectory(Path);
+            //computer = Computer;
+            object obj = Object;
+            file = Path + @"\" + FileName + ".json";
+
+            var output = newt.Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+
+            File.WriteAllText(file, output);
+        }
+        public string getString(string path)
+        {
+
+
+            try
+            {
+                var file = File.ReadAllText(path);
+                var input = newt.Newtonsoft.Json.JsonConvert.DeserializeObject(file);
+                return (string)input;
+
+            }
+            catch
+            {
+                return null;
+            }
+
+
+
+        }
         public Info GetInfofromURL(string Path)
         {
             try
@@ -86,25 +118,6 @@ namespace Testings
             try
             {
                 var file = File.ReadAllText(initPath);
-                var input = newt.Newtonsoft.Json.JsonConvert.DeserializeObject(file);
-                return (string)input;
-
-            }
-            catch
-            {
-                return null;
-            }
-
-
-
-        }
-        public string getString(string path)
-        {
-
-
-            try
-            {
-                var file = File.ReadAllText(path);
                 var input = newt.Newtonsoft.Json.JsonConvert.DeserializeObject(file);
                 return (string)input;
 
