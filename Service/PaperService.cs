@@ -88,7 +88,7 @@ namespace Service
             //data.SaveObjectDatatoPath("VERSION 0.0.0.2", path + "\\", "Version updated");
             if (!File.Exists(path + "\\Version.json"))
             {
-                string Version = "0.0.0.0";
+                string Version = "0.0.0.2";
                 data.SaveObjectDatatoPath(Version, path+"\\", "Version");
             }
            // computer.version = "0.0.0.0";
