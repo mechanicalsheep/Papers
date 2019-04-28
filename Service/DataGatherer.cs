@@ -27,14 +27,18 @@ namespace Service
        ServiceDataHandler data;
         ManagementClass mc = new ManagementClass();
 
+        //for testing
+        EventLog eventlog = new EventLog();
         public DataGatherer(string Path)
         {
           
+            eventlog.Source = "Paper";
+            eventlog.Log="PaperLog";
+
             path = Path;
             settingFolder = "settings";
             SettingsFilename = "Settings";
             fullSettingFilePath = $"{path}\\{settingFolder}\\{SettingsFilename}.json";
-            
 
 
             mc.Path = new ManagementPath("Win32_ComputerSystem");
@@ -60,6 +64,8 @@ namespace Service
         }
         void GetComputerData()
         {
+            try
+            {
 
             computer.uniqueKey = getUniqueKey();
             computer.OS = getOS();
@@ -85,14 +91,21 @@ namespace Service
                 //writeline("COMPUTER.ANYDESKKEY= " + computer.anyDesk);
                 //writeline( getAnyDeskKey());
             }
-            // writeline("Computer group is: " + computer.group);
-            Console.WriteLine("Processor is: " + computer.processor);
+                // writeline("Computer group is: " + computer.group);
+                //eventlog.WriteEntry("computer.anyDesk is: " + computer.anyDesk);
+                Console.WriteLine("Processor is: " + computer.processor);
+            }
+            catch(Exception err)
+            {
+
+            eventlog.WriteEntry("ERROR getting computer data :: "+err);
+            }
 
 
         }
         public string getVersion()
         {
-           string version= data.getString(path + "Version.json");
+           string version= data.getString(path + "\\Version.json");
             return version;
         }
 
@@ -230,7 +243,6 @@ namespace Service
             void getAnyDeskKey()
         {
             string anyDeskKey = "";
-
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
@@ -240,9 +252,9 @@ namespace Service
 
 
             if (computer.processor == "64-bit")
-                p.StartInfo.FileName = path + "tools\\anydeskid.bat";
+                p.StartInfo.FileName = path + "\\tools\\anydeskid.bat";
             else
-                p.StartInfo.FileName = path + "tools\\anydeskidx86.bat";
+                p.StartInfo.FileName = path + "\\tools\\anydeskidx86.bat";
 
 
 
@@ -265,6 +277,7 @@ namespace Service
             {
 
                 if (e.Data != null)
+                    eventlog.WriteEntry("Error running Anydesk Process: " + e.Data);
                     Console.WriteLine("Error running Anydesk Process: " + e.Data);
             });
             p.Start();
@@ -272,6 +285,7 @@ namespace Service
             p.BeginErrorReadLine();
             p.WaitForExit(Convert.ToInt32(TimeSpan.FromSeconds(1).TotalMilliseconds));
             // p.WaitForExit();
+           
             Console.WriteLine("anyDeskKey is: " + anyDeskKey);
             p.Close();
 

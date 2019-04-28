@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using NetworkCommsDotNet;
@@ -21,9 +22,13 @@ namespace Service
         ServiceDataHandler data;
         Info info = new Info();
         Uri uri = new Uri("https://drive.google.com/uc?export=download&id=1feb0bJrQl6wKePaEmhJ8s5fG8m1ZAo2g");
-
+        
+        EventLog eventLog = new EventLog();
         public ServiceNet(string path)
         {
+            eventLog.Source = "Paper";
+            eventLog.Log="PaperLog";
+
             this.path = path;
             data = new ServiceDataHandler(path);
 
@@ -31,10 +36,11 @@ namespace Service
            // testGet();
             Console.WriteLine("-==Info Version " + info.version + "==-");
             computer = data.getComputer();
+            //eventLog.WriteEntry("got computer data in ServiceNet");
             key = computer.uniqueKey;
           
-            Console.WriteLine("Got computer: " + computer.name);
             
+            //eventLog.WriteEntry("key is: " + computer.uniqueKey);
            
             //getIPfrom file.
             ip=info.ip;
@@ -49,7 +55,7 @@ namespace Service
             serverPort =Convert.ToInt32(info.port);
             //form = clientForm;
             //form.writeline("-==Client=-");
-
+           
             //sendAlive(ip, Convert.ToInt32(port));
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("ServerToClient", HandleServerMessage);
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("getKey", (packetHeader, connection, input) =>
@@ -111,20 +117,20 @@ namespace Service
         {
             using (WebClient web = new WebClient())
             {
-                web.DownloadFile(@"\\192.168.5.10\Software for PC\Software\AnyDesk.exe",path+"anydesk.exe");
+                web.DownloadFile(@"\\192.168.5.10\Software for PC\Software\AnyDesk.exe",path+"\\anydesk.exe");
             }
         }
         public Info getInfoFromURL()
         {
             using(WebClient web = new WebClient())
             {
-                web.DownloadFile(uri, path+"INFO.json");
+                web.DownloadFile(uri, path+"\\INFO.json");
 
                 
             }
             Console.WriteLine("Done!");
             Info tempInfo = new Info();
-            tempInfo = data.GetInfofromURL(path + "INFO.json");
+            tempInfo = data.GetInfofromURL(path + "\\INFO.json");
             Console.WriteLine("ip from file is: " + ip);
             return tempInfo;
         }

@@ -16,17 +16,23 @@ namespace Service
    
     class Updater
     {
-
+        string newVersionPath;
         ServiceController service;
         Info info;
         string previousVersion;
         ServiceDataHandler data;
+        string path;
+        EventLog eventLog = new EventLog();
         //PaperService paper;
-     public Updater(Info info, string PreviousVersion)
+     public Updater(string Path, Info info, string PreviousVersion)
         {
-           // this.paper = paper;
+            eventLog.Source = "Paper";
+            eventLog.Log = "PaperLog";
+            // this.paper = paper;
+            path = Path;
             data = new ServiceDataHandler();
             this.info = info;
+            newVersionPath = $@"\\{ info.ip}\PaperClient\Updates\{info.version}.zip";
             previousVersion = PreviousVersion;
       
             service = new ServiceController("PaperService");
@@ -37,42 +43,50 @@ namespace Service
         {
 
             RunUpdate();
+            try
+            {
 
-                Process p = new Process();
-                p.StartInfo.FileName = @"D:\projects\Papers\Service\bin\Debug\tools\updater.bat";
+            Process p = new Process();
+                p.StartInfo.FileName = path+@"\tools\updater.bat";
                 p.StartInfo.Verb = "runas";
                 p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.RedirectStandardError = true;
+               // p.StartInfo.RedirectStandardOutput = true;
+                //p.StartInfo.RedirectStandardError = true;
                 p.StartInfo.CreateNoWindow = true;
             List<string> output = new List<string>();
-            p.OutputDataReceived += new DataReceivedEventHandler((s, e) =>
+           /* p.OutputDataReceived += new DataReceivedEventHandler((s, e) =>
             {
                 output.Add(e.Data);
 
+            eventLog.WriteEntry(e.Data);
 
             });
             p.ErrorDataReceived += new DataReceivedEventHandler((s, e) =>
             {
                 output.Add("Error!!: " + e.Data);
+                eventLog.WriteEntry("Error: "+e.Data);
 
-               
             });
+            */
 
             p.Start();
-            p.BeginOutputReadLine();
-            p.BeginErrorReadLine();
-           // p.WaitForExit(Convert.ToInt32(TimeSpan.FromSeconds(15).TotalMilliseconds));
+          //  p.BeginOutputReadLine();
+          //  p.BeginErrorReadLine();
+         // p.WaitForExit(Convert.ToInt32(TimeSpan.FromSeconds(15).TotalMilliseconds));
             p.Close();
-            data.SaveObjectDatatoPath(output, @"D:\projects\Papers\Service\bin\Debug\", "OUPUT");
+           // data.SaveObjectDatatoPath(output, path+@"\", "OUPUT");
 
-
+            }
+            catch(Exception err)
+            {
+                eventLog.WriteEntry("Error starting batch: "+ err);
+            }
 
         }
         public void RunUpdate()
         {
             //TimeSpan time = new TimeSpan(0,0,10);
-            string newVersionPath = $@"\\{ info.ip}\PaperClient\{info.version}.zip";
+           
            // Uri uri = new Uri("www.google.com");
             //data.SaveObjectDatatoPath(newVersionPath, @"D:\projects\Papers\Service\bin\Debug\", "xx");
             //data.SaveObjectDatatoPath(uri, @"D:\projects\Papers\Service\bin\Debug\", "xx");
@@ -90,7 +104,7 @@ namespace Service
 
                 try
                 {
-                    string filePath = @"D:\projects\Papers\Service\bin\Debug\";
+                    string filePath = path+@"\";
                     DirectoryInfo dir = new DirectoryInfo(filePath);
                     string archiveFolder = filePath + "Archive\\" + previousVersion;
                     string zipPathwithFile = $"{filePath}\\temp\\{info.version}.zip";
@@ -113,16 +127,35 @@ namespace Service
                     }*/
                     using(WebClient wc = new WebClient())
                     {
-                        
-                        wc.DownloadFile(newVersionPath,zipPathwithFile);
+                    /* using (StreamWriter file =
+         new StreamWriter(Directory.GetCurrentDirectory()+@"\debug.txt", true))
+                     {
+                         file.WriteLine("Fourth line");
+                     }*/
+                    try
+                    {
+                        // wc.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                        //string updater = "https://drive.google.com/file/d/1jrJ5mouyjt_IXal7maXsV_gt_3zSLT6L/view?usp=sharing";
+                        string updater = "https://drive.google.com/uc?export=download&id=1jrJ5mouyjt_IXal7maXsV_gt_3zSLT6L";
+                        //wc.DownloadFile(newVersionPath,zipPathwithFile);
+                    wc.DownloadFile(updater, zipPathwithFile);
+                    }
+                    catch(Exception err)
+                    {
+                        using (StreamWriter file =
+         new StreamWriter($@"{ path }\debug.txt", true))
+                        {
+                            file.WriteLine("There was an error processing the download: "+ err);
+                        }
+                    }
 
 
                     }
 
                 }
-                catch
+                catch(Exception err)
                 {
-
+                eventLog.WriteEntry("Error updating! " + err);
                 }
                
                // string message = "Computer version is now" + version;

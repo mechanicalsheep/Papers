@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 
 using System;
+using System.Diagnostics;
 
 namespace Service
 {
@@ -20,6 +21,8 @@ namespace Service
         //public Settings set;
         Computer computer;
 
+        EventLog eventLog = new EventLog();
+
         //create serviceDataHandler for generic writing and reading instead of data gathering based.
         public ServiceDataHandler()
         {
@@ -27,11 +30,14 @@ namespace Service
         }
         public ServiceDataHandler(string Path)
         {
+            eventLog.Source = "Paper";
+            eventLog.Log = "PaperLog";
+
             path = Path;
-            initPath = path+"settings\\init.json";
+            initPath = path+"\\settings\\init.json";
             uniqueKey = getKey();
 
-            computerPath = path + "ref\\" + uniqueKey + ".json";
+            computerPath = path + "\\ref\\" + uniqueKey + ".json";
         }
 
         public void SaveObjectData(object obj, string FileName, string FolderName)
@@ -106,6 +112,8 @@ namespace Service
             }
             catch(Exception err)
             {
+                eventLog.WriteEntry("Error getting info from url: PATH is: "+Path+ " Error is  : "+err);
+                
                 Console.WriteLine("Error retrieving Info from getIPfromURL");
                 return null;
             }

@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
@@ -31,8 +32,8 @@ namespace Service
         {
            
             InitializeComponent();
+           Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
 
-          
 
             eventLog1 = new EventLog();
             if (!EventLog.SourceExists("Paper"))
@@ -50,7 +51,7 @@ namespace Service
         {
             try
             {
-                eventLog1.WriteEntry("attempt to send stillAlive");
+                //eventLog1.WriteEntry("attempt to send stillAlive");
                 serviceNet.sendAlive(ip, port);
             }
             catch (Exception)
@@ -64,24 +65,31 @@ namespace Service
         {
             //eventLog1.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
         }
-
+        public void versionSuccess()
+        {
+            data.SaveObjectDatatoPath("successfully updated!", path + "\\", "Version updated");
+        }
         protected override void OnStart(string[] args)
         {
-            path = @"D:\projects\Papers\ClientForm\bin\Debug\";
-            string currentPath = @"D:\projects\Papers\Service\bin\Debug\";
-            dataGatherer = new DataGatherer(currentPath);
-            data = new ServiceDataHandler(currentPath);
+
+            getServiceUser();
+            path = Directory.GetCurrentDirectory();//@"D:\projects\Papers\ClientForm\bin\Debug\";
+            //string currentPath = @"D:\projects\Papers\Service\bin\Debug\";
+            dataGatherer = new DataGatherer(path);
+            data = new ServiceDataHandler(path);
             //string yes = "I DID IT";
-            //data.SaveObjectDatatoPath(yes, @"D:\projects\Papers\Service\bin\Debug", "YES");
-            serviceNet = new ServiceNet(currentPath);
+           // data.SaveObjectDatatoPath(path, @"D:\projects\Papers\Service\bin\Debug", "Path");
+         // eventLog1.WriteEntry("passed serviceDataHandler");
+            serviceNet = new ServiceNet(path);
             info = serviceNet.GetInfo();
             computer = data.getComputer();
-            
-          
-            if (!File.Exists(currentPath + "Version.json"))
+
+           // versionSuccess();
+            //data.SaveObjectDatatoPath("VERSION 0.0.0.2", path + "\\", "Version updated");
+            if (!File.Exists(path + "\\Version.json"))
             {
                 string Version = "0.0.0.0";
-                data.SaveObjectDatatoPath(Version, @"D:\projects\Papers\Service\bin\Debug", "Version");
+                data.SaveObjectDatatoPath(Version, path+"\\", "Version");
             }
            // computer.version = "0.0.0.0";
             computer.ip = info.ip;
@@ -133,9 +141,10 @@ namespace Service
             Thread t = new Thread(() =>
             {
                sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0,0,10));
+                    eventLog1.WriteEntry("Computer.version != info.version :: Computer.version= " + computer.version + " info.version= " + info.version);
                 if (computer.version != info.version)
                 {
-                    Updater updater = new Updater(info,computer.version);
+                    Updater updater = new Updater(path,info,computer.version);
                     updater.CallUpdater();
 
                 }
@@ -147,8 +156,24 @@ namespace Service
 
 
         }
+        public void getServiceUser()
+        {
+            /* System.Management.SelectQuery sQuery = new System.Management.SelectQuery(string.Format("select name, startname from Win32_Service")); // where name = '{0}'", "MCShield.exe"));
+             using (System.Management.ManagementObjectSearcher mgmtSearcher  = new System.Management.ManagementObjectSearcher(sQuery))
+             {
+                 foreach (System.Management.ManagementObject service in mgmtSearcher.Get())
+                 {
+                     string servicelogondetails =
+                         string.Format("Name: {0} ,  Logon : {1} ", service["Name"].ToString(), service["startname"]).ToString();
+     eventLog1.WriteEntry(servicelogondetails);
+                 }
+             }*/
+            ManagementObject wmiService = new ManagementObject("Win32_Service.Name='" + this.ServiceName + "'");
+            wmiService.Get();
+            string user = wmiService["startname"].ToString();
+            eventLog1.WriteEntry("Service: "+user);
+        }
 
-        
         protected override void OnStop()
         {
             eventLog1.WriteEntry("In OnStop.");
