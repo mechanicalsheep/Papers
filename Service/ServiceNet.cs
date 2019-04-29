@@ -11,6 +11,7 @@ namespace Service
 
     public class ServiceNet
     {
+        Commands commands;
         string path;
         //private ClientForm form;
         string ip;
@@ -26,6 +27,7 @@ namespace Service
         EventLog eventLog = new EventLog();
         public ServiceNet(string path)
         {
+            commands = new Commands();
             eventLog.Source = "Paper";
             eventLog.Log="PaperLog";
 
@@ -63,6 +65,14 @@ namespace Service
                 //form.writeline("Choco command: " + input.command);
                 //form.choco(input.command, input.username, input.password, input.domain);
                 connection.SendObject("giveKey", key);
+
+            });
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendCommand", (packetHeader, connection, command) =>
+            {
+                commands.doCommand(command);
+                //form.writeline("Choco command: " + input.command);
+                //form.choco(input.command, input.username, input.password, input.domain);
+                //connection.SendObject("giveKey", key);
 
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("setGroup", (packetHeader, connection, group) =>
