@@ -69,7 +69,7 @@ namespace Service
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("sendCommand", (packetHeader, connection, command) =>
             {
-                string returnedMessage = commands.doCommand(command);
+                object returnedMessage = commands.doCommand(command);
                 connection.SendObject("CommandResponse", returnedMessage);
                 //form.writeline("Choco command: " + input.command);
                 //form.choco(input.command, input.username, input.password, input.domain);

@@ -90,9 +90,15 @@ namespace ServerForm
                   form.setOffline(ipPort[0]);
 
               };
-            NetworkComms.AppendGlobalIncomingPacketHandler<string>("CommandResponse", (packetHeader, connection, command) =>
+            NetworkComms.AppendGlobalIncomingPacketHandler<List<string>>("CommandResponse", (packetHeader, connection, command) =>
             {
-                form.writeline(command);
+                foreach(var com in command)
+                {
+                form.writeline(com);
+
+                }
+               
+            
 
             });
             NetworkComms.AppendGlobalConnectionEstablishHandler(clientEstablishDelegate);
