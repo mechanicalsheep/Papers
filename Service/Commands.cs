@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
@@ -9,24 +10,47 @@ namespace Service
 {
     class Commands
     {
-        public Commands()
+        string path;
+        public Commands(string Path)
         {
-
+            path = Path;
         }
-        public void doCommand(string command)
+        public string doCommand(string command)
         {
+            string message="";
             switch (command)
             {
                 case "restartService":
                 {
-                        ServiceController sc = new ServiceController("PaperService");
-                        sc.Stop();
-                        sc.WaitForStatus(ServiceControllerStatus.Stopped);
+                        try
+                        {
 
-                        sc.Start();
+                            using (Process p = new Process())
+                            {
+
+                                p.StartInfo.FileName = path + "\\tools\\restarter.bat";
+                            p.StartInfo.Verb = "runas";
+                            p.StartInfo.UseShellExecute = false;
+                            p.StartInfo.CreateNoWindow = true;
+                            p.Start();
+
+                            message = "Service has been restarted";
+                            }
+                        }
+                        catch(Exception err)
+                        {
+                            message = "Error restarting service " + err;
+                        }
                         break;
                 }
+                case "hello":
+                    {
+                        message= "Hello!";
+                        break;
+                    }
             }
+            return message;
+            
         }
     }
 }

@@ -27,11 +27,11 @@ namespace Service
         EventLog eventLog = new EventLog();
         public ServiceNet(string path)
         {
-            commands = new Commands();
+            this.path = path;
+            commands = new Commands(path);
             eventLog.Source = "Paper";
             eventLog.Log="PaperLog";
 
-            this.path = path;
             data = new ServiceDataHandler(path);
 
             info = getInfoFromURL();
@@ -67,9 +67,10 @@ namespace Service
                 connection.SendObject("giveKey", key);
 
             });
-            NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendCommand", (packetHeader, connection, command) =>
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("sendCommand", (packetHeader, connection, command) =>
             {
-                commands.doCommand(command);
+                string returnedMessage = commands.doCommand(command);
+                connection.SendObject("CommandResponse", returnedMessage);
                 //form.writeline("Choco command: " + input.command);
                 //form.choco(input.command, input.username, input.password, input.domain);
                 //connection.SendObject("giveKey", key);

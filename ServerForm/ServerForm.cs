@@ -280,7 +280,29 @@ namespace ServerForm
        
         private void btn_send_Click(object sender, EventArgs e)
         {
-            
+            if (lv_computers.SelectedItems.Count > 0)
+            {
+                foreach (var item in lv_computers.SelectedItems)
+                {
+                    ListViewItem lvi = item as ListViewItem;
+                    /*NetworkCredential networkCredential = new NetworkCredential()
+                    {
+                        UserName = tb_username.Text,
+                        Password = tb_password.Text,
+                        Domain = tb_domain.Text,
+
+                    };
+                    */
+                    string ip = lvi.SubItems[1].Text;
+                    int port = Convert.ToInt32(lvi.SubItems[2].Text);
+                   // CommandInfo commandInfo = new CommandInfo(networkCredential, tb_command.Text);
+
+                    serverNet.sendCommand(ip, port, tb_command.Text);
+
+                }
+
+            }
+            /*
             if (lv_computers.SelectedItems.Count > 0)
             {
                 foreach (var item in lv_computers.SelectedItems)
@@ -303,6 +325,7 @@ namespace ServerForm
                 }
 
             }
+            */
 
         }
         public void StartManifest(Computer Computer)

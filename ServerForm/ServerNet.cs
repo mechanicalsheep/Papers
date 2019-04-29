@@ -90,7 +90,11 @@ namespace ServerForm
                   form.setOffline(ipPort[0]);
 
               };
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("CommandResponse", (packetHeader, connection, command) =>
+            {
+                form.writeline(command);
 
+            });
             NetworkComms.AppendGlobalConnectionEstablishHandler(clientEstablishDelegate);
             NetworkComms.AppendGlobalConnectionCloseHandler(connectionShutdownDelegate);
 
@@ -141,6 +145,19 @@ namespace ServerForm
             catch (Exception)
             {
                 return null;
+            }
+        }
+        public void sendCommand(string ip, int port, string Command)
+        {
+            form.writeline("Sending Command: " + Command);
+            try
+            {
+
+                NetworkComms.SendObject<string>("sendCommand", ip, port, Command);
+            }
+            catch (Exception err)
+            {
+                form.writeline($"EXCEPTION IN SENDING COMMAND: {err}");
             }
         }
      public void sendCommand(string ip, int port, CommandInfo commandInfo)
