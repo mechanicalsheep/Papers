@@ -19,7 +19,6 @@ namespace Service
         string ip;
         int port;
         System.Timers.Timer aTimer;
-        //private int eventId = 1;
         string uniqueKey;
         ServiceNet serviceNet;
         public string path { get; set; }
@@ -27,6 +26,7 @@ namespace Service
         DataGatherer dataGatherer;
         public Computer computer;
         public Info info;
+        int stillAliveFailCount = 0;
 
         public PaperService()
         {
@@ -44,26 +44,52 @@ namespace Service
             eventLog1.Source = "Paper";
             eventLog1.Log="PaperLog";
 
-           // eventLog1.WriteEntry("Current Directory is: "+Directory.GetCurrentDirectory());
+           //eventLog1.WriteEntry("Current Directory is: "+Directory.GetCurrentDirectory());
 
         }
         private void stillAlive(object sender, ElapsedEventArgs e)
         {
+            
             try
             {
-                //eventLog1.WriteEntry("attempt to send stillAlive");
+              
                 serviceNet.sendAlive(ip, port);
+                //stillAliveFailCount = 0;
             }
             catch (Exception)
             {
-                aTimer.Interval = 10000;
-                //writeline("unable to send, awaiting 10 seconds");
+
+                //stillAliveFailCount++;
+                info = serviceNet.GetInfo();
+                if (info.version != computer.version)
+                {
+                    eventLog1.WriteEntry("computer is not updated, attempting to run update");
+                    startUpdate();
+                }
+                else if (info.ip != ip)
+                {
+                    ip = info.ip;
+                }
+
+                else
+                {
+                    if (aTimer.Interval < TimeSpan.FromHours(1).TotalMilliseconds)
+                    {
+                        //stop incrementing after 1 hours.
+                        aTimer.Interval = aTimer.Interval * 2;
+                    }
+                    else
+                    {
+                        aTimer.Interval = TimeSpan.FromHours(1).TotalMilliseconds;
+                    }
+                }
+               
             }
         }
 
         private void OnTimer(object sender, ElapsedEventArgs e)
         {
-            //eventLog1.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
+           
         }
         public void versionSuccess()
         {
@@ -71,38 +97,25 @@ namespace Service
         }
         protected override void OnStart(string[] args)
         {
+            try
+            {
 
-            getServiceUser();
-            path = Directory.GetCurrentDirectory();//@"D:\projects\Papers\ClientForm\bin\Debug\";
-            //string currentPath = @"D:\projects\Papers\Service\bin\Debug\";
+            //getServiceUser();
+            path = Directory.GetCurrentDirectory();
             dataGatherer = new DataGatherer(path);
-            data = new ServiceDataHandler(path);
-            //string yes = "I DID IT";
-           // data.SaveObjectDatatoPath(path, @"D:\projects\Papers\Service\bin\Debug", "Path");
-         // eventLog1.WriteEntry("passed serviceDataHandler");
+            data = new ServiceDataHandler(path);           
             serviceNet = new ServiceNet(path);
-            info = serviceNet.GetInfo();
+                info = serviceNet.GetInfo();
             computer = data.getComputer();
-
-           // versionSuccess();
-            //data.SaveObjectDatatoPath("VERSION 0.0.0.2", path + "\\", "Version updated");
             if (!File.Exists(path + "\\Version.json"))
             {
                 string Version = "0.0.0.2";
                 data.SaveObjectDatatoPath(Version, path+"\\", "Version");
             }
-           // computer.version = "0.0.0.0";
             computer.ip = info.ip;
 
-           ServiceController sc = new ServiceController("PaperService");
+          
 
-            /*Updater updater = new Updater();
-             updater.RunUpdate();
-             /*if(computer.version != info.version)
-             {
-                 Updater updater = new Updater();
-                 updater.RunUpdate();
-             }*/
             Console.WriteLine("IP from serviceNEt that will be saved is: " + dataGatherer.ip);
             data.SaveObjectData(computer, computer.uniqueKey, "ref");
 
@@ -123,51 +136,72 @@ namespace Service
             //port = 11111;
             uniqueKey = data.uniqueKey;
 
-            // computer = data.getComputer(@"D:\projects\Papers\ClientForm\bin\Debug\ref\"+uniqueKey+".json");
+            //versionSuccess();
 
+           
             serviceNet.sendComputer(ip, port, computer);
-            //data.SaveObjectData("hello!","serviceLog","Meow");
-
+           
             aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(stillAlive);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
 
-            /* if (sc.Status == ServiceControllerStatus.StartPending)
-             {
-                 sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 10));
-             }*/
+            if (!isUpdated())
+            {
+                eventLog1.WriteEntry("computer is not updated, attempting to run update");
+                startUpdate();
+            }
+           
 
+            }
+            catch(Exception err)
+            {
+                eventLog1.WriteEntry("Error starting service: " + err);
+            }
+
+        }
+
+        public void startUpdate()
+        {
+            try
+            {
+                
+            ServiceController sc = new ServiceController("PaperService");
             Thread t = new Thread(() =>
             {
-               sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0,0,10));
-                    eventLog1.WriteEntry("Computer.version != info.version :: Computer.version= " + computer.version + " info.version= " + info.version);
-                if (computer.version != info.version)
-                {
-                    Updater updater = new Updater(path,info,computer.version);
+                sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 10));
+                eventLog1.WriteEntry("Computer.version != info.version :: Computer.version= " + computer.version + " info.version= " + info.version);
+               
+                    Updater updater = new Updater(path, info, computer.version);
                     updater.CallUpdater();
+               
 
-                }
-                // updater.RunUpdate();
-                
-                
             });
             t.Start();
+            }
+            catch(Exception err)
+            {
+                eventLog1.WriteEntry("Error processing update:: "+err);
+            }
+        }
+        public bool isUpdated()
+        {
+            
 
+            info = serviceNet.GetInfo();
+            if (computer.version != info.version)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
 
         }
         public void getServiceUser()
         {
-            /* System.Management.SelectQuery sQuery = new System.Management.SelectQuery(string.Format("select name, startname from Win32_Service")); // where name = '{0}'", "MCShield.exe"));
-             using (System.Management.ManagementObjectSearcher mgmtSearcher  = new System.Management.ManagementObjectSearcher(sQuery))
-             {
-                 foreach (System.Management.ManagementObject service in mgmtSearcher.Get())
-                 {
-                     string servicelogondetails =
-                         string.Format("Name: {0} ,  Logon : {1} ", service["Name"].ToString(), service["startname"]).ToString();
-     eventLog1.WriteEntry(servicelogondetails);
-                 }
-             }*/
+            
             ManagementObject wmiService = new ManagementObject("Win32_Service.Name='" + this.ServiceName + "'");
             wmiService.Get();
             string user = wmiService["startname"].ToString();
