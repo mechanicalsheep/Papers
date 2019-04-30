@@ -15,9 +15,9 @@ namespace Service
         {
             path = Path;
         }
-        public object doCommand(string command)
+        public List<string> doCommand(string command)
         {
-            string message="";
+            List<string> message=new List<string>();
             switch (command.StartsWith("choco")? "choco": command)
             {
                 case "restartService":
@@ -34,18 +34,18 @@ namespace Service
                             p.StartInfo.CreateNoWindow = true;
                             p.Start();
 
-                            message = "Service has been restarted";
+                            message.Add("Service has been restarted");
                             }
                         }
                         catch(Exception err)
                         {
-                            message = "Error restarting service " + err;
+                            message.Add("Error restarting service " + err);
                         }
                         break;
                 }
                 case "hello":
                     {
-                        message= "Hello!";
+                        message.Add("Hello!");
                         break;
                     }
                 case "choco":

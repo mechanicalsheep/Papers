@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -69,7 +70,7 @@ namespace Service
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("sendCommand", (packetHeader, connection, command) =>
             {
-                object returnedMessage = commands.doCommand(command);
+               List<string> returnedMessage = commands.doCommand(command);
                 connection.SendObject("CommandResponse", returnedMessage);
                 //form.writeline("Choco command: " + input.command);
                 //form.choco(input.command, input.username, input.password, input.domain);
