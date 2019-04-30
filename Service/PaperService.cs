@@ -47,45 +47,7 @@ namespace Service
            //eventLog1.WriteEntry("Current Directory is: "+Directory.GetCurrentDirectory());
 
         }
-        private void stillAlive(object sender, ElapsedEventArgs e)
-        {
-            
-            try
-            {
-              
-                serviceNet.sendAlive(ip, port);
-                //stillAliveFailCount = 0;
-            }
-            catch (Exception)
-            {
-
-                //stillAliveFailCount++;
-                info = serviceNet.GetInfo();
-                if (info.version != computer.version)
-                {
-                    eventLog1.WriteEntry("computer is not updated, attempting to run update");
-                    startUpdate();
-                }
-                else if (info.ip != ip)
-                {
-                    ip = info.ip;
-                }
-
-                else
-                {
-                    if (aTimer.Interval < TimeSpan.FromHours(1).TotalMilliseconds)
-                    {
-                        //stop incrementing after 1 hours.
-                        aTimer.Interval = aTimer.Interval * 2;
-                    }
-                    else
-                    {
-                        aTimer.Interval = TimeSpan.FromHours(1).TotalMilliseconds;
-                    }
-                }
-               
-            }
-        }
+        
 
         private void OnTimer(object sender, ElapsedEventArgs e)
         {
@@ -141,15 +103,13 @@ namespace Service
            
             serviceNet.sendComputer(ip, port, computer);
            
-            aTimer = new System.Timers.Timer();
-            aTimer.Elapsed += new ElapsedEventHandler(stillAlive);
-            aTimer.Interval = 5000;
-            aTimer.Enabled = true;
+           
 
             if (!isUpdated())
             {
                 eventLog1.WriteEntry("computer is not updated, attempting to run update");
-                startUpdate();
+                    Updater updater = new Updater(path, info, computer.version);
+                    updater.startUpdate();
             }
            
 
@@ -159,31 +119,11 @@ namespace Service
                 eventLog1.WriteEntry("Error starting service: " + err);
             }
 
+            serviceNet.startStillAlive();
+
         }
 
-        public void startUpdate()
-        {
-            try
-            {
-                
-            ServiceController sc = new ServiceController("PaperService");
-            Thread t = new Thread(() =>
-            {
-                sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 10));
-                eventLog1.WriteEntry("Computer.version != info.version :: Computer.version= " + computer.version + " info.version= " + info.version);
-               
-                    Updater updater = new Updater(path, info, computer.version);
-                    updater.CallUpdater();
-               
-
-            });
-            t.Start();
-            }
-            catch(Exception err)
-            {
-                eventLog1.WriteEntry("Error processing update:: "+err);
-            }
-        }
+        
         public bool isUpdated()
         {
             
@@ -210,7 +150,7 @@ namespace Service
 
         protected override void OnStop()
         {
-            eventLog1.WriteEntry("In OnStop.");
+            //eventLog1.WriteEntry("In OnStop.");
             
         }
 

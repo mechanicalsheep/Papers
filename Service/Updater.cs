@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -86,6 +87,29 @@ using(Process p = new Process())
                 eventLog.WriteEntry("Error starting batch: "+ err);
             }
 
+        }
+        public void startUpdate()
+        {
+            try
+            {
+
+                ServiceController sc = new ServiceController("PaperService");
+                Thread t = new Thread(() =>
+                {
+                    sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 10));
+                    eventLog.WriteEntry("Computer.version != info.version :: Computer.version= " + previousVersion + " info.version= " + info.version);
+
+                    Updater updater = new Updater(path, info, previousVersion);
+                    updater.CallUpdater();
+
+
+                });
+                t.Start();
+            }
+            catch (Exception err)
+            {
+                eventLog.WriteEntry("Error processing update:: " + err);
+            }
         }
         public void RunUpdate()
         {

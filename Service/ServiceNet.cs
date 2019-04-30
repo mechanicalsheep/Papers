@@ -5,7 +5,10 @@ using System.Linq;
 using System.Net;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
+using NetworkCommsDotNet.Connections.TCP;
 using ProtoBuf;
+using System.Timers;
+//using System.Threading;
 
 namespace Service
 {
@@ -24,10 +27,11 @@ namespace Service
         ServiceDataHandler data;
         Info info = new Info();
         Uri uri = new Uri("https://drive.google.com/uc?export=download&id=1feb0bJrQl6wKePaEmhJ8s5fG8m1ZAo2g");
-        
+        Timer aTimer;// = new System.Timers.Timer();
         EventLog eventLog = new EventLog();
         public ServiceNet(string path)
         {
+            aTimer = new Timer();
             this.path = path;
             commands = new Commands(path);
             eventLog.Source = "Paper";
@@ -102,7 +106,36 @@ namespace Service
                //When this is received by the client it will complete the synchronous request
              //  connection.SendObject("snrServer", message);
            });
-            
+
+            NetworkComms.AppendGlobalConnectionEstablishHandler((connection) =>
+            {
+                eventLog.WriteEntry("Connected to : " + connection.ToString());
+                stopStillAlive();
+            });
+              NetworkComms.AppendGlobalConnectionCloseHandler((connection) =>
+               {
+                   eventLog.WriteEntry("Connection closed to : " + connection.ToString());
+                   startStillAlive();
+                   aTimer.Start();
+               });
+          /*  NetworkComms.ConnectionEstablishShutdownDelegate connectionEstablish = (connection) =>
+            {
+
+                eventLog.WriteEntry("Connection ESTABLISHED : " + connection.ToString());
+                StartStillAlive();
+           
+
+            };*/
+/*
+            NetworkComms.ConnectionEstablishShutdownDelegate connectionShutdownDelegate = (connection) =>
+            {
+
+                eventLog.WriteEntry("Connection shutdown : " + connection.ToString());
+                StartStillAlive();
+                /*string[] ipPort = connection.ConnectionInfo.RemoteEndPoint.ToString().Split(':');
+
+            };*/
+
             Connection.StartListening(ConnectionType.TCP, new IPEndPoint(IPAddress.Any, 0));
             //clientForm.writeline("Client Listening On: ");
             foreach (IPEndPoint localEndpoint in Connection.ExistingLocalListenEndPoints(ConnectionType.TCP))
@@ -114,13 +147,69 @@ namespace Service
                 {
 
                    // clientForm.writeline(" - " + localEndpoint.Address + " " + localEndpoint.Port);
-                    ip = localEndpoint.Address.ToString();
+                   string localIp = localEndpoint.Address.ToString();
                     localport = localEndpoint.Port.ToString();
                 }
             }
            
         }
-       
+        public void startStillAlive()
+        {
+           
+            aTimer.Elapsed += new ElapsedEventHandler(stillAlive);
+            aTimer.Interval = 5000;
+            aTimer.Enabled = true;
+            
+        }
+        //PLEASE RENAME!!!!!
+        public void StartStillAlive()
+        {
+            aTimer.Start();
+        }
+        public void stopStillAlive()
+        {
+            aTimer.Stop();
+        }
+        private void stillAlive(object sender, ElapsedEventArgs e)
+        {
+
+            try
+            {
+
+                sendAlive(ip, serverPort);
+                //stillAliveFailCount = 0;
+            }
+            catch (Exception)
+            {
+
+                //stillAliveFailCount++;
+                info = GetInfo();
+                if (info.version != computer.version)
+                {
+                    eventLog.WriteEntry("computer is not updated, attempting to run update");
+                    Updater updater = new Updater(path,info,computer.version);
+                    updater.startUpdate();
+                }
+                else if (info.ip != ip)
+                {
+                    ip = info.ip;
+                }
+
+                else
+                {
+                    if (aTimer.Interval < TimeSpan.FromHours(1).TotalMilliseconds)
+                    {
+                        //stop incrementing after 1 hours.
+                        aTimer.Interval = aTimer.Interval * 2;
+                    }
+                    else
+                    {
+                        aTimer.Interval = TimeSpan.FromHours(1).TotalMilliseconds;
+                    }
+                }
+
+            }
+        }
         public Info GetInfo()
         {
             return info;
