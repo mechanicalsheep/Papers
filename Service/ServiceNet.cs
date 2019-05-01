@@ -83,7 +83,10 @@ namespace Service
             });
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("setGroup", (packetHeader, connection, group) =>
              {
-               //supposed to call set group ofrom here.
+                 //supposed to call set group ofrom here.
+                 Settings tempSettings = data.GetSettings(path+"\\settings\\Settings.json");
+                 tempSettings.group = group;
+                 data.SaveObjectData(tempSettings, "Settings", "settings");
              });
             //choco command receiver!
             NetworkComms.AppendGlobalIncomingPacketHandler<CommandInfo>("choco", (packetHeader, connection, input) =>

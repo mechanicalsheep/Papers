@@ -106,6 +106,10 @@ namespace Service
         public string getVersion()
         {
            string version= data.getString(path + "\\Version.json");
+            Settings tempSettings= data.GetSettings(path + "\\settings\\Settings.json");
+            tempSettings.version = version;
+            data.SaveObjectData(tempSettings, "Settings", "settings");
+
             return version;
         }
 

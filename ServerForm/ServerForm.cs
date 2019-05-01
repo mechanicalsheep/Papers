@@ -231,6 +231,14 @@ namespace ServerForm
                 lv_computers.Invoke(new Action(() => {
                     Console.WriteLine("lv_computers.length = " + lv_computers.Items.Count);
                     Console.WriteLine("finditemwithvalue(" + key + ") =" + lv_computers.FindItemWithText(key).Text);
+                    foreach (var computer in computers)
+                    {
+                        if (computer.Value.ip == key)
+                        {
+                            computer.Value.online = false;
+                            
+                        }
+                    }
                     lv_computers.FindItemWithText(key).ForeColor = Color.Gray;
 
                 }));
@@ -238,6 +246,14 @@ namespace ServerForm
             }
             else
             {
+                foreach (var computer in computers)
+                {
+                    if (computer.Value.ip == key)
+                    {
+                        computer.Value.online = false;
+
+                    }
+                }
                 lv_computers.FindItemWithText(key).ForeColor = Color.Gray;
                 
             }
