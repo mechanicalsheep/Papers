@@ -1,9 +1,9 @@
 ﻿using ProtoBuf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
-
-namespace ServerForm
+namespace Service
 {
     [ProtoContract]
 #pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
@@ -75,7 +75,7 @@ namespace ServerForm
             if (uniqueKey == other.uniqueKey)
             {
 
-                if (name == other.name && OS == other.OS && ram == other.ram && group == other.group && machineNote == other.machineNote && note == other.note && username == other.username)
+                if (name == other.name && OS == other.OS && ram == other.ram && group == other.group && machineNote==other.machineNote && note==other.note)
                 {
                     //if all the others are true, they are the same computer, let's check if the softwares have changed.
                     if (softwares.Count == other.softwares.Count)
@@ -92,13 +92,6 @@ namespace ServerForm
                     {
                         return false;
                     }
-                    if(chocoSoftwares==null && other.chocoSoftwares == null)
-                     {
-
-                     }
-                    else
-                        {
-
                     if (chocoSoftwares.Count == other.chocoSoftwares.Count)
                     {
                         foreach (var soft in chocoSoftwares)
@@ -109,31 +102,10 @@ namespace ServerForm
                             }
                         }
                     }
-
                     else
                     {
                         return false;
                     }
-                           
-                        }
-                    
-                    if (allUsers.Count == other.allUsers.Count)
-                    {
-                        foreach (var user in allUsers)
-                        {
-                            if (!other.allUsers.ContainsKey(user.Key) && other.allUsers[user.Key].ToString() != allUsers[user.Key].ToString())
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-        
-
-       
                 }
                 else
                 {

@@ -39,16 +39,16 @@ namespace ServerForm
             File.WriteAllText(file, output);
         }
      
-        public bool ComputerExists(string computer)
+        public bool ComputerExists(string uniqueKey)
         {
             
-            return File.Exists(computerPath+"\\"+computer+".json");
+            return File.Exists(computerPath+"\\"+uniqueKey+".json");
         }
-        public Computer GetComputer(string computerName)
+        public Computer GetComputer(string computerKey)
         {
             try
             {
-            string compFile = computerPath + "\\" + computerName + ".json";
+            string compFile = computerPath + "\\" + computerKey + ".json";
             var inputs = File.ReadAllText(compFile);
                 object computer = newt.Newtonsoft.Json.JsonConvert.DeserializeObject<Computer>(inputs);
 
@@ -66,6 +66,9 @@ namespace ServerForm
         {
             Dictionary<string,Computer> computerList = new Dictionary<string, Computer>();
             DirectoryInfo dir = new DirectoryInfo(computerPath);
+            if (dir.Exists)
+            {
+
             foreach(var file in dir.GetFiles())
             {
                 var inputs = File.ReadAllText(file.FullName);
@@ -81,6 +84,11 @@ namespace ServerForm
                 {
                     Console.WriteLine("ERROR IN GENERATECOMPUTERLIST(): THE UNIQUE KEY POSSIBLY WAS ALREADY ADDED.");
                 }
+            }
+            }
+            else
+            {
+                Directory.CreateDirectory(computerPath);
             }
             return computerList;
         }

@@ -53,7 +53,7 @@ namespace ServerForm
                         else
                         {
                              lvi = new ListViewItem(new[] { computer.name, computer.ip, computer.port, computer.uniqueKey });
-
+                            
                             lvi.ForeColor = Color.DarkViolet;
 
                         }
@@ -229,7 +229,16 @@ namespace ServerForm
             if (lv_computers.InvokeRequired)
             {
                 lv_computers.Invoke(new Action(() => {
-
+                    Console.WriteLine("lv_computers.length = " + lv_computers.Items.Count);
+                    Console.WriteLine("finditemwithvalue(" + key + ") =" + lv_computers.FindItemWithText(key).Text);
+                    foreach (var computer in computers)
+                    {
+                        if (computer.Value.ip == key)
+                        {
+                            computer.Value.online = false;
+                            
+                        }
+                    }
                     lv_computers.FindItemWithText(key).ForeColor = Color.Gray;
 
                 }));
@@ -237,6 +246,14 @@ namespace ServerForm
             }
             else
             {
+                foreach (var computer in computers)
+                {
+                    if (computer.Value.ip == key)
+                    {
+                        computer.Value.online = false;
+
+                    }
+                }
                 lv_computers.FindItemWithText(key).ForeColor = Color.Gray;
                 
             }
@@ -279,7 +296,29 @@ namespace ServerForm
        
         private void btn_send_Click(object sender, EventArgs e)
         {
-            
+            if (lv_computers.SelectedItems.Count > 0)
+            {
+                foreach (var item in lv_computers.SelectedItems)
+                {
+                    ListViewItem lvi = item as ListViewItem;
+                    /*NetworkCredential networkCredential = new NetworkCredential()
+                    {
+                        UserName = tb_username.Text,
+                        Password = tb_password.Text,
+                        Domain = tb_domain.Text,
+
+                    };
+                    */
+                    string ip = lvi.SubItems[1].Text;
+                    int port = Convert.ToInt32(lvi.SubItems[2].Text);
+                   // CommandInfo commandInfo = new CommandInfo(networkCredential, tb_command.Text);
+
+                    serverNet.sendCommand(ip, port, tb_command.Text);
+
+                }
+
+            }
+            /*
             if (lv_computers.SelectedItems.Count > 0)
             {
                 foreach (var item in lv_computers.SelectedItems)
@@ -302,32 +341,38 @@ namespace ServerForm
                 }
 
             }
+            */
 
         }
         public void StartManifest(Computer Computer)
         {
             Console.WriteLine("already have this computer info.");
             Computer computer = Computer;
-            Computer savedComputer = data.GetComputer(computer.name);
+            Computer savedComputer = data.GetComputer(computer.uniqueKey);
+            writeline("Saved computer name is " + savedComputer.name);
+            writeline("computer name is " + computer.name);
             if (savedComputer.uniqueKey!=computer.uniqueKey)
             {
+                writeline("unique keys don't match");
                 //they are different computer with possibly same name?
                 computer.machineNote = "There is possibly another computer with the same name as " + computer.name;
-                data.SaveObjectData(computer, computer.name, "WarningComps");
+                data.SaveObjectData(computer, computer.uniqueKey, "WarningComps");
             }
             else if (computer.Equals(savedComputer))
             {
+                writeline("The computers equal eachother!");
                 Console.WriteLine("the computers are equal");
                 //don't do anything, we already have the computer snapshot and nothing changed.
             }
             else
             {
+                writeline("Computers do not equal eachother");
                 Console.WriteLine("things have been changed");
                 Manifest manifest = new Manifest(savedComputer, computer);
                 Console.WriteLine("Manifest computer date is: "+manifest.dateTime);
                 string[] datestring = computer.dateTime.Split(':');
-                data.SaveObjectData(manifest, computer.name + "-" + datestring[0]+datestring[1],"Manifest\\"+computer.name);
-                data.SaveObjectData(computer, computer.name, "Computers");
+                data.SaveObjectData(manifest, computer.uniqueKey + "-" + datestring[0]+datestring[1],"Manifest\\"+computer.uniqueKey);
+                data.SaveObjectData(computer, computer.uniqueKey, "Computers");
             }
 
             Console.WriteLine("got data from " + savedComputer.name);
@@ -343,14 +388,14 @@ namespace ServerForm
             writeline("Computer: " + computer.name);
             writeline("OS: " + computer.OS);
 
-            if (data.ComputerExists(computer.name))
+            if (data.ComputerExists(computer.uniqueKey))
             {
                 //add to the manifest
                 StartManifest(computer);
             }
             else
             {
-                data.SaveObjectData(computer, computer.name, "Computers");
+                data.SaveObjectData(computer, computer.uniqueKey, "Computers");
             }
         }
         private void btn_getComputer_Click(object sender, EventArgs e)

@@ -65,7 +65,7 @@ namespace Client
 
             StartManifest(computer);
             
-            data.SaveObjectData(computer, computer.name, "ref");
+            data.SaveObjectData(computer, computer.uniqueKey, "ref");
            
 
             tb_installer_path.KeyDown += Tb_installer_path_KeyDown;
@@ -102,7 +102,7 @@ namespace Client
         {
           //  Console.WriteLine("already have this computer info.");
             Computer computer = Computer;
-            string path = Directory.GetCurrentDirectory() + "\\ref\\" + computer.name+".json";
+            string path = Directory.GetCurrentDirectory() + "\\ref\\" + computer.uniqueKey+".json";
             if (File.Exists(path))
             {
             Computer savedComputer = data.GetComputer(path);
@@ -123,8 +123,8 @@ namespace Client
                 Manifest manifest = new Manifest(savedComputer, computer);
                 Console.WriteLine("Manifest computer date is: " + manifest.dateTime);
                 string[] datestring = computer.dateTime.Split(':');
-                data.SaveObjectData(manifest, computer.name + "-" + datestring[0] + datestring[1], "Manifest\\" + computer.name);
-                data.SaveObjectData(computer, computer.name, "ref");
+                data.SaveObjectData(manifest, computer.uniqueKey + "-" + datestring[0] + datestring[1], "Manifest\\" + computer.uniqueKey);
+                data.SaveObjectData(computer, computer.uniqueKey, "ref");
             }
 
             Console.WriteLine("got data from " + savedComputer.name);
@@ -369,10 +369,28 @@ namespace Client
        
         string generateUniqueKey()
         {
-                Guid g = Guid.NewGuid();
+            // not allowed strings:
+            // " * / : < > ? \ |
+            Guid g = Guid.NewGuid();
+            Random random = new Random();
+            
+            
                 string GuidString = Convert.ToBase64String(g.ToByteArray());
-                GuidString = GuidString.Replace("=", "");
-                GuidString = GuidString.Replace("+", "");
+            GuidString=GuidString.TrimEnd('=');
+            //    //GuidString = GuidString.Replace("=", Convert.ToString(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65))));
+            //    //GuidString = GuidString.Replace("+", Convert.ToString(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65))));
+            GuidString = GuidString.Replace("\"", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+            GuidString = GuidString.Replace("\\", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+            GuidString = GuidString.Replace("/", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+            GuidString = GuidString.Replace("*", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+            GuidString = GuidString.Replace(":", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+            GuidString = GuidString.Replace("<", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+            GuidString = GuidString.Replace(">", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+            GuidString = GuidString.Replace("?", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+            GuidString = GuidString.Replace("/", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+            GuidString = GuidString.Replace("|", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+            GuidString = GuidString.Replace("-", Convert.ToString(Convert.ToInt32(Math.Floor(33 * random.NextDouble() + 126))));
+
             settings.setKey(GuidString);
             data.SaveObjectData(settings,"Settings","settings");
             data.SaveObjectData(GuidString, "init", "settings");
@@ -402,6 +420,8 @@ namespace Client
                 return null;
             }
         }
+
+        #region Choco installations
         public void choco(string Command, string username, string password, string domain)
         {
            Installer installer = new Installer(this);
@@ -412,6 +432,8 @@ namespace Client
                 if (outs != null)
                     writeline(outs);
         }
+        #endregion
+
         public List<string> getInstallations()
         {
             List<string> software = new List<string>();
@@ -509,7 +531,7 @@ namespace Client
         {
             computer.note = tb_note.Text;
             computer.dateTime = getDateTime();
-            data.SaveObjectData(computer, computer.name, "ref");
+            data.SaveObjectData(computer, computer.uniqueKey, "ref");
             writeline("note saved!");
         }
 

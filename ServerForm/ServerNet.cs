@@ -21,23 +21,35 @@ namespace ServerForm
             NetworkComms.ConnectionEstablishShutdownDelegate clientEstablishDelegate = (connection) =>
 
             {
-                
+                form.writeline(connection + " has connected in ClientEstablishDelegate");
                 string[] ipPort = connection.ConnectionInfo.RemoteEndPoint.ToString().Split(':');
                 string uniqueKey = GetUniqueKey(ipPort[0], Convert.ToInt32(ipPort[1]));
                 Console.WriteLine($"Server got UniqueKey {uniqueKey} from connection {ipPort[0]}");
                 if (form.computers.ContainsKey(uniqueKey))
                 {
+                    //send data once it connects.
+                    form.computers[uniqueKey] = GetComputer(ipPort[0], Convert.ToInt32(ipPort[1]));
+                    form.writeline($"Updating {form.computers[uniqueKey].name} to include user: {form.computers[uniqueKey].username}");
+                    form.writeline("Computers[] unique key is: "+form.computers[uniqueKey].uniqueKey);
+                    form.StartManifest(form.computers[uniqueKey]);
+
+                    //the rest
                     form.computers[uniqueKey].port = ipPort[1];
                     form.setOnline(uniqueKey, ipPort[0],ipPort[1]);
                     form.writeline("Setting " + form.computers[uniqueKey].name + " online");
                 }
                 else
                 {
+                    try
+                    {
+
                     form.getComputerData(ipPort[0], Convert.ToInt32(ipPort[1]));
                     Computer computer = GetComputer(ipPort[0], Convert.ToInt32(ipPort[1]));
+                        computer.ip = ipPort[0];
                     try
                     {
                         computer.online = true;
+                            computer.ip = ipPort[0];
                         computer.port = ipPort[1];
                         //form.setOnline(computer.uniqueKey, ipPort[0], ipPort[1]);
                     form.computers.Add(computer.uniqueKey, computer);
@@ -53,29 +65,42 @@ namespace ServerForm
                     //lvi.ForeColor = System.Drawing.Color.Blue;
                     //lvi.Tag = computer;
                     form.addComputerToList(computer);
+                    }
+                    catch(Exception err)
+                    {
+                        Console.WriteLine("ServerNet Exception::: -"+err.Message);
+                    }
 
                 }
                 Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.ToString());
 
                 //form.AddOnlineComputer(GetComputerName(ipPort[0],Convert.ToInt32(ipPort[1]),"Whatevs"),ipPort[0], ipPort[1]);
                
-            Console.WriteLine("Client " + connection.ConnectionInfo + " connected.");
+            //Console.WriteLine("Client " + connection.ConnectionInfo + " connected.");
+                //form.writeline("Client " + connection.ConnectionInfo + " connected.");
 
 
             };
             NetworkComms.ConnectionEstablishShutdownDelegate connectionShutdownDelegate = (connection) =>
               {
-                  /* string ipPort= connection.ConnectionInfo.RemoteEndPoint.ToString();
-                  // form.ScanForConnections();
-                   form.RemoveOfflineComputer(ipPort.Split(':').First());
-                   Console.WriteLine("Client" + connection.ConnectionInfo + "disconnected");
-                   */
+             
                   string[] ipPort = connection.ConnectionInfo.RemoteEndPoint.ToString().Split(':');
-                 // string uniqueKey = GetUniqueKey(ipPort[0], Convert.ToInt32(ipPort[1]));
+                
+                  form.writeline(connection + " has disconnected.");
                   form.setOffline(ipPort[0]);
 
               };
+            NetworkComms.AppendGlobalIncomingPacketHandler<List<string>>("CommandResponse", (packetHeader, connection, command) =>
+            {
+                foreach(var com in command)
+                {
+                form.writeline(com);
 
+                }
+               
+            
+
+            });
             NetworkComms.AppendGlobalConnectionEstablishHandler(clientEstablishDelegate);
             NetworkComms.AppendGlobalConnectionCloseHandler(connectionShutdownDelegate);
 
@@ -112,7 +137,7 @@ namespace ServerForm
 
         private void HandleAliveSend(PacketHeader packetHeader, Connection connection, string incomingObject)
         {
-            
+            form.writeline(connection + " is alive! Key= "+incomingObject);
         }
 
         public Computer GetComputer(string ip, int port)
@@ -126,6 +151,19 @@ namespace ServerForm
             catch (Exception)
             {
                 return null;
+            }
+        }
+        public void sendCommand(string ip, int port, string Command)
+        {
+            form.writeline("Sending Command: " + Command);
+            try
+            {
+
+                NetworkComms.SendObject<string>("sendCommand", ip, port, Command);
+            }
+            catch (Exception err)
+            {
+                form.writeline($"EXCEPTION IN SENDING COMMAND: {err}");
             }
         }
      public void sendCommand(string ip, int port, CommandInfo commandInfo)
