@@ -114,6 +114,7 @@ namespace Service
             {
                 eventLog.WriteEntry("Connected to : " + connection.ToString());
                 stopStillAlive();
+                aTimer.Enabled = false;
             });
               NetworkComms.AppendGlobalConnectionCloseHandler((connection) =>
                {
@@ -172,20 +173,23 @@ namespace Service
         public void stopStillAlive()
         {
             aTimer.Stop();
+            
         }
         private void stillAlive(object sender, ElapsedEventArgs e)
         {
 
             try
             {
-
+                
+                ConnectionInfo connection = new ConnectionInfo(ip, serverPort);
+                if(!NetworkComms.ConnectionExists(connection))
                 sendAlive(ip, serverPort);
-                //stillAliveFailCount = 0;
+               
             }
             catch (Exception)
             {
 
-                //stillAliveFailCount++;
+                
                 info = GetInfo();
                 if (info.version != computer.version)
                 {
