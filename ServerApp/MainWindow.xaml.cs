@@ -25,17 +25,35 @@ namespace ServerApp
         pg_Devices devices;
         pg_home home;
         List<Page> pages;
+        Page currentPage;
+        bool output=true;
+        //List<string> output;
         public MainWindow()
         {
             InitializeComponent();
+            //output = new List<string>();
            devices = new pg_Devices();
            home = new pg_home();
             pages = new List<Page>();
 
-            //TODO: ADD PAGE TAGGS THEN ADD THEM TO LIST, SEE IF YOU CAN'T KEEP TRACK OF PAGE AND BUTTON WITH THE SAME TAGS.
-            MainFrame.Navigate(home);
+            home.Tag = "home";
+            devices.Tag = "devices";
+
+            pages.Add(home);
+            pages.Add(devices);
+
+            //TODO: ADD PAGE TAGS THEN ADD THEM TO LIST, SEE IF YOU CAN'T KEEP TRACK OF PAGE AND BUTTON WITH THE SAME TAGS.
+            //currentPage = new pg_home();
+            currentPage = new pg_Devices();
+            currentPage.IsEnabled = false;
+            MainFrame.Navigate(currentPage);
             //btn_Home.IsEnabled = false;
 
+        }
+
+        public void writeline(string message)
+        {
+            lb.Items.Add(message);
         }
         private void btnLeftMenuHide_Click(object sender, RoutedEventArgs e)
         {
@@ -68,20 +86,49 @@ namespace ServerApp
 
         private void navTo(object sender, RoutedEventArgs e)
         {
+            
             var button = sender as Button;
-            MainFrame.Navigate(button.Tag);
+           // Page tempPage = pages.First(x => x.Tag == button.Tag);
+
+               // writeline($"Button.Tag={button.Tag}");
+            foreach(var page in pages)
+            {
+                //writeline($"page.tag= {page.Tag}");
+               // writeline($"is {button.Tag} == {page.Tag} ?");
+                if (page.Tag.Equals( button.Tag))
+                {
+                    currentPage.IsEnabled = true;
+                    currentPage = page;
+                    
+                    MainFrame.Navigate(currentPage);
+                    //label.Content = "Found it!";
+                   //writeline("Found it!");
+                }
+            }
+            //MainFrame.Navigate();
+            //Console.WriteLine(tempPage.Tag);
+           //label.Content=pages.Where(x=> x.Tag==button.Tag).ToString();
+
         }
         private void Btn_Devices_Click(object sender, RoutedEventArgs e)
         {
-           MainFrame.Navigate()
-            MainFrame.Navigate(devices);
             
 
         }
 
         private void Btn_Home_Click(object sender, RoutedEventArgs e)
         {
+            MainFrame.Navigate(home);
+        }
 
+        private void Btn_output_Click(object sender, RoutedEventArgs e)
+        {
+            output = !output;
+            // lb.IsEnabled = output;
+            if (output == false)
+                lb.Visibility = Visibility.Hidden;
+            else
+                lb.Visibility = Visibility.Visible;
         }
     }
 }

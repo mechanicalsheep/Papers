@@ -27,9 +27,9 @@
         <StackPanel Panel.ZIndex="2" Name="pnlLeftMenu" Orientation="Horizontal" Height="400" HorizontalAlignment="Left" Margin="-150,0,0,20">
             <Border BorderBrush="#AF1719" BorderThickness="1" Width="150" Background="#4C4AA6AA" Margin="0,0,0,-19" >
                 <Grid>
-                    <Button x:Name="btn_Home" Click="navTo" Tag="home" Content="Home" Height="40" Margin="-1,-1,-1,377"/>
-                    <Button x:Name="btn_Devices" Click="navTo" Tag="devices"  Content="Devices" Height="40" Margin="-1,40,0,337"/> 
-                                        
+                    <Button x:Name="btn_Home" Click="Btn_Home_Click" Tag="home" Content="Home" Height="40" Margin="-1,-1,-1,377" Background="Black" Foreground="#FF2B8D95"/>
+                    <Button x:Name="btn_Devices" Click="navTo" Tag="devices"  Content="Devices" Height="40" Margin="-1,40,0,337" Foreground="#FF2B8D95" Background="Black"/>
+
                 </Grid>
 
             </Border>
@@ -39,6 +39,8 @@
                 <Button x:Name="btnLeftMenuShow" Width="38" Height="38" Click="btnLeftMenuShow_Click" Content="☰" Margin="0,0,0,381" Background="#FF020101" Foreground="#FF00ECFD" />
             </Grid>
         </StackPanel>
-        <Frame Content="Frame" Name="MainFrame" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="792"/>
+        <Frame NavigationUIVisibility="Hidden" Content="Frame" Name="MainFrame" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="792"/>
+        <ListBox Name="lb" HorizontalAlignment="Left" Height="189" Margin="107,211,0,0" VerticalAlignment="Top" Width="556"/>
+        <Button Content="Output" Name="btn_output" HorizontalAlignment="Left" Margin="690,19,0,0" VerticalAlignment="Top" Width="75" Click="Btn_output_Click"/>
     </Grid>
 </Window>
